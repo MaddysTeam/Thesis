@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="renderer" content="webkit" />
+	<title>2019年中小学微课评选活动</title>
+	<!-- CSS -->
+	@Styles.Render("~/css/bootstrapzc")
+	@RenderSection("css", required: false)
+	@Styles.Render("~/css/Ace")
+</head>
+<body>
+
+		<div class="d_top">
+			<div class="container top_nav">
+				<div class="div_ml_mr95">
+					@if (Request.IsAuthenticated)
+					{
+						var user = ResSettings.SettingsInSession.User;
+						var link = string.Format(ThisApp.AdminSystemUrl, user.UserName, Util.Security.Encrpytor.DESEncrypt(Util.Security.Encrpytor.KEY, user.Password));
+
+						<a class="top_s_text p_l0" href="@Url.Action("Index", "CroMy", new { id = ResSettings.SettingsInSession.UserId })">进入我的个人中心</a>
+						<span class="top_s_bo"></span>
+						if (null != user && user.UserTypePKID != ResUserHelper.Teacher)
+						{
+							<a class="top_s_text" href="@link" target="_blank">进入后台管理</a>
+							<span class="top_s_bo"></span>
+						}
+						<a class="top_s_text" href="@Url.Action("LogOff2", "Account")">退出我的登录</a>
+					}
+					<span class="fr "></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="container banner">
+			<img src="~/assets/img/u_banner.jpg" />
+		</div>
+
+		<div class="container">
+			<div class="div_ml_mr95 ">
+				<div class="fl l_main">
+					@Html.Partial("_sidebar")
+					</div>
+				<div class="fr r_main u">
+					@RenderBody()
+					</div>
+				</div>
+		</div>
+
+
+			<div class="d_bottom">
+				<div class="container d_b w_1230">
+					<p>上海市电化教育馆主管、上海教育软件发展有限公司技术支持</p>
+					<p>
+						沪ICP备11037386号-6
+					</p>
+					<p>
+						（ICP备案可在工信部网站 http://beian.miit.gov.cn查询）
+					</p>
+				</div>
+			</div>
+
+
+	@Scripts.Render("~/js/jquery")
+	@Scripts.Render("~/js/bootstrapzc")
+	@Scripts.Render("~/js/jqueryval")
+	@RenderSection("plugins", required: false)
+	@Scripts.Render("~/js/Ace")
+	@RenderSection("scripts", required: false)
+
+
+</body>
+</html>

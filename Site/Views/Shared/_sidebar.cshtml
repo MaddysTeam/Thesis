@@ -1,0 +1,34 @@
+﻿@{
+	var id = this.ViewContext.RouteData.Values["id"];
+	string act = (string)this.Request.RequestContext.RouteData.Values["action"];
+	var user = ResSettings.SettingsInSession.User;
+	var link = string.Format(ThisApp.AdminSystemUrl, user.UserName,Util.Security.Encrpytor.DESEncrypt(Util.Security.Encrpytor.KEY, user.Password));
+}
+<p>管理菜单</p>
+<ul class="nav navmanager @act">
+   <li><a href="@Url.Action("Index", "CroHome")">返回首页</a></li>
+	<li><a class="a_More" href="@Url.Action("More", "CroMy", new { id = id })" >通知公告</a></li>
+		<li><a class="a_Index" href="@Url.Action("Index", "CroMy", new { id = id })" >个人信息</a></li>
+	@if (HttpContext.Current.Request.IsAuthenticated & ResSettings.SettingsInSession.UserId == Convert.ToInt64(id))
+	{ 
+		<li><a class="a_Upload" href="@Url.Action("Upload", "CroMy", new { id = id })">论文上传</a></li>
+	}
+		<li>
+			<a href="@Url.Action("CroMyResource", "CroMy", new { id = id })" class=" a_sczy">我的论文</a>
+		</li>
+		<li><a class="a_CroMyMedal" href="@Url.Action("CroMyMedal", "CroMy", new { id = id })">我的奖状</a></li>
+	@*@if (user.UserTypePKID != ResUserHelper.Teacher)
+	{
+   	<li><a class="a_CroMyDownload" href="@link" target="_blank">后台管理</a></li>
+	}*@
+</ul>
+<script>
+	function expandMy(what) {
+		$(".a_CroMyResource").trigger('click')
+		if (what == "resource") {
+			$(".a_sczy").addClass("actived");
+		} else if (what == "recommand") {
+			$(".a_tjzy").addClass("actived");
+		}
+	}
+</script>
