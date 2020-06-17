@@ -154,30 +154,19 @@ namespace Res.Business
 
       #region [ Properties ]
 
-
-      public string Stage { get { return CroResourceHelper.Stage.GetName(StagePKID); } }
-
-      public string Grade { get { return CroResourceHelper.Grade.GetName(GradePKID); } }
-
       public string ResourceType { get { return CroResourceHelper.ResourceType.GetName(ResourceTypePKID); } }
-
-      public string CourseType { get { return CroResourceHelper.CourseType.GetName(CourseTypePKID); } }
-
-      public string Subject { get { return CroResourceHelper.Subject.GetName(SubjectPKID); } }
 
       public string State { get { return CroResourceHelper.State.GetName(StatePKID); } }
 
-      public string Province { get { return GetCompanyName(ProvinceId); } }
+      //public string Province { get { return GetCompanyName(ProvinceId); } }
 
-      public string Area { get { return GetCompanyName(AreaId); } }
-
-      public string School { get { return GetCompanyName(CompanyId); } }
+      //public string Area { get { return GetCompanyName(AreaId); } }
 
       public string WinLevel { get { return CroResourceHelper.WinLevel.GetName(WinLevelPKID); } }
 
-      public string PublicState { get { return CroResourceHelper.PublicState.GetName(PublicStatePKID); } }
+      [Required]
+      public string Attachment { get; set; }
 
-      public string DownloadState { get { return CroResourceHelper.DownloadState.GetName(DownloadStatePKID); } }
 
       [Display(Name = "资源路径")]
       [Required]

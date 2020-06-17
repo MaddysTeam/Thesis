@@ -951,7 +951,6 @@
     <Content Include="Views\Shared\_ZcLayout.cshtml" />
     <None Include="Properties\PublishProfiles\Site.pubxml" />
     <Content Include="Views\Shared\_ZSLayout.cshtml" />
-    <Content Include="Views\CroMy\CroMyCourses.cshtml" />
     <Content Include="Views\CroMy\ChgPwd.cshtml" />
     <Content Include="Views\CroMy\CroMyMedal.cshtml" />
   </ItemGroup>

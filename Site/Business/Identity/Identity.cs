@@ -138,8 +138,9 @@ namespace Res.Business
       public long CompanyId { get; set; }
 
       [Required]
+      [RegularExpression(@"[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]", ErrorMessage="请输入正确的身份证号码")]
       [Display(Name ="身份证件号")]
-      public string IdNo { get; set; }
+      public string IdCard { get; set; }
 
    }
 

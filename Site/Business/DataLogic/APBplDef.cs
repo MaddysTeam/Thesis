@@ -331,7 +331,7 @@ namespace Res.Business
 
             var query = APQuery
                .select(t.CrosourceId, t.Title, u.RealName.As("Author") //TODO:t.MediumTypePKID
-               , t.CreatedTime, t.StatePKID, t.EliteScore)
+               , t.CreatedTime, t.StatePKID)
                .from(t, u.JoinInner(t.Creator == u.UserId))
                .where(where)
                .primary(t.CrosourceId)

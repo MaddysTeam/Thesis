@@ -91,13 +91,13 @@ namespace Res.Controllers
 
       #endregion
 
-      #region [我的活动作品]
+      #region [我的论文]
 
       public List<CroMyResource> MyCroResource(long id, out int total, int take, int skip = 0)
       {
          var t = APDBDef.CroResource;
          var userid = id;
-         var query = APQuery.select(t.CrosourceId, t.Title, t.Author, t.PublicStatePKID, t.DownloadStatePKID, //t.CoverPath, t.FileExtName, 
+         var query = APQuery.select(t.CrosourceId, t.Title, t.Author, //t.CoverPath, t.FileExtName, 
              t.Description, t.CreatedTime, t.AuditOpinion, t.StatePKID,t.ActiveId)
             .from(t)
             .where(t.Creator == userid)
@@ -120,10 +120,6 @@ namespace Res.Controllers
                CrosourceId = t.CrosourceId.GetValue(reader),
                Title = t.Title.GetValue(reader),
                Author = t.Author.GetValue(reader),
-               PublicStatePKID = t.PublicStatePKID.GetValue(reader),
-               DownloadStatePKID = t.DownloadStatePKID.GetValue(reader),
-               //CoverPath = t.CoverPath.GetValue(reader),
-               //FileExtName = t.FileExtName.GetValue(reader),
                Description = des,
                OccurTime = t.CreatedTime.GetValue(reader),
                StatePKID = t.StatePKID.GetValue(reader),

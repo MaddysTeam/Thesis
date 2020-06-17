@@ -89,7 +89,7 @@ namespace Res.Controllers
          if (userInfo != null)
             model.Password = ThisApp.Default_Password;
 
-         
+
          //这不会计入到为执行帐户锁定而统计的登录失败次数中
          //若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
          var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
@@ -97,7 +97,7 @@ namespace Res.Controllers
          {
             case SignInStatus.Success:
                APBplDef.ResUserBpl.SetLastLoginTime(model.UserName);
-               var user =await UserManager.FindByNameAsync(model.UserName);
+               var user = await UserManager.FindByNameAsync(model.UserName);
                return RedirectToLocal(Url.Action("Index", "CroMy", new { user.Id }));
             case SignInStatus.LockedOut:
                return View("Lockout");
@@ -154,7 +154,7 @@ namespace Res.Controllers
          }
 
          model.Username = model.Username.Trim();
-         model.Password = model.Password.Trim();;
+         model.Password = model.Password.Trim(); ;
          model.Email = model.Email.Trim();
 
          var t = APDBDef.ResUser;
@@ -162,7 +162,7 @@ namespace Res.Controllers
          {
             var errormsg = "登录名称已经被使用";
             ModelState.AddModelError("Username", errormsg);
-            return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new {error="error", msg = errormsg });
+            return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new { error = "error", msg = errormsg });
          }
 
          var user = new ResUser
@@ -173,36 +173,24 @@ namespace Res.Controllers
             RealName = model.RealName,
             PhotoPath = "",
             GenderPKID = ResUserHelper.GenderMale,
-            ProvinceId=model.ProvinceId,
-            AreaId=model.AreaId,
-            CompanyId=model.CompanyId,
+            ProvinceId = model.ProvinceId,
+            AreaId = model.AreaId,
+            CompanyId = model.CompanyId,
             Actived = true,
             Removed = false,
             RegisterTime = DateTime.Now,
             LastLoginTime = DateTime.Now,
             LoginCount = 1,
-            UserTypePKID = ResUserHelper.Teacher
+            UserTypePKID = ResUserHelper.Teacher,
+            IDCard = model.IdCard
          };
          var result = await UserManager.CreateAsync(user, model.Password);
          if (result.Succeeded)
          {
             APBplDef.ResUserRoleBpl.Insert(new ResUserRole() { UserId = user.UserId, RoleId = 2 });
-            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-
-            if (!Request.IsAjaxRequest())
-               return RedirectToAction("Index", "CroHome");
-            else
-               return Json(new { error = "none", msg ="注册成功", returnUrl=Url.Action("Index", "CroHome") });
-         }
-         else
-         {
-            if (!Request.IsAjaxRequest())
-               return RedirectToAction("Index", "CroHome");
-            else 
-            return Json(new { error = "true", msg = result.Errors.FirstOrDefault(), returnUrl = Url.Action("Index", "CroHome") });
          }
 
-        // return View(model);
+         return RedirectToAction("Login", "Account");
       }
 
 

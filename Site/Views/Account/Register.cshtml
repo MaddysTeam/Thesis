@@ -46,8 +46,8 @@
 			<div class="form-group">
 				<label for="IdNo" class="control-label sr-only">身份证件号</label>
 				<div class="col-sm-12">
-					@Html.TextBoxFor(m => m.IdNo, new { @class = "form-control", placeholder = "身份证件号" })
-					@Html.ValidationMessageFor(m => m.IdNo, null, new { @class = "text-danger" })
+					@Html.TextBoxFor(m => m.IdCard, new { @class = "form-control", placeholder = "身份证件号" })
+					@Html.ValidationMessageFor(m => m.IdCard, null, new { @class = "text-danger" })
 				</div>
 			</div>
 			<div class="form-group">
@@ -101,7 +101,7 @@
 
 			$.validator.unobtrusive.parse("#form");
 			$("#form").submit(function () {
-				if (isEmpty($('#ProvinceId').val()) || isEmpty($('#AreaId').val()) || isEmpty($('#CompanyId').val())) {
+				if (isEmpty($('#ProvinceId').val()) || isEmpty($('#AreaId').val())) {
 					alert('必须选择省市，地区和单位');
 					return false;
 				}    

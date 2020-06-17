@@ -231,7 +231,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 微课作品 TableDef
+        /// 论文资源 TableDef
         /// </summary>
         public static CroResourceTableDef CroResource {
             get {
@@ -471,7 +471,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 微课作品 Dal
+        /// 论文资源 Dal
         /// </summary>
         public virtual APDalDef.CroResourceDal CroResourceDal {
             get {
@@ -2834,19 +2834,15 @@ namespace Res.Business {
             
             private StringAPColumnDef _title;
             
-            private StringAPColumnDef _author;
-            
-            private StringAPColumnDef _keywords;
-            
             private StringAPColumnDef _description;
             
             private Int64APColumnDef _provinceId;
             
             private Int64APColumnDef _areaId;
             
-            private Int64APColumnDef _companyId;
-            
             private Int64APColumnDef _activeId;
+            
+            private StringAPColumnDef _author;
             
             private StringAPColumnDef _authorCompany;
             
@@ -2856,35 +2852,11 @@ namespace Res.Business {
             
             private StringAPColumnDef _authorPhone;
             
-            private Int64APColumnDef _stagePKID;
-            
-            private Int64APColumnDef _gradePKID;
-            
             private Int64APColumnDef _resourceTypePKID;
-            
-            private Int64APColumnDef _subjectPKID;
-            
-            private Int64APColumnDef _courseTypePKID;
             
             private Int64APColumnDef _statePKID;
             
-            private Int64APColumnDef _publicStatePKID;
-            
-            private Int64APColumnDef _downloadStatePKID;
-            
             private Int64APColumnDef _winLevelPKID;
-            
-            private Int32APColumnDef _downCount;
-            
-            private Int32APColumnDef _favoriteCount;
-            
-            private Int32APColumnDef _viewCount;
-            
-            private Int32APColumnDef _commentCount;
-            
-            private Int32APColumnDef _eliteScore;
-            
-            private Int32APColumnDef _praiseCount;
             
             private Int64APColumnDef _auditor;
             
@@ -2902,9 +2874,7 @@ namespace Res.Business {
             
             private DoubleAPColumnDef _score;
             
-            private Int32APColumnDef _weiXinFavoriteCount;
-            
-            private Int32APColumnDef _weiXInPraiseCount;
+            private Int64APColumnDef _attachmentId;
             
             public CroResourceTableDef(string tableName) : 
                     base(tableName) {
@@ -2921,7 +2891,7 @@ namespace Res.Business {
                 get {
                     if (Object.ReferenceEquals(_crosourceId, null)) {
                         _crosourceId = new Int64APColumnDef(this, "CrosourceId", false);
-                        _crosourceId.Display = "作品ID";
+                        _crosourceId.Display = "论文ID";
                     }
                     return _crosourceId;
                 }
@@ -2934,38 +2904,10 @@ namespace Res.Business {
                 get {
                     if (Object.ReferenceEquals(_title, null)) {
                         _title = new StringAPColumnDef(this, "Title", false, 250);
-                        _title.Display = "标题";
+                        _title.Display = "论文标题";
                         _title.Required = true;
                     }
                     return _title;
-                }
-            }
-            
-            /// <summary>
-            /// Author ColumnDef
-            /// </summary>
-            public virtual StringAPColumnDef Author {
-                get {
-                    if (Object.ReferenceEquals(_author, null)) {
-                        _author = new StringAPColumnDef(this, "Author", false, 50);
-                        _author.Display = "作者";
-                        _author.Required = true;
-                    }
-                    return _author;
-                }
-            }
-            
-            /// <summary>
-            /// Keywords ColumnDef
-            /// </summary>
-            public virtual StringAPColumnDef Keywords {
-                get {
-                    if (Object.ReferenceEquals(_keywords, null)) {
-                        _keywords = new StringAPColumnDef(this, "Keywords", false, 50);
-                        _keywords.Display = "关键字";
-                        _keywords.Required = true;
-                    }
-                    return _keywords;
                 }
             }
             
@@ -3009,19 +2951,6 @@ namespace Res.Business {
             }
             
             /// <summary>
-            /// CompanyId ColumnDef
-            /// </summary>
-            public virtual Int64APColumnDef CompanyId {
-                get {
-                    if (Object.ReferenceEquals(_companyId, null)) {
-                        _companyId = new Int64APColumnDef(this, "CompanyId", false);
-                        _companyId.Display = "所属学校";
-                    }
-                    return _companyId;
-                }
-            }
-            
-            /// <summary>
             /// ActiveId ColumnDef
             /// </summary>
             public virtual Int64APColumnDef ActiveId {
@@ -3031,6 +2960,20 @@ namespace Res.Business {
                         _activeId.Display = "所属项目";
                     }
                     return _activeId;
+                }
+            }
+            
+            /// <summary>
+            /// Author ColumnDef
+            /// </summary>
+            public virtual StringAPColumnDef Author {
+                get {
+                    if (Object.ReferenceEquals(_author, null)) {
+                        _author = new StringAPColumnDef(this, "Author", false, 50);
+                        _author.Display = "论文作者";
+                        _author.Required = true;
+                    }
+                    return _author;
                 }
             }
             
@@ -3088,34 +3031,6 @@ namespace Res.Business {
             }
             
             /// <summary>
-            /// StagePKID ColumnDef
-            /// </summary>
-            public virtual Int64APColumnDef StagePKID {
-                get {
-                    if (Object.ReferenceEquals(_stagePKID, null)) {
-                        _stagePKID = new Int64APColumnDef(this, "StagePKID", false);
-                        _stagePKID.Display = "学段";
-                        _stagePKID.Required = true;
-                    }
-                    return _stagePKID;
-                }
-            }
-            
-            /// <summary>
-            /// GradePKID ColumnDef
-            /// </summary>
-            public virtual Int64APColumnDef GradePKID {
-                get {
-                    if (Object.ReferenceEquals(_gradePKID, null)) {
-                        _gradePKID = new Int64APColumnDef(this, "GradePKID", false);
-                        _gradePKID.Display = "年级";
-                        _gradePKID.Required = true;
-                    }
-                    return _gradePKID;
-                }
-            }
-            
-            /// <summary>
             /// ResourceTypePKID ColumnDef
             /// </summary>
             public virtual Int64APColumnDef ResourceTypePKID {
@@ -3125,34 +3040,6 @@ namespace Res.Business {
                         _resourceTypePKID.Display = "作品类型";
                     }
                     return _resourceTypePKID;
-                }
-            }
-            
-            /// <summary>
-            /// SubjectPKID ColumnDef
-            /// </summary>
-            public virtual Int64APColumnDef SubjectPKID {
-                get {
-                    if (Object.ReferenceEquals(_subjectPKID, null)) {
-                        _subjectPKID = new Int64APColumnDef(this, "SubjectPKID", false);
-                        _subjectPKID.Display = "学科";
-                        _subjectPKID.Required = true;
-                    }
-                    return _subjectPKID;
-                }
-            }
-            
-            /// <summary>
-            /// CourseTypePKID ColumnDef
-            /// </summary>
-            public virtual Int64APColumnDef CourseTypePKID {
-                get {
-                    if (Object.ReferenceEquals(_courseTypePKID, null)) {
-                        _courseTypePKID = new Int64APColumnDef(this, "CourseTypePKID", false);
-                        _courseTypePKID.Display = "资源类型";
-                        _courseTypePKID.Required = true;
-                    }
-                    return _courseTypePKID;
                 }
             }
             
@@ -3170,32 +3057,6 @@ namespace Res.Business {
             }
             
             /// <summary>
-            /// PublicStatePKID ColumnDef
-            /// </summary>
-            public virtual Int64APColumnDef PublicStatePKID {
-                get {
-                    if (Object.ReferenceEquals(_publicStatePKID, null)) {
-                        _publicStatePKID = new Int64APColumnDef(this, "PublicStatePKID", false);
-                        _publicStatePKID.Display = "公开设置";
-                    }
-                    return _publicStatePKID;
-                }
-            }
-            
-            /// <summary>
-            /// DownloadStatePKID ColumnDef
-            /// </summary>
-            public virtual Int64APColumnDef DownloadStatePKID {
-                get {
-                    if (Object.ReferenceEquals(_downloadStatePKID, null)) {
-                        _downloadStatePKID = new Int64APColumnDef(this, "DownloadStatePKID", false);
-                        _downloadStatePKID.Display = "下载设置";
-                    }
-                    return _downloadStatePKID;
-                }
-            }
-            
-            /// <summary>
             /// WinLevelPKID ColumnDef
             /// </summary>
             public virtual Int64APColumnDef WinLevelPKID {
@@ -3205,84 +3066,6 @@ namespace Res.Business {
                         _winLevelPKID.Display = "获奖等级";
                     }
                     return _winLevelPKID;
-                }
-            }
-            
-            /// <summary>
-            /// DownCount ColumnDef
-            /// </summary>
-            public virtual Int32APColumnDef DownCount {
-                get {
-                    if (Object.ReferenceEquals(_downCount, null)) {
-                        _downCount = new Int32APColumnDef(this, "DownCount", false);
-                        _downCount.Display = "下载次数";
-                    }
-                    return _downCount;
-                }
-            }
-            
-            /// <summary>
-            /// FavoriteCount ColumnDef
-            /// </summary>
-            public virtual Int32APColumnDef FavoriteCount {
-                get {
-                    if (Object.ReferenceEquals(_favoriteCount, null)) {
-                        _favoriteCount = new Int32APColumnDef(this, "FavoriteCount", false);
-                        _favoriteCount.Display = "收藏次数";
-                    }
-                    return _favoriteCount;
-                }
-            }
-            
-            /// <summary>
-            /// ViewCount ColumnDef
-            /// </summary>
-            public virtual Int32APColumnDef ViewCount {
-                get {
-                    if (Object.ReferenceEquals(_viewCount, null)) {
-                        _viewCount = new Int32APColumnDef(this, "ViewCount", false);
-                        _viewCount.Display = "点击次数";
-                    }
-                    return _viewCount;
-                }
-            }
-            
-            /// <summary>
-            /// CommentCount ColumnDef
-            /// </summary>
-            public virtual Int32APColumnDef CommentCount {
-                get {
-                    if (Object.ReferenceEquals(_commentCount, null)) {
-                        _commentCount = new Int32APColumnDef(this, "CommentCount", false);
-                        _commentCount.Display = "评论次数";
-                    }
-                    return _commentCount;
-                }
-            }
-            
-            /// <summary>
-            /// EliteScore ColumnDef
-            /// </summary>
-            public virtual Int32APColumnDef EliteScore {
-                get {
-                    if (Object.ReferenceEquals(_eliteScore, null)) {
-                        _eliteScore = new Int32APColumnDef(this, "EliteScore", false);
-                        _eliteScore.Display = "加精分数";
-                    }
-                    return _eliteScore;
-                }
-            }
-            
-            /// <summary>
-            /// PraiseCount ColumnDef
-            /// </summary>
-            public virtual Int32APColumnDef PraiseCount {
-                get {
-                    if (Object.ReferenceEquals(_praiseCount, null)) {
-                        _praiseCount = new Int32APColumnDef(this, "PraiseCount", false);
-                        _praiseCount.Display = "点赞次数";
-                    }
-                    return _praiseCount;
                 }
             }
             
@@ -3391,28 +3174,15 @@ namespace Res.Business {
             }
             
             /// <summary>
-            /// WeiXinFavoriteCount ColumnDef
+            /// AttachmentId ColumnDef
             /// </summary>
-            public virtual Int32APColumnDef WeiXinFavoriteCount {
+            public virtual Int64APColumnDef AttachmentId {
                 get {
-                    if (Object.ReferenceEquals(_weiXinFavoriteCount, null)) {
-                        _weiXinFavoriteCount = new Int32APColumnDef(this, "WeiXinFavoriteCount", false);
-                        _weiXinFavoriteCount.Display = "微信收藏次数";
+                    if (Object.ReferenceEquals(_attachmentId, null)) {
+                        _attachmentId = new Int64APColumnDef(this, "AttachmentId", false);
+                        _attachmentId.Display = "附件id";
                     }
-                    return _weiXinFavoriteCount;
-                }
-            }
-            
-            /// <summary>
-            /// WeiXInPraiseCount ColumnDef
-            /// </summary>
-            public virtual Int32APColumnDef WeiXInPraiseCount {
-                get {
-                    if (Object.ReferenceEquals(_weiXInPraiseCount, null)) {
-                        _weiXInPraiseCount = new Int32APColumnDef(this, "WeiXInPraiseCount", false);
-                        _weiXInPraiseCount.Display = "微信点赞次数";
-                    }
-                    return _weiXInPraiseCount;
+                    return _attachmentId;
                 }
             }
             
@@ -3438,32 +3208,18 @@ namespace Res.Business {
             public virtual void Fullup(IDataReader reader, CroResource data, bool throwIfValidColumnName) {
                 data.CrosourceId = CrosourceId.GetValue<long>(reader, throwIfValidColumnName);
                 data.Title = Title.GetValue<string>(reader, throwIfValidColumnName);
-                data.Author = Author.GetValue<string>(reader, throwIfValidColumnName);
-                data.Keywords = Keywords.GetValue<string>(reader, throwIfValidColumnName);
                 data.Description = Description.GetValue<string>(reader, throwIfValidColumnName);
                 data.ProvinceId = ProvinceId.GetValue<long>(reader, throwIfValidColumnName);
                 data.AreaId = AreaId.GetValue<long>(reader, throwIfValidColumnName);
-                data.CompanyId = CompanyId.GetValue<long>(reader, throwIfValidColumnName);
                 data.ActiveId = ActiveId.GetValue<long>(reader, throwIfValidColumnName);
+                data.Author = Author.GetValue<string>(reader, throwIfValidColumnName);
                 data.AuthorCompany = AuthorCompany.GetValue<string>(reader, throwIfValidColumnName);
                 data.AuthorAddress = AuthorAddress.GetValue<string>(reader, throwIfValidColumnName);
                 data.AuthorEmail = AuthorEmail.GetValue<string>(reader, throwIfValidColumnName);
                 data.AuthorPhone = AuthorPhone.GetValue<string>(reader, throwIfValidColumnName);
-                data.StagePKID = StagePKID.GetValue<long>(reader, throwIfValidColumnName);
-                data.GradePKID = GradePKID.GetValue<long>(reader, throwIfValidColumnName);
                 data.ResourceTypePKID = ResourceTypePKID.GetValue<long>(reader, throwIfValidColumnName);
-                data.SubjectPKID = SubjectPKID.GetValue<long>(reader, throwIfValidColumnName);
-                data.CourseTypePKID = CourseTypePKID.GetValue<long>(reader, throwIfValidColumnName);
                 data.StatePKID = StatePKID.GetValue<long>(reader, throwIfValidColumnName);
-                data.PublicStatePKID = PublicStatePKID.GetValue<long>(reader, throwIfValidColumnName, 10450);
-                data.DownloadStatePKID = DownloadStatePKID.GetValue<long>(reader, throwIfValidColumnName, 10452);
                 data.WinLevelPKID = WinLevelPKID.GetValue<long>(reader, throwIfValidColumnName, 0);
-                data.DownCount = DownCount.GetValue<int>(reader, throwIfValidColumnName);
-                data.FavoriteCount = FavoriteCount.GetValue<int>(reader, throwIfValidColumnName);
-                data.ViewCount = ViewCount.GetValue<int>(reader, throwIfValidColumnName);
-                data.CommentCount = CommentCount.GetValue<int>(reader, throwIfValidColumnName);
-                data.EliteScore = EliteScore.GetValue<int>(reader, throwIfValidColumnName);
-                data.PraiseCount = PraiseCount.GetValue<int>(reader, throwIfValidColumnName, 0);
                 data.Auditor = Auditor.GetValue<long>(reader, throwIfValidColumnName);
                 data.AuditedTime = AuditedTime.GetValue<System.DateTime>(reader, throwIfValidColumnName);
                 data.AuditOpinion = AuditOpinion.GetValue<string>(reader, throwIfValidColumnName);
@@ -3472,8 +3228,7 @@ namespace Res.Business {
                 data.LastModifier = LastModifier.GetValue<long>(reader, throwIfValidColumnName);
                 data.LastModifiedTime = LastModifiedTime.GetValue<System.DateTime>(reader, throwIfValidColumnName);
                 data.Score = Score.GetValue<double>(reader, throwIfValidColumnName);
-                data.WeiXinFavoriteCount = WeiXinFavoriteCount.GetValue<int>(reader, throwIfValidColumnName);
-                data.WeiXInPraiseCount = WeiXInPraiseCount.GetValue<int>(reader, throwIfValidColumnName, 0);
+                data.AttachmentId = AttachmentId.GetValue<long>(reader, throwIfValidColumnName);
             }
             
             /// <summary>
@@ -6310,7 +6065,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 微课作品 DalBase
+        /// 论文资源 DalBase
         /// </summary>
         public partial class CroResourceDalBase : APDal {
             
@@ -6328,7 +6083,7 @@ namespace Res.Business {
                 if ((data.CrosourceId == 0)) {
                     data.CrosourceId = ((long)(GetNewId(APDBDef.CroResource.CrosourceId)));
                 }
-                var query = APQuery.insert(APDBDef.CroResource).values(APDBDef.CroResource.CrosourceId.SetValue(data.CrosourceId), APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.Keywords.SetValue(data.Keywords), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.CompanyId.SetValue(data.CompanyId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.StagePKID.SetValue(data.StagePKID), APDBDef.CroResource.GradePKID.SetValue(data.GradePKID), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.SubjectPKID.SetValue(data.SubjectPKID), APDBDef.CroResource.CourseTypePKID.SetValue(data.CourseTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.PublicStatePKID.SetValue(data.PublicStatePKID), APDBDef.CroResource.DownloadStatePKID.SetValue(data.DownloadStatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.DownCount.SetValue(data.DownCount), APDBDef.CroResource.FavoriteCount.SetValue(data.FavoriteCount), APDBDef.CroResource.ViewCount.SetValue(data.ViewCount), APDBDef.CroResource.CommentCount.SetValue(data.CommentCount), APDBDef.CroResource.EliteScore.SetValue(data.EliteScore), APDBDef.CroResource.PraiseCount.SetValue(data.PraiseCount), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.WeiXinFavoriteCount.SetValue(data.WeiXinFavoriteCount), APDBDef.CroResource.WeiXInPraiseCount.SetValue(data.WeiXInPraiseCount));
+                var query = APQuery.insert(APDBDef.CroResource).values(APDBDef.CroResource.CrosourceId.SetValue(data.CrosourceId), APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId));
                 ExecuteNonQuery(query);
             }
             
@@ -6336,7 +6091,7 @@ namespace Res.Business {
             /// Update Data.
             /// </summary>
             public virtual void Update(CroResource data) {
-                var query = APQuery.update(APDBDef.CroResource).values(APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.Keywords.SetValue(data.Keywords), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.CompanyId.SetValue(data.CompanyId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.StagePKID.SetValue(data.StagePKID), APDBDef.CroResource.GradePKID.SetValue(data.GradePKID), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.SubjectPKID.SetValue(data.SubjectPKID), APDBDef.CroResource.CourseTypePKID.SetValue(data.CourseTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.PublicStatePKID.SetValue(data.PublicStatePKID), APDBDef.CroResource.DownloadStatePKID.SetValue(data.DownloadStatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.DownCount.SetValue(data.DownCount), APDBDef.CroResource.FavoriteCount.SetValue(data.FavoriteCount), APDBDef.CroResource.ViewCount.SetValue(data.ViewCount), APDBDef.CroResource.CommentCount.SetValue(data.CommentCount), APDBDef.CroResource.EliteScore.SetValue(data.EliteScore), APDBDef.CroResource.PraiseCount.SetValue(data.PraiseCount), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.WeiXinFavoriteCount.SetValue(data.WeiXinFavoriteCount), APDBDef.CroResource.WeiXInPraiseCount.SetValue(data.WeiXInPraiseCount)).where((APDBDef.CroResource.CrosourceId == data.CrosourceId));
+                var query = APQuery.update(APDBDef.CroResource).values(APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId)).where((APDBDef.CroResource.CrosourceId == data.CrosourceId));
                 ExecuteNonQuery(query);
             }
             
@@ -6433,7 +6188,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 微课作品 Dal
+        /// 论文资源 Dal
         /// </summary>
         public partial class CroResourceDal : CroResourceDalBase {
             
@@ -9030,7 +8785,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 微课作品 BplBase
+        /// 论文资源 BplBase
         /// </summary>
         public partial class CroResourceBplBase {
             
@@ -9173,7 +8928,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 微课作品 Dal
+        /// 论文资源 Dal
         /// </summary>
         public partial class CroResourceBpl : CroResourceBplBase {
         }
@@ -14602,7 +14357,7 @@ namespace Res.Business {
     }
     
     /// <summary>
-    /// 微课作品 Base
+    /// 论文资源 Base
     /// </summary>
     [Serializable()]
     public abstract partial class CroResourceBase {
@@ -14616,16 +14371,6 @@ namespace Res.Business {
         /// Title
         /// </summary>
         private string _title = string.Empty;
-        
-        /// <summary>
-        /// Author
-        /// </summary>
-        private string _author = string.Empty;
-        
-        /// <summary>
-        /// Keywords
-        /// </summary>
-        private string _keywords = string.Empty;
         
         /// <summary>
         /// Description
@@ -14643,14 +14388,14 @@ namespace Res.Business {
         private long _areaId;
         
         /// <summary>
-        /// CompanyId
-        /// </summary>
-        private long _companyId;
-        
-        /// <summary>
         /// ActiveId
         /// </summary>
         private long _activeId;
+        
+        /// <summary>
+        /// Author
+        /// </summary>
+        private string _author = string.Empty;
         
         /// <summary>
         /// AuthorCompany
@@ -14673,29 +14418,9 @@ namespace Res.Business {
         private string _authorPhone = string.Empty;
         
         /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceStage
-        /// </summary>
-        private long _stagePKID;
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceGrade
-        /// </summary>
-        private long _gradePKID;
-        
-        /// <summary>
         /// PickList - APEdu.net key is PLKey_ResourceType
         /// </summary>
         private long _resourceTypePKID;
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceSubject
-        /// </summary>
-        private long _subjectPKID;
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_CourseType
-        /// </summary>
-        private long _courseTypePKID;
         
         /// <summary>
         /// PickList - APEdu.net key is PLKey_ResourceState
@@ -14703,49 +14428,9 @@ namespace Res.Business {
         private long _statePKID;
         
         /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourcePublicState
-        /// </summary>
-        private long _publicStatePKID = 10450;
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceDownloadState
-        /// </summary>
-        private long _downloadStatePKID = 10452;
-        
-        /// <summary>
         /// PickList - APEdu.net key is PLKey_WinLevel
         /// </summary>
         private long _winLevelPKID = 0;
-        
-        /// <summary>
-        /// DownCount
-        /// </summary>
-        private int _downCount;
-        
-        /// <summary>
-        /// FavoriteCount
-        /// </summary>
-        private int _favoriteCount;
-        
-        /// <summary>
-        /// ViewCount
-        /// </summary>
-        private int _viewCount;
-        
-        /// <summary>
-        /// CommentCount
-        /// </summary>
-        private int _commentCount;
-        
-        /// <summary>
-        /// EliteScore
-        /// </summary>
-        private int _eliteScore;
-        
-        /// <summary>
-        /// PraiseCount
-        /// </summary>
-        private int _praiseCount = 0;
         
         /// <summary>
         /// Auditor
@@ -14788,14 +14473,9 @@ namespace Res.Business {
         private double _score;
         
         /// <summary>
-        /// WeiXinFavoriteCount
+        /// AttachmentId
         /// </summary>
-        private int _weiXinFavoriteCount;
-        
-        /// <summary>
-        /// WeiXInPraiseCount
-        /// </summary>
-        private int _weiXInPraiseCount = 0;
+        private long _attachmentId;
         
         /// <summary>
         /// Default constructor.
@@ -14809,32 +14489,18 @@ namespace Res.Business {
         public CroResourceBase(
                     long crosourceId, 
                     string title, 
-                    string author, 
-                    string keywords, 
                     string description, 
                     long provinceId, 
                     long areaId, 
-                    long companyId, 
                     long activeId, 
+                    string author, 
                     string authorCompany, 
                     string authorAddress, 
                     string authorEmail, 
                     string authorPhone, 
-                    long stagePKID, 
-                    long gradePKID, 
                     long resourceTypePKID, 
-                    long subjectPKID, 
-                    long courseTypePKID, 
                     long statePKID, 
-                    long publicStatePKID, 
-                    long downloadStatePKID, 
                     long winLevelPKID, 
-                    int downCount, 
-                    int favoriteCount, 
-                    int viewCount, 
-                    int commentCount, 
-                    int eliteScore, 
-                    int praiseCount, 
                     long auditor, 
                     System.DateTime auditedTime, 
                     string auditOpinion, 
@@ -14843,36 +14509,21 @@ namespace Res.Business {
                     long lastModifier, 
                     System.DateTime lastModifiedTime, 
                     double score, 
-                    int weiXinFavoriteCount, 
-                    int weiXInPraiseCount) {
+                    long attachmentId) {
             _crosourceId = crosourceId;
             _title = title;
-            _author = author;
-            _keywords = keywords;
             _description = description;
             _provinceId = provinceId;
             _areaId = areaId;
-            _companyId = companyId;
             _activeId = activeId;
+            _author = author;
             _authorCompany = authorCompany;
             _authorAddress = authorAddress;
             _authorEmail = authorEmail;
             _authorPhone = authorPhone;
-            _stagePKID = stagePKID;
-            _gradePKID = gradePKID;
             _resourceTypePKID = resourceTypePKID;
-            _subjectPKID = subjectPKID;
-            _courseTypePKID = courseTypePKID;
             _statePKID = statePKID;
-            _publicStatePKID = publicStatePKID;
-            _downloadStatePKID = downloadStatePKID;
             _winLevelPKID = winLevelPKID;
-            _downCount = downCount;
-            _favoriteCount = favoriteCount;
-            _viewCount = viewCount;
-            _commentCount = commentCount;
-            _eliteScore = eliteScore;
-            _praiseCount = praiseCount;
             _auditor = auditor;
             _auditedTime = auditedTime;
             _auditOpinion = auditOpinion;
@@ -14881,14 +14532,13 @@ namespace Res.Business {
             _lastModifier = lastModifier;
             _lastModifiedTime = lastModifiedTime;
             _score = score;
-            _weiXinFavoriteCount = weiXinFavoriteCount;
-            _weiXInPraiseCount = weiXInPraiseCount;
+            _attachmentId = attachmentId;
         }
         
         /// <summary>
         /// CrosourceId
         /// </summary>
-        [Display(Name="作品ID")]
+        [Display(Name="论文ID")]
         public virtual long CrosourceId {
             get {
                 return _crosourceId;
@@ -14910,7 +14560,7 @@ namespace Res.Business {
         /// <summary>
         /// Title
         /// </summary>
-        [Display(Name="标题")]
+        [Display(Name="论文标题")]
         [Required()]
         [StringLength(250)]
         public virtual string Title {
@@ -14928,54 +14578,6 @@ namespace Res.Business {
         public static StringAPColumnDef TitleDef {
             get {
                 return APDBDef.CroResource.Title;
-            }
-        }
-        
-        /// <summary>
-        /// Author
-        /// </summary>
-        [Display(Name="作者")]
-        [Required()]
-        [StringLength(50)]
-        public virtual string Author {
-            get {
-                return _author;
-            }
-            set {
-                _author = value;
-            }
-        }
-        
-        /// <summary>
-        /// Author APColumnDef
-        /// </summary>
-        public static StringAPColumnDef AuthorDef {
-            get {
-                return APDBDef.CroResource.Author;
-            }
-        }
-        
-        /// <summary>
-        /// Keywords
-        /// </summary>
-        [Display(Name="关键字")]
-        [Required()]
-        [StringLength(50)]
-        public virtual string Keywords {
-            get {
-                return _keywords;
-            }
-            set {
-                _keywords = value;
-            }
-        }
-        
-        /// <summary>
-        /// Keywords APColumnDef
-        /// </summary>
-        public static StringAPColumnDef KeywordsDef {
-            get {
-                return APDBDef.CroResource.Keywords;
             }
         }
         
@@ -15047,28 +14649,6 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// CompanyId
-        /// </summary>
-        [Display(Name="所属学校")]
-        public virtual long CompanyId {
-            get {
-                return _companyId;
-            }
-            set {
-                _companyId = value;
-            }
-        }
-        
-        /// <summary>
-        /// CompanyId APColumnDef
-        /// </summary>
-        public static Int64APColumnDef CompanyIdDef {
-            get {
-                return APDBDef.CroResource.CompanyId;
-            }
-        }
-        
-        /// <summary>
         /// ActiveId
         /// </summary>
         [Display(Name="所属项目")]
@@ -15087,6 +14667,30 @@ namespace Res.Business {
         public static Int64APColumnDef ActiveIdDef {
             get {
                 return APDBDef.CroResource.ActiveId;
+            }
+        }
+        
+        /// <summary>
+        /// Author
+        /// </summary>
+        [Display(Name="论文作者")]
+        [Required()]
+        [StringLength(50)]
+        public virtual string Author {
+            get {
+                return _author;
+            }
+            set {
+                _author = value;
+            }
+        }
+        
+        /// <summary>
+        /// Author APColumnDef
+        /// </summary>
+        public static StringAPColumnDef AuthorDef {
+            get {
+                return APDBDef.CroResource.Author;
             }
         }
         
@@ -15184,52 +14788,6 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceStage
-        /// </summary>
-        [Display(Name="学段")]
-        [Required()]
-        public virtual long StagePKID {
-            get {
-                return _stagePKID;
-            }
-            set {
-                _stagePKID = value;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceStage APColumnDef
-        /// </summary>
-        public static Int64APColumnDef StagePKIDDef {
-            get {
-                return APDBDef.CroResource.StagePKID;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceGrade
-        /// </summary>
-        [Display(Name="年级")]
-        [Required()]
-        public virtual long GradePKID {
-            get {
-                return _gradePKID;
-            }
-            set {
-                _gradePKID = value;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceGrade APColumnDef
-        /// </summary>
-        public static Int64APColumnDef GradePKIDDef {
-            get {
-                return APDBDef.CroResource.GradePKID;
-            }
-        }
-        
-        /// <summary>
         /// PickList - APEdu.net key is PLKey_ResourceType
         /// </summary>
         [Display(Name="作品类型")]
@@ -15248,52 +14806,6 @@ namespace Res.Business {
         public static Int64APColumnDef ResourceTypePKIDDef {
             get {
                 return APDBDef.CroResource.ResourceTypePKID;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceSubject
-        /// </summary>
-        [Display(Name="学科")]
-        [Required()]
-        public virtual long SubjectPKID {
-            get {
-                return _subjectPKID;
-            }
-            set {
-                _subjectPKID = value;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceSubject APColumnDef
-        /// </summary>
-        public static Int64APColumnDef SubjectPKIDDef {
-            get {
-                return APDBDef.CroResource.SubjectPKID;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_CourseType
-        /// </summary>
-        [Display(Name="资源类型")]
-        [Required()]
-        public virtual long CourseTypePKID {
-            get {
-                return _courseTypePKID;
-            }
-            set {
-                _courseTypePKID = value;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_CourseType APColumnDef
-        /// </summary>
-        public static Int64APColumnDef CourseTypePKIDDef {
-            get {
-                return APDBDef.CroResource.CourseTypePKID;
             }
         }
         
@@ -15320,50 +14832,6 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourcePublicState
-        /// </summary>
-        [Display(Name="公开设置")]
-        public virtual long PublicStatePKID {
-            get {
-                return _publicStatePKID;
-            }
-            set {
-                _publicStatePKID = value;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourcePublicState APColumnDef
-        /// </summary>
-        public static Int64APColumnDef PublicStatePKIDDef {
-            get {
-                return APDBDef.CroResource.PublicStatePKID;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceDownloadState
-        /// </summary>
-        [Display(Name="下载设置")]
-        public virtual long DownloadStatePKID {
-            get {
-                return _downloadStatePKID;
-            }
-            set {
-                _downloadStatePKID = value;
-            }
-        }
-        
-        /// <summary>
-        /// PickList - APEdu.net key is PLKey_ResourceDownloadState APColumnDef
-        /// </summary>
-        public static Int64APColumnDef DownloadStatePKIDDef {
-            get {
-                return APDBDef.CroResource.DownloadStatePKID;
-            }
-        }
-        
-        /// <summary>
         /// PickList - APEdu.net key is PLKey_WinLevel
         /// </summary>
         [Display(Name="获奖等级")]
@@ -15382,138 +14850,6 @@ namespace Res.Business {
         public static Int64APColumnDef WinLevelPKIDDef {
             get {
                 return APDBDef.CroResource.WinLevelPKID;
-            }
-        }
-        
-        /// <summary>
-        /// DownCount
-        /// </summary>
-        [Display(Name="下载次数")]
-        public virtual int DownCount {
-            get {
-                return _downCount;
-            }
-            set {
-                _downCount = value;
-            }
-        }
-        
-        /// <summary>
-        /// DownCount APColumnDef
-        /// </summary>
-        public static Int32APColumnDef DownCountDef {
-            get {
-                return APDBDef.CroResource.DownCount;
-            }
-        }
-        
-        /// <summary>
-        /// FavoriteCount
-        /// </summary>
-        [Display(Name="收藏次数")]
-        public virtual int FavoriteCount {
-            get {
-                return _favoriteCount;
-            }
-            set {
-                _favoriteCount = value;
-            }
-        }
-        
-        /// <summary>
-        /// FavoriteCount APColumnDef
-        /// </summary>
-        public static Int32APColumnDef FavoriteCountDef {
-            get {
-                return APDBDef.CroResource.FavoriteCount;
-            }
-        }
-        
-        /// <summary>
-        /// ViewCount
-        /// </summary>
-        [Display(Name="点击次数")]
-        public virtual int ViewCount {
-            get {
-                return _viewCount;
-            }
-            set {
-                _viewCount = value;
-            }
-        }
-        
-        /// <summary>
-        /// ViewCount APColumnDef
-        /// </summary>
-        public static Int32APColumnDef ViewCountDef {
-            get {
-                return APDBDef.CroResource.ViewCount;
-            }
-        }
-        
-        /// <summary>
-        /// CommentCount
-        /// </summary>
-        [Display(Name="评论次数")]
-        public virtual int CommentCount {
-            get {
-                return _commentCount;
-            }
-            set {
-                _commentCount = value;
-            }
-        }
-        
-        /// <summary>
-        /// CommentCount APColumnDef
-        /// </summary>
-        public static Int32APColumnDef CommentCountDef {
-            get {
-                return APDBDef.CroResource.CommentCount;
-            }
-        }
-        
-        /// <summary>
-        /// EliteScore
-        /// </summary>
-        [Display(Name="加精分数")]
-        public virtual int EliteScore {
-            get {
-                return _eliteScore;
-            }
-            set {
-                _eliteScore = value;
-            }
-        }
-        
-        /// <summary>
-        /// EliteScore APColumnDef
-        /// </summary>
-        public static Int32APColumnDef EliteScoreDef {
-            get {
-                return APDBDef.CroResource.EliteScore;
-            }
-        }
-        
-        /// <summary>
-        /// PraiseCount
-        /// </summary>
-        [Display(Name="点赞次数")]
-        public virtual int PraiseCount {
-            get {
-                return _praiseCount;
-            }
-            set {
-                _praiseCount = value;
-            }
-        }
-        
-        /// <summary>
-        /// PraiseCount APColumnDef
-        /// </summary>
-        public static Int32APColumnDef PraiseCountDef {
-            get {
-                return APDBDef.CroResource.PraiseCount;
             }
         }
         
@@ -15691,46 +15027,24 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// WeiXinFavoriteCount
+        /// AttachmentId
         /// </summary>
-        [Display(Name="微信收藏次数")]
-        public virtual int WeiXinFavoriteCount {
+        [Display(Name="附件id")]
+        public virtual long AttachmentId {
             get {
-                return _weiXinFavoriteCount;
+                return _attachmentId;
             }
             set {
-                _weiXinFavoriteCount = value;
+                _attachmentId = value;
             }
         }
         
         /// <summary>
-        /// WeiXinFavoriteCount APColumnDef
+        /// AttachmentId APColumnDef
         /// </summary>
-        public static Int32APColumnDef WeiXinFavoriteCountDef {
+        public static Int64APColumnDef AttachmentIdDef {
             get {
-                return APDBDef.CroResource.WeiXinFavoriteCount;
-            }
-        }
-        
-        /// <summary>
-        /// WeiXInPraiseCount
-        /// </summary>
-        [Display(Name="微信点赞次数")]
-        public virtual int WeiXInPraiseCount {
-            get {
-                return _weiXInPraiseCount;
-            }
-            set {
-                _weiXInPraiseCount = value;
-            }
-        }
-        
-        /// <summary>
-        /// WeiXInPraiseCount APColumnDef
-        /// </summary>
-        public static Int32APColumnDef WeiXInPraiseCountDef {
-            get {
-                return APDBDef.CroResource.WeiXInPraiseCount;
+                return APDBDef.CroResource.AttachmentId;
             }
         }
         
@@ -15758,32 +15072,18 @@ namespace Res.Business {
         public virtual void Assignment(CroResource data) {
             CrosourceId = data.CrosourceId;
             Title = data.Title;
-            Author = data.Author;
-            Keywords = data.Keywords;
             Description = data.Description;
             ProvinceId = data.ProvinceId;
             AreaId = data.AreaId;
-            CompanyId = data.CompanyId;
             ActiveId = data.ActiveId;
+            Author = data.Author;
             AuthorCompany = data.AuthorCompany;
             AuthorAddress = data.AuthorAddress;
             AuthorEmail = data.AuthorEmail;
             AuthorPhone = data.AuthorPhone;
-            StagePKID = data.StagePKID;
-            GradePKID = data.GradePKID;
             ResourceTypePKID = data.ResourceTypePKID;
-            SubjectPKID = data.SubjectPKID;
-            CourseTypePKID = data.CourseTypePKID;
             StatePKID = data.StatePKID;
-            PublicStatePKID = data.PublicStatePKID;
-            DownloadStatePKID = data.DownloadStatePKID;
             WinLevelPKID = data.WinLevelPKID;
-            DownCount = data.DownCount;
-            FavoriteCount = data.FavoriteCount;
-            ViewCount = data.ViewCount;
-            CommentCount = data.CommentCount;
-            EliteScore = data.EliteScore;
-            PraiseCount = data.PraiseCount;
             Auditor = data.Auditor;
             AuditedTime = data.AuditedTime;
             AuditOpinion = data.AuditOpinion;
@@ -15792,8 +15092,7 @@ namespace Res.Business {
             LastModifier = data.LastModifier;
             LastModifiedTime = data.LastModifiedTime;
             Score = data.Score;
-            WeiXinFavoriteCount = data.WeiXinFavoriteCount;
-            WeiXInPraiseCount = data.WeiXInPraiseCount;
+            AttachmentId = data.AttachmentId;
         }
         
         /// <summary>
@@ -15806,12 +15105,6 @@ namespace Res.Business {
             if ((Title != data.Title)) {
                 return false;
             }
-            if ((Author != data.Author)) {
-                return false;
-            }
-            if ((Keywords != data.Keywords)) {
-                return false;
-            }
             if ((Description != data.Description)) {
                 return false;
             }
@@ -15821,10 +15114,10 @@ namespace Res.Business {
             if ((AreaId != data.AreaId)) {
                 return false;
             }
-            if ((CompanyId != data.CompanyId)) {
+            if ((ActiveId != data.ActiveId)) {
                 return false;
             }
-            if ((ActiveId != data.ActiveId)) {
+            if ((Author != data.Author)) {
                 return false;
             }
             if ((AuthorCompany != data.AuthorCompany)) {
@@ -15839,49 +15132,13 @@ namespace Res.Business {
             if ((AuthorPhone != data.AuthorPhone)) {
                 return false;
             }
-            if ((StagePKID != data.StagePKID)) {
-                return false;
-            }
-            if ((GradePKID != data.GradePKID)) {
-                return false;
-            }
             if ((ResourceTypePKID != data.ResourceTypePKID)) {
-                return false;
-            }
-            if ((SubjectPKID != data.SubjectPKID)) {
-                return false;
-            }
-            if ((CourseTypePKID != data.CourseTypePKID)) {
                 return false;
             }
             if ((StatePKID != data.StatePKID)) {
                 return false;
             }
-            if ((PublicStatePKID != data.PublicStatePKID)) {
-                return false;
-            }
-            if ((DownloadStatePKID != data.DownloadStatePKID)) {
-                return false;
-            }
             if ((WinLevelPKID != data.WinLevelPKID)) {
-                return false;
-            }
-            if ((DownCount != data.DownCount)) {
-                return false;
-            }
-            if ((FavoriteCount != data.FavoriteCount)) {
-                return false;
-            }
-            if ((ViewCount != data.ViewCount)) {
-                return false;
-            }
-            if ((CommentCount != data.CommentCount)) {
-                return false;
-            }
-            if ((EliteScore != data.EliteScore)) {
-                return false;
-            }
-            if ((PraiseCount != data.PraiseCount)) {
                 return false;
             }
             if ((Auditor != data.Auditor)) {
@@ -15908,10 +15165,7 @@ namespace Res.Business {
             if ((Score != data.Score)) {
                 return false;
             }
-            if ((WeiXinFavoriteCount != data.WeiXinFavoriteCount)) {
-                return false;
-            }
-            if ((WeiXInPraiseCount != data.WeiXInPraiseCount)) {
+            if ((AttachmentId != data.AttachmentId)) {
                 return false;
             }
             return true;
@@ -15996,7 +15250,7 @@ namespace Res.Business {
     }
     
     /// <summary>
-    /// 微课作品
+    /// 论文资源
     /// </summary>
     [Serializable()]
     public partial class CroResource : CroResourceBase {
@@ -16013,32 +15267,18 @@ namespace Res.Business {
         public CroResource(
                     long crosourceId, 
                     string title, 
-                    string author, 
-                    string keywords, 
                     string description, 
                     long provinceId, 
                     long areaId, 
-                    long companyId, 
                     long activeId, 
+                    string author, 
                     string authorCompany, 
                     string authorAddress, 
                     string authorEmail, 
                     string authorPhone, 
-                    long stagePKID, 
-                    long gradePKID, 
                     long resourceTypePKID, 
-                    long subjectPKID, 
-                    long courseTypePKID, 
                     long statePKID, 
-                    long publicStatePKID, 
-                    long downloadStatePKID, 
                     long winLevelPKID, 
-                    int downCount, 
-                    int favoriteCount, 
-                    int viewCount, 
-                    int commentCount, 
-                    int eliteScore, 
-                    int praiseCount, 
                     long auditor, 
                     System.DateTime auditedTime, 
                     string auditOpinion, 
@@ -16047,9 +15287,8 @@ namespace Res.Business {
                     long lastModifier, 
                     System.DateTime lastModifiedTime, 
                     double score, 
-                    int weiXinFavoriteCount, 
-                    int weiXInPraiseCount) : 
-                base(crosourceId, title, author, keywords, description, provinceId, areaId, companyId, activeId, authorCompany, authorAddress, authorEmail, authorPhone, stagePKID, gradePKID, resourceTypePKID, subjectPKID, courseTypePKID, statePKID, publicStatePKID, downloadStatePKID, winLevelPKID, downCount, favoriteCount, viewCount, commentCount, eliteScore, praiseCount, auditor, auditedTime, auditOpinion, creator, createdTime, lastModifier, lastModifiedTime, score, weiXinFavoriteCount, weiXInPraiseCount) {
+                    long attachmentId) : 
+                base(crosourceId, title, description, provinceId, areaId, activeId, author, authorCompany, authorAddress, authorEmail, authorPhone, resourceTypePKID, statePKID, winLevelPKID, auditor, auditedTime, auditOpinion, creator, createdTime, lastModifier, lastModifiedTime, score, attachmentId) {
         }
     }
     

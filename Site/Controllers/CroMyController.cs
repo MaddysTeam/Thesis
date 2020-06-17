@@ -147,14 +147,14 @@ namespace Res.Controllers
          ViewBag.Provinces = provinces;
          ViewBag.Areas = areas;
          ViewBag.Companies = schools;
-         ViewBag.Actives = APBplDef.ActiveBpl.GetAll().Where(x=>x.IsCurrent).ToList();
+         ViewBag.Actives = APBplDef.ActiveBpl.GetAll().Where(x => x.IsCurrent).ToList();
          ViewBag.ProvincesDic = GetStrengthDict(areas);
          ViewBag.AreasDic = GetStrengthDict(areas);
          ViewBag.SchoolsDic = GetStrengthDict(schools);
          ViewBag.ResTypes = GetStrengthDict(CroResourceHelper.ResourceType.GetItems());
 
-         var model= resid == null ? 
-                       new CroResource { ProvinceId=user.ProvinceId, AreaId=user.AreaId, CompanyId=user.CompanyId } :
+         var model = resid == null ?
+                       new CroResource { ProvinceId = user.ProvinceId, AreaId = user.AreaId } :
                        APBplDef.CroResourceBpl.GetResource(db, resid.Value);
 
          return View(model);
@@ -162,9 +162,22 @@ namespace Res.Controllers
 
 
       [HttpPost]
-      [ValidateInput(false)]
-      public ActionResult Upload(long id, long? resid, CroResource model, FormCollection fc)
+      [ValidateInput(true)]
+      public ActionResult Upload(CroResource model)
       {
+         if (!ModelState.IsValid)
+         {
+            return View(model);
+         }
+
+         if (model.CrosourceId > 0)
+         {
+            db.CroResourceDal.Update(model);
+         }
+         else
+         {
+            db.CroResourceDal.Insert(model);
+         }
 
          //CroResource current = null;
          //if (resid != null && resid.Value > 0)
@@ -292,7 +305,7 @@ namespace Res.Controllers
       }
 
 
-      public ActionResult CroMyMedal(long id,int page= 1)
+      public ActionResult CroMyMedal(long id, int page = 1)
       {
          int total = 0;
          ViewBag.ListofMedals = MyMedals(id, out total, 10, (page - 1) * 10);

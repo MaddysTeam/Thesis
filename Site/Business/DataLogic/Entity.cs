@@ -81,10 +81,6 @@ namespace Res.Business
       public string Description { get; set; }
       public DateTime OccurTime { get; set; }
       public long StatePKID { get; set; }
-      public long PublicStatePKID { get; set; }
-      public long DownloadStatePKID { get; set; }
-      public string PublicState => PublicStatePKID == CroResourceHelper.Public ? "取消公开" : "点击公开";
-      public string DownloadState => DownloadStatePKID == CroResourceHelper.AllowDownload ? "禁止下载" : "允许下载";
 
       public long ProvinceId { get; set; }
       public long AreaId { get; set; }
