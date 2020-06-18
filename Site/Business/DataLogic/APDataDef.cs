@@ -158,9 +158,9 @@ namespace Res.Business
 
       public string State { get { return CroResourceHelper.State.GetName(StatePKID); } }
 
-      //public string Province { get { return GetCompanyName(ProvinceId); } }
+      public string Province { get { return GetCompanyName(ProvinceId); } }
 
-      //public string Area { get { return GetCompanyName(AreaId); } }
+      public string Area { get { return GetCompanyName(AreaId); } }
 
       public string WinLevel { get { return CroResourceHelper.WinLevel.GetName(WinLevelPKID); } }
 
@@ -171,6 +171,20 @@ namespace Res.Business
       [Display(Name = "资源路径")]
       [Required]
       public string GhostFileName { get; set; }
+
+      [EmailAddress]
+      public override string AuthorEmail
+      {
+         get
+         {
+            return base.AuthorEmail;
+         }
+
+         set
+         {
+            base.AuthorEmail = value;
+         }
+      }
 
       #endregion
 

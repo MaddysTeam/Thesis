@@ -105,6 +105,27 @@ function RelationSelect(src, tat, rule, none, fixInit) {
 	doit(fixInit || $tat.val());
 }
 
+
+function ajaxSubmitForm(selector, isReplaceCommas) {
+	$.validator.unobtrusive.parse(selector);
+
+	selector.submit(function (e) {
+		e.preventDefault();
+		var $this = $(this);
+		var para = $this.serialize();
+		if (isReplaceCommas == true) {
+			para = para.replace('%2c', ',');
+		}
+		$this.valid() && $.post($this.attr('action'), para, function (data, status) {
+			var afterSuccess = $this.data('afterSuccess');
+			if (afterSuccess) {
+				eval(afterSuccess);
+			}
+		})
+	});
+}
+
+
 //$(function () {
 //	$(document).on("click", ".joinbag", function (e) {
 //		e.stopPropagation();

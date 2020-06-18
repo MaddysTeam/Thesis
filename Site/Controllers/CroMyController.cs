@@ -162,12 +162,12 @@ namespace Res.Controllers
 
 
       [HttpPost]
-      [ValidateInput(true)]
+      //[ValidateInput(true)]
       public ActionResult Upload(CroResource model)
       {
          if (!ModelState.IsValid)
          {
-            return View(model);
+            return Upload(ResSettings.SettingsInSession.UserId,model.CrosourceId);
          }
 
          if (model.CrosourceId > 0)
