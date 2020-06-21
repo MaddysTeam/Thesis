@@ -26,17 +26,6 @@
 
 			<div class="widget-content">
 
-				@*@if (ViewData != null && ViewData.ModelState.Values != null)
-				{
-					foreach (var state in ViewData.ModelState.Values)
-					{
-						if (state.Errors.Count > 0)
-						{
-							<h1>@state.Errors[0].ErrorMessage</h1>
-						}
-					}
-				}*@
-
 				<div class="uploadForms">
 				</div>
 
@@ -44,6 +33,12 @@
 					@using (Html.BeginForm("Upload", "CroMy", Model == null ? null : new { id = id, resid = Model.CrosourceId }, FormMethod.Post, new { id = "form", role = "form", @class = "form-horizontal" }))
 					{
 						@Html.HiddenFor(m => m.CrosourceId)
+						@Html.HiddenFor(m => m.StatePKID)
+						@Html.HiddenFor(m => m.AuditedTime)
+						@Html.HiddenFor(m => m.Creator)
+						@Html.HiddenFor(m => m.CreatedTime)
+						@Html.HiddenFor(m => m.LastModifier)
+
 						<fieldset class="col-sm-11  fieldContainer">
 
 							@*<div class="form-group ">
@@ -60,28 +55,18 @@
 									@Html.ValidationMessageFor(m => m.Title)
 								</div>
 							</div>
-
-							@*<div class="form-group">
-									@Html.LabelFor(m => m.Description, new { @class = "control-label col-sm-3" })
-									<div class="col-sm-9">
-										@Html.TextAreaFor(m => m.Description, 4, 30, new { @class = "form-control  textarea", maxlength = "150", placeholder = "作品简介" })
-										<div class="img_ta_num">简介最多只允许填写150个字以内</div>
-									</div>
-								</div>*@
-
-							@*<div class="form-group">
-									<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 关键词</label>
-									<div class="col-sm-9">
-										@Html.TextBoxFor(m => m.Keywords, new { @class = "form-control gjz", maxlength = "255", placeholder = "关键词" })
-										@Html.ValidationMessageFor(m => m.Keywords)
-
-									</div>
-								</div>*@
-
+							<div class="form-group">
+								<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 论文主题</label>
+								<div class="col-sm-9">
+									@Html.DropDownListFor(m => m.ThemeId, (ViewBag.Themes as List<ResPickListItem>).Select(x => new SelectListItem { Text = x.Name, Value = x.PickListItemId.ToString() }), "选择主题", new { @class = "form-control" })
+									@Html.ValidationMessageFor(m => m.AreaId, null, new { @class = "text-danger" })
+								</div>
+							</div>
 							<div class="form-group ">
 									<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 省份</label>
 									<div class="col-sm-9">
 										@Html.DropDownListFor(m => m.ProvinceId, (ViewBag.Provinces as List<ResCompany>).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择省份", new { @class = "form-control" })
+									   @Html.ValidationMessageFor(m => m.ProvinceId, null, new { @class = "text-danger" })
 									</div>
 								</div>
 
@@ -89,6 +74,7 @@
 									<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 地区</label>
 									<div class="col-sm-9">
 										@Html.DropDownListFor(m => m.AreaId, (ViewBag.Areas as List<ResCompany>).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择地区", new { @class = "form-control" })
+										@Html.ValidationMessageFor(m => m.AreaId, null, new { @class = "text-danger" })
 									</div>
 								</div>
 
@@ -101,7 +87,7 @@
 							</div>
 
 							<div class="form-group">
-								<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 作者单位</label>
+								<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 作者单位(全称)</label>
 								<div class="col-sm-9">
 									@Html.TextBoxFor(m => m.AuthorCompany, new { @class = "form-control", maxlength = "255", placeholder = "作者所在单位" })
 									@Html.ValidationMessageFor(m => m.AuthorCompany, null, new { @class = "text-danger" })
@@ -117,7 +103,7 @@
 							</div>
 
 							<div class="form-group">
-								@Html.LabelFor(m => m.AuthorEmail, new { @class = "control-label col-sm-3" })
+								<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 作者邮箱</label>
 								<div class="col-sm-9">
 									@Html.TextBoxFor(m => m.AuthorEmail, new { @class = "form-control", maxlength = "255", placeholder = "作者电子邮箱" })
 									@Html.ValidationMessageFor(m => m.AuthorEmail, null, new { @class = "text-danger" })
@@ -129,13 +115,13 @@
 
 								<div class="col-sm-9">
 									<div class="input-group">
-										@Html.TextBoxFor(m => m.Attachment, new { @class = "form-control resource-path", maxlength = "255", placeholder = "上传论文附件", @readonly = "readonly" })
+										@Html.TextBoxFor(m => m.AttachmentName, new { @class = "form-control resource-path", maxlength = "255", placeholder = "上传论文附件", @readonly = "readonly" })
 										
 										<div class="input-group-btn">
 											<button type="button" class="btn btn-default dropdown-toggle btn-upload" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-upload"></i> </button>
 										</div>
 									</div>
-									@Html.ValidationMessageFor(m => m.Attachment, null, new { @class = "text-danger" })
+									@Html.ValidationMessageFor(m => m.AttachmentName, null, new { @class = "text-danger" })
 									<div class="progress" style="display:none">
 										<div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
 											<span class="sr-only"></span>
@@ -178,7 +164,7 @@
 	<script type="text/javascript">
 		$(function () {
 
-			bindResourceUploader($('.attachmentUploader'), 'attachment', '.doc,.docx,.pdf');
+			bindResourceUploader($('.attachmentUploader'), 'attachment', '.doc,.docx');
 
 		});
 
@@ -198,7 +184,7 @@
 					$('.uploadForms').append($('<form action="' + action + '" class="' + dropzoneName + ' uploaderForm' + i + '"></form>'));
 					$('.' + dropzoneName).dropzone({
 						addRemoveLinks: !0,
-						maxFilesize: 200,
+						maxFilesize: 30,
 						filesizeBase: 100 * 1024,
 						maxFiles: 100,
 						acceptedFiles: mimeTypes,

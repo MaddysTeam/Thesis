@@ -1130,6 +1130,8 @@ namespace Res.Business {
             
             private Int64APColumnDef _userTypePKID;
             
+            private StringAPColumnDef _company;
+            
             private StringAPColumnDef _realName;
             
             private StringAPColumnDef _photoPath;
@@ -1269,6 +1271,20 @@ namespace Res.Business {
                         _userTypePKID.Display = "用户角色";
                     }
                     return _userTypePKID;
+                }
+            }
+            
+            /// <summary>
+            /// Company ColumnDef
+            /// </summary>
+            public virtual StringAPColumnDef Company {
+                get {
+                    if (Object.ReferenceEquals(_company, null)) {
+                        _company = new StringAPColumnDef(this, "Company", false, 200);
+                        _company.Display = "单位全称";
+                        _company.Required = true;
+                    }
+                    return _company;
                 }
             }
             
@@ -1483,6 +1499,7 @@ namespace Res.Business {
                 data.Question = Question.GetValue<string>(reader, throwIfValidColumnName);
                 data.Answer = Answer.GetValue<string>(reader, throwIfValidColumnName);
                 data.UserTypePKID = UserTypePKID.GetValue<long>(reader, throwIfValidColumnName);
+                data.Company = Company.GetValue<string>(reader, throwIfValidColumnName);
                 data.RealName = RealName.GetValue<string>(reader, throwIfValidColumnName);
                 data.PhotoPath = PhotoPath.GetValue<string>(reader, throwIfValidColumnName);
                 data.GenderPKID = GenderPKID.GetValue<long>(reader, throwIfValidColumnName);
@@ -2842,6 +2859,8 @@ namespace Res.Business {
             
             private Int64APColumnDef _activeId;
             
+            private Int64APColumnDef _themeId;
+            
             private StringAPColumnDef _author;
             
             private StringAPColumnDef _authorCompany;
@@ -2964,6 +2983,19 @@ namespace Res.Business {
             }
             
             /// <summary>
+            /// ThemeId ColumnDef
+            /// </summary>
+            public virtual Int64APColumnDef ThemeId {
+                get {
+                    if (Object.ReferenceEquals(_themeId, null)) {
+                        _themeId = new Int64APColumnDef(this, "ThemeId", false);
+                        _themeId.Display = "所属主题";
+                    }
+                    return _themeId;
+                }
+            }
+            
+            /// <summary>
             /// Author ColumnDef
             /// </summary>
             public virtual StringAPColumnDef Author {
@@ -2983,7 +3015,7 @@ namespace Res.Business {
             public virtual StringAPColumnDef AuthorCompany {
                 get {
                     if (Object.ReferenceEquals(_authorCompany, null)) {
-                        _authorCompany = new StringAPColumnDef(this, "AuthorCompany", false, 50);
+                        _authorCompany = new StringAPColumnDef(this, "AuthorCompany", false, 200);
                         _authorCompany.Display = "作者单位";
                         _authorCompany.Required = true;
                     }
@@ -3212,6 +3244,7 @@ namespace Res.Business {
                 data.ProvinceId = ProvinceId.GetValue<long>(reader, throwIfValidColumnName);
                 data.AreaId = AreaId.GetValue<long>(reader, throwIfValidColumnName);
                 data.ActiveId = ActiveId.GetValue<long>(reader, throwIfValidColumnName);
+                data.ThemeId = ThemeId.GetValue<long>(reader, throwIfValidColumnName);
                 data.Author = Author.GetValue<string>(reader, throwIfValidColumnName);
                 data.AuthorCompany = AuthorCompany.GetValue<string>(reader, throwIfValidColumnName);
                 data.AuthorAddress = AuthorAddress.GetValue<string>(reader, throwIfValidColumnName);
@@ -4995,7 +5028,7 @@ namespace Res.Business {
                 if ((data.UserId == 0)) {
                     data.UserId = ((long)(GetNewId(APDBDef.ResUser.UserId)));
                 }
-                var query = APQuery.insert(APDBDef.ResUser).values(APDBDef.ResUser.UserId.SetValue(data.UserId), APDBDef.ResUser.UserName.SetValue(data.UserName), APDBDef.ResUser.Password.SetValue(data.Password), APDBDef.ResUser.PasswordHash.SetValue(data.PasswordHash), APDBDef.ResUser.SecurityStamp.SetValue(data.SecurityStamp), APDBDef.ResUser.Question.SetValue(data.Question), APDBDef.ResUser.Answer.SetValue(data.Answer), APDBDef.ResUser.UserTypePKID.SetValue(data.UserTypePKID), APDBDef.ResUser.RealName.SetValue(data.RealName), APDBDef.ResUser.PhotoPath.SetValue(data.PhotoPath), APDBDef.ResUser.GenderPKID.SetValue(data.GenderPKID), APDBDef.ResUser.IDCard.SetValue(data.IDCard), APDBDef.ResUser.Email.SetValue(data.Email), APDBDef.ResUser.CompanyId.SetValue(data.CompanyId), APDBDef.ResUser.ProvinceId.SetValue(data.ProvinceId), APDBDef.ResUser.AreaId.SetValue(data.AreaId), APDBDef.ResUser.Actived.SetValue(data.Actived), APDBDef.ResUser.Removed.SetValue(data.Removed), APDBDef.ResUser.RegisterTime.SetValue(data.RegisterTime), APDBDef.ResUser.LastLoginTime.SetValue(data.LastLoginTime), APDBDef.ResUser.LoginCount.SetValue(data.LoginCount), APDBDef.ResUser.MD5.SetValue(data.MD5));
+                var query = APQuery.insert(APDBDef.ResUser).values(APDBDef.ResUser.UserId.SetValue(data.UserId), APDBDef.ResUser.UserName.SetValue(data.UserName), APDBDef.ResUser.Password.SetValue(data.Password), APDBDef.ResUser.PasswordHash.SetValue(data.PasswordHash), APDBDef.ResUser.SecurityStamp.SetValue(data.SecurityStamp), APDBDef.ResUser.Question.SetValue(data.Question), APDBDef.ResUser.Answer.SetValue(data.Answer), APDBDef.ResUser.UserTypePKID.SetValue(data.UserTypePKID), APDBDef.ResUser.Company.SetValue(data.Company), APDBDef.ResUser.RealName.SetValue(data.RealName), APDBDef.ResUser.PhotoPath.SetValue(data.PhotoPath), APDBDef.ResUser.GenderPKID.SetValue(data.GenderPKID), APDBDef.ResUser.IDCard.SetValue(data.IDCard), APDBDef.ResUser.Email.SetValue(data.Email), APDBDef.ResUser.CompanyId.SetValue(data.CompanyId), APDBDef.ResUser.ProvinceId.SetValue(data.ProvinceId), APDBDef.ResUser.AreaId.SetValue(data.AreaId), APDBDef.ResUser.Actived.SetValue(data.Actived), APDBDef.ResUser.Removed.SetValue(data.Removed), APDBDef.ResUser.RegisterTime.SetValue(data.RegisterTime), APDBDef.ResUser.LastLoginTime.SetValue(data.LastLoginTime), APDBDef.ResUser.LoginCount.SetValue(data.LoginCount), APDBDef.ResUser.MD5.SetValue(data.MD5));
                 ExecuteNonQuery(query);
             }
             
@@ -5003,7 +5036,7 @@ namespace Res.Business {
             /// Update Data.
             /// </summary>
             public virtual void Update(ResUser data) {
-                var query = APQuery.update(APDBDef.ResUser).values(APDBDef.ResUser.UserName.SetValue(data.UserName), APDBDef.ResUser.Password.SetValue(data.Password), APDBDef.ResUser.PasswordHash.SetValue(data.PasswordHash), APDBDef.ResUser.SecurityStamp.SetValue(data.SecurityStamp), APDBDef.ResUser.Question.SetValue(data.Question), APDBDef.ResUser.Answer.SetValue(data.Answer), APDBDef.ResUser.UserTypePKID.SetValue(data.UserTypePKID), APDBDef.ResUser.RealName.SetValue(data.RealName), APDBDef.ResUser.PhotoPath.SetValue(data.PhotoPath), APDBDef.ResUser.GenderPKID.SetValue(data.GenderPKID), APDBDef.ResUser.IDCard.SetValue(data.IDCard), APDBDef.ResUser.Email.SetValue(data.Email), APDBDef.ResUser.CompanyId.SetValue(data.CompanyId), APDBDef.ResUser.ProvinceId.SetValue(data.ProvinceId), APDBDef.ResUser.AreaId.SetValue(data.AreaId), APDBDef.ResUser.Actived.SetValue(data.Actived), APDBDef.ResUser.Removed.SetValue(data.Removed), APDBDef.ResUser.RegisterTime.SetValue(data.RegisterTime), APDBDef.ResUser.LastLoginTime.SetValue(data.LastLoginTime), APDBDef.ResUser.LoginCount.SetValue(data.LoginCount), APDBDef.ResUser.MD5.SetValue(data.MD5)).where((APDBDef.ResUser.UserId == data.UserId));
+                var query = APQuery.update(APDBDef.ResUser).values(APDBDef.ResUser.UserName.SetValue(data.UserName), APDBDef.ResUser.Password.SetValue(data.Password), APDBDef.ResUser.PasswordHash.SetValue(data.PasswordHash), APDBDef.ResUser.SecurityStamp.SetValue(data.SecurityStamp), APDBDef.ResUser.Question.SetValue(data.Question), APDBDef.ResUser.Answer.SetValue(data.Answer), APDBDef.ResUser.UserTypePKID.SetValue(data.UserTypePKID), APDBDef.ResUser.Company.SetValue(data.Company), APDBDef.ResUser.RealName.SetValue(data.RealName), APDBDef.ResUser.PhotoPath.SetValue(data.PhotoPath), APDBDef.ResUser.GenderPKID.SetValue(data.GenderPKID), APDBDef.ResUser.IDCard.SetValue(data.IDCard), APDBDef.ResUser.Email.SetValue(data.Email), APDBDef.ResUser.CompanyId.SetValue(data.CompanyId), APDBDef.ResUser.ProvinceId.SetValue(data.ProvinceId), APDBDef.ResUser.AreaId.SetValue(data.AreaId), APDBDef.ResUser.Actived.SetValue(data.Actived), APDBDef.ResUser.Removed.SetValue(data.Removed), APDBDef.ResUser.RegisterTime.SetValue(data.RegisterTime), APDBDef.ResUser.LastLoginTime.SetValue(data.LastLoginTime), APDBDef.ResUser.LoginCount.SetValue(data.LoginCount), APDBDef.ResUser.MD5.SetValue(data.MD5)).where((APDBDef.ResUser.UserId == data.UserId));
                 ExecuteNonQuery(query);
             }
             
@@ -6083,7 +6116,7 @@ namespace Res.Business {
                 if ((data.CrosourceId == 0)) {
                     data.CrosourceId = ((long)(GetNewId(APDBDef.CroResource.CrosourceId)));
                 }
-                var query = APQuery.insert(APDBDef.CroResource).values(APDBDef.CroResource.CrosourceId.SetValue(data.CrosourceId), APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId));
+                var query = APQuery.insert(APDBDef.CroResource).values(APDBDef.CroResource.CrosourceId.SetValue(data.CrosourceId), APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.ThemeId.SetValue(data.ThemeId), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId));
                 ExecuteNonQuery(query);
             }
             
@@ -6091,7 +6124,7 @@ namespace Res.Business {
             /// Update Data.
             /// </summary>
             public virtual void Update(CroResource data) {
-                var query = APQuery.update(APDBDef.CroResource).values(APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId)).where((APDBDef.CroResource.CrosourceId == data.CrosourceId));
+                var query = APQuery.update(APDBDef.CroResource).values(APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.ThemeId.SetValue(data.ThemeId), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId)).where((APDBDef.CroResource.CrosourceId == data.CrosourceId));
                 ExecuteNonQuery(query);
             }
             
@@ -11092,6 +11125,11 @@ namespace Res.Business {
         private long _userTypePKID;
         
         /// <summary>
+        /// Company
+        /// </summary>
+        private string _company = string.Empty;
+        
+        /// <summary>
         /// RealName
         /// </summary>
         private string _realName = string.Empty;
@@ -11179,6 +11217,7 @@ namespace Res.Business {
                     string question, 
                     string answer, 
                     long userTypePKID, 
+                    string company, 
                     string realName, 
                     string photoPath, 
                     long genderPKID, 
@@ -11201,6 +11240,7 @@ namespace Res.Business {
             _question = question;
             _answer = answer;
             _userTypePKID = userTypePKID;
+            _company = company;
             _realName = realName;
             _photoPath = photoPath;
             _genderPKID = genderPKID;
@@ -11398,6 +11438,30 @@ namespace Res.Business {
         public static Int64APColumnDef UserTypePKIDDef {
             get {
                 return APDBDef.ResUser.UserTypePKID;
+            }
+        }
+        
+        /// <summary>
+        /// Company
+        /// </summary>
+        [Display(Name="单位全称")]
+        [Required()]
+        [StringLength(200)]
+        public virtual string Company {
+            get {
+                return _company;
+            }
+            set {
+                _company = value;
+            }
+        }
+        
+        /// <summary>
+        /// Company APColumnDef
+        /// </summary>
+        public static StringAPColumnDef CompanyDef {
+            get {
+                return APDBDef.ResUser.Company;
             }
         }
         
@@ -11742,6 +11806,7 @@ namespace Res.Business {
             Question = data.Question;
             Answer = data.Answer;
             UserTypePKID = data.UserTypePKID;
+            Company = data.Company;
             RealName = data.RealName;
             PhotoPath = data.PhotoPath;
             GenderPKID = data.GenderPKID;
@@ -11784,6 +11849,9 @@ namespace Res.Business {
                 return false;
             }
             if ((UserTypePKID != data.UserTypePKID)) {
+                return false;
+            }
+            if ((Company != data.Company)) {
                 return false;
             }
             if ((RealName != data.RealName)) {
@@ -11933,6 +12001,7 @@ namespace Res.Business {
                     string question, 
                     string answer, 
                     long userTypePKID, 
+                    string company, 
                     string realName, 
                     string photoPath, 
                     long genderPKID, 
@@ -11947,7 +12016,7 @@ namespace Res.Business {
                     System.DateTime lastLoginTime, 
                     int loginCount, 
                     string mD5) : 
-                base(userId, userName, password, passwordHash, securityStamp, question, answer, userTypePKID, realName, photoPath, genderPKID, iDCard, email, companyId, provinceId, areaId, actived, removed, registerTime, lastLoginTime, loginCount, mD5) {
+                base(userId, userName, password, passwordHash, securityStamp, question, answer, userTypePKID, company, realName, photoPath, genderPKID, iDCard, email, companyId, provinceId, areaId, actived, removed, registerTime, lastLoginTime, loginCount, mD5) {
         }
     }
     
@@ -14393,6 +14462,11 @@ namespace Res.Business {
         private long _activeId;
         
         /// <summary>
+        /// ThemeId
+        /// </summary>
+        private long _themeId;
+        
+        /// <summary>
         /// Author
         /// </summary>
         private string _author = string.Empty;
@@ -14493,6 +14567,7 @@ namespace Res.Business {
                     long provinceId, 
                     long areaId, 
                     long activeId, 
+                    long themeId, 
                     string author, 
                     string authorCompany, 
                     string authorAddress, 
@@ -14516,6 +14591,7 @@ namespace Res.Business {
             _provinceId = provinceId;
             _areaId = areaId;
             _activeId = activeId;
+            _themeId = themeId;
             _author = author;
             _authorCompany = authorCompany;
             _authorAddress = authorAddress;
@@ -14671,6 +14747,28 @@ namespace Res.Business {
         }
         
         /// <summary>
+        /// ThemeId
+        /// </summary>
+        [Display(Name="所属主题")]
+        public virtual long ThemeId {
+            get {
+                return _themeId;
+            }
+            set {
+                _themeId = value;
+            }
+        }
+        
+        /// <summary>
+        /// ThemeId APColumnDef
+        /// </summary>
+        public static Int64APColumnDef ThemeIdDef {
+            get {
+                return APDBDef.CroResource.ThemeId;
+            }
+        }
+        
+        /// <summary>
         /// Author
         /// </summary>
         [Display(Name="论文作者")]
@@ -14699,7 +14797,7 @@ namespace Res.Business {
         /// </summary>
         [Display(Name="作者单位")]
         [Required()]
-        [StringLength(50)]
+        [StringLength(200)]
         public virtual string AuthorCompany {
             get {
                 return _authorCompany;
@@ -15076,6 +15174,7 @@ namespace Res.Business {
             ProvinceId = data.ProvinceId;
             AreaId = data.AreaId;
             ActiveId = data.ActiveId;
+            ThemeId = data.ThemeId;
             Author = data.Author;
             AuthorCompany = data.AuthorCompany;
             AuthorAddress = data.AuthorAddress;
@@ -15115,6 +15214,9 @@ namespace Res.Business {
                 return false;
             }
             if ((ActiveId != data.ActiveId)) {
+                return false;
+            }
+            if ((ThemeId != data.ThemeId)) {
                 return false;
             }
             if ((Author != data.Author)) {
@@ -15271,6 +15373,7 @@ namespace Res.Business {
                     long provinceId, 
                     long areaId, 
                     long activeId, 
+                    long themeId, 
                     string author, 
                     string authorCompany, 
                     string authorAddress, 
@@ -15288,7 +15391,7 @@ namespace Res.Business {
                     System.DateTime lastModifiedTime, 
                     double score, 
                     long attachmentId) : 
-                base(crosourceId, title, description, provinceId, areaId, activeId, author, authorCompany, authorAddress, authorEmail, authorPhone, resourceTypePKID, statePKID, winLevelPKID, auditor, auditedTime, auditOpinion, creator, createdTime, lastModifier, lastModifiedTime, score, attachmentId) {
+                base(crosourceId, title, description, provinceId, areaId, activeId, themeId, author, authorCompany, authorAddress, authorEmail, authorPhone, resourceTypePKID, statePKID, winLevelPKID, auditor, auditedTime, auditOpinion, creator, createdTime, lastModifier, lastModifiedTime, score, attachmentId) {
         }
     }
     

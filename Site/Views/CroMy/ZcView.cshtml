@@ -1,0 +1,87 @@
+﻿@{
+	//Layout = "~/Views/Shared/_ZcLayout.cshtml";
+	ViewBag.Title = "首页";
+}
+@model CroResource
+<style>
+	.btn-sm {
+		padding: 2px 10px;
+	}
+
+	.pdf {
+		width: 500px;
+		height: 500px;
+	}
+</style>
+<div class="row">
+	<div class="col-md-9">
+
+
+		<div class="div_cont fl w100">
+
+			<div class="show">
+				<div class="row">
+					<div class="col-md-8">
+						<h1>
+							@Model.Title
+						</h1>
+					</div>
+				</div>
+
+				<div class="pdf" id="pdf">
+					<iframe></iframe>
+				</div>
+
+				<div class="attr cb">
+
+					<div class="source cb">
+						<p></p>
+					</div>
+					<div class="div">
+						<h3><i class="fa fa-file"></i> 作品信息</h3>
+					</div>
+
+					<div class="div">
+						<p><span>作品名称： @Model.Title</span></p>
+						<p><span>省　　份： @Model.Province</span></p>
+						<p><span>市　　区： @Model.Area</span></p>
+						<p><span>上传日期： @Model.CreatedTime.ToShortDateString()</span></p>
+					</div>
+
+					<div class="div">
+						<p><span>作　　者： @Model.Author</span></p>
+						<p><span>电　　话： @Model.AuthorPhone</span></p>
+						<p><span>单　　位： @Model.AuthorCompany</span></p>
+						<p><span>电子邮箱： @Model.AuthorEmail</span></p>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<!-- modal frame -->
+	<div class="modal fade" id="inner-edit-form" tabindex="-1" role="dialog" aria-hidden="true"></div>
+	<!-- end modal frame -->
+
+</div>
+
+@section Plugins {
+	@Scripts.Render("~/js/dot")
+}
+
+@section Scripts{
+	<script src="~/assets/js/pdf.js"></script>
+	<script>
+		$(function () {
+
+			var ua = navigator.userAgent;
+			var pdfPath = '@Model.AttachmentPath' + '.pdf';
+			PDFObject.embed(pdfPath, "#pdf");
+
+		});
+	</script>
+}

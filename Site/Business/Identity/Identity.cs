@@ -112,7 +112,7 @@ namespace Res.Business
 		[Required]
 		[Display(Name = "登录密码")]
 		[DataType(DataType.Password)]
-		[StringLength(100, ErrorMessage = "{0} 必须至少包含 {2} 个字符。", MinimumLength = 6)]
+		[StringLength(100, ErrorMessage = "{0} 必须至少包含 {2} 个字符。", MinimumLength = 8)]
 		public string Password { get; set; }
 
 		[Required]
@@ -134,8 +134,8 @@ namespace Res.Business
       public long AreaId { get; set; }
 
       [Required]
-      [Display(Name = "单位")]
-      public long CompanyId { get; set; }
+      [Display(Name = "单位全称")]
+      public string Company { get; set; }
 
       [Required]
       [RegularExpression(@"[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]", ErrorMessage="请输入正确的身份证号码")]

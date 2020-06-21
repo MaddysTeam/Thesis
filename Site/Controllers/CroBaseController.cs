@@ -12,85 +12,6 @@ namespace Res.Controllers
    public class CroBaseController : BaseController
    {
 
-      //以下为活动作品
-
-      #region [ 活动作品查询 ]
-
-      public List<MicroCourseRanking> SearchCroResourceList(APSqlWherePhrase where, APSqlOrderPhrase order, out int total, int take, int skip = -1)
-      {
-         //var cr = APDBDef.CroResource;
-         //var cf = APDBDef.Files;
-         //var rc = APDBDef.ResCompany;
-
-
-         //var query = APQuery.select(cr.CrosourceId, cr.Title, cr.Author, cr.FavoriteCount, cr.ProvinceId, cr.AreaId, cr.CompanyId,
-         //   cr.AuthorCompany, cr.Description, cr.CreatedTime, rc.Path, cr.ViewCount, cr.CommentCount, cr.DownCount,//cr.FileExtName
-         //   mc.CourseId, mc.CourseTitle, mc.PlayCount, cf.FilePath
-         //   )
-         //   .from(cr,
-         //         mc.JoinInner(mc.ResourceId == cr.CrosourceId),
-         //         rc.JoinInner(rc.CompanyId == cr.CompanyId),
-         //         cf.JoinLeft(cf.FileId == mc.CoverId)
-         //         //a.JoinInner(a.ActiveId==cr.ActiveId)
-         //         )
-         //   .where(cr.StatePKID == CroResourceHelper.StateAllow & cr.PublicStatePKID == CroResourceHelper.Public)
-         //   //.where(cr.StatePKID == CroResourceHelper.StateAllow & cr.PublicStatePKID==CroResourceHelper.Public & cr.ProvinceId==ResCompanyHelper.ShangHai) // TODO:审核通过和公开的作品 
-         //   .order_by(cr.ActiveId.Desc)
-         //   .primary(cr.CrosourceId)
-         //   .take(take);
-
-         //if (where != null)
-         //   query.where_and(where);
-
-         //if (order != null)
-         //   query.order_by_add(order).order_by_add(cr.CrosourceId.Asc);
-         //else
-         //   query.order_by_add(cr.CrosourceId.Asc);
-
-         //if (skip != -1)
-         //{
-         //   query.skip(skip);
-         //   total = db.ExecuteSizeOfSelect(query);
-         //}
-         //else
-         //{
-         //   total = 0;
-         //}
-
-         //return db.Query(query, reader =>
-         //{
-         //   var des = cr.Description.GetValue(reader);
-         //   if (des.Length > 100)
-         //      des = des.Substring(0, 100);
-         //   return new MicroCourseRanking()
-         //   {
-         //      CourseId = mc.CourseId.GetValue(reader),
-         //      CrosourceId = cr.CrosourceId.GetValue(reader),
-         //      ResourceTitle = cr.Title.GetValue(reader),
-         //      Title = mc.CourseTitle.GetValue(reader),
-         //      Author = cr.Author.GetValue(reader),
-         //      CoverPath = cf.FilePath.GetValue(reader),
-         //      AuthorCompany = cr.AuthorCompany.GetValue(reader),
-         //      CreatedTime = cr.CreatedTime.GetValue(reader),
-         //      FavoriteCount = cr.FavoriteCount.GetValue(reader),
-         //      CompanyPath = rc.Path.GetValue(reader),
-         //      ProvinceId = cr.ProvinceId.GetValue(reader),
-         //      AreaId = cr.AreaId.GetValue(reader),
-         //      SchoolId = cr.CompanyId.GetValue(reader),
-         //      ViewCount = cr.ViewCount.GetValue(reader),
-         //      CommentCount = cr.CommentCount.GetValue(reader),
-         //      DownCount = cr.DownCount.GetValue(reader),
-         //      //FileExtName = cr.FileExtName.GetValue(reader),
-         //      Description = des,
-         //   };
-         //}).ToList();
-
-         total = 0;
-         return null;
-      }
-
-      #endregion
-
       #region [我的论文]
 
       public List<CroMyResource> MyCroResource(long id, out int total, int take, int skip = 0)
@@ -101,7 +22,6 @@ namespace Res.Controllers
              t.Description, t.CreatedTime, t.AuditOpinion, t.StatePKID,t.ActiveId)
             .from(t)
             .where(t.Creator == userid)
-
             .order_by(t.CreatedTime.Desc)
             .primary(t.CrosourceId)
             .take(take)
@@ -169,7 +89,6 @@ namespace Res.Controllers
 
       #endregion
  
-
    }
 
 }

@@ -24,6 +24,7 @@ namespace Res.Business
       public static PickListAPRptColumn WinLevel;
       public static PickListAPRptColumn PublicState;
       public static PickListAPRptColumn DownloadState;
+      public static PickListAPRptColumn Theme;
 
       static CroResourceHelper()
       {

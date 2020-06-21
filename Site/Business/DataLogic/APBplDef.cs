@@ -190,9 +190,9 @@ namespace Res.Business
             var ur = APDBDef.ResUserRole;
 
             var query = APQuery
-               .select(t.UserId, t.UserName, t.RealName, t.GenderPKID, t.Email, t.RegisterTime, t.LoginCount, t.Actived, c.CompanyName, r.RoleName)
+               .select(t.UserId, t.UserName, t.RealName, t.GenderPKID, t.Email, t.RegisterTime, t.LoginCount, t.Actived, r.RoleName)
                .from(t,
-                  c.JoinInner(t.CompanyId == c.CompanyId),
+                  //c.JoinInner(t.CompanyId == c.CompanyId),
                   ur.JoinInner(t.UserId == ur.UserId),
                   r.JoinInner(r.RoleId == ur.RoleId))
                .where(where)
@@ -218,7 +218,7 @@ namespace Res.Business
                      RegisterTime = t.RegisterTime.GetValue(reader),
                      LoginCount = t.LoginCount.GetValue(reader),
                      Actived = t.Actived.GetValue(reader),
-                     CompanyName = c.CompanyName.GetValue(reader),
+                     Company = c.CompanyName.GetValue(reader),
                      //RoleName = r.RoleName.GetValue(reader),
                   };
                }).ToList();
@@ -357,85 +357,28 @@ namespace Res.Business
          /// <param name="db">db</param>
          /// <param name="resourceId">resourceId</param>
          /// <returns>CroResource</returns>
-         public static CroResource GetResource(APDBDef db, long resourceId)
+         public static CroResource GetResource(APDBDef db, long resourceId,long userId)
          {
-            //var query = APQuery.select(cr.Asterisk, mc.Asterisk, et.Asterisk, eti.Asterisk, cr.DownCount.As("totalDownCount"),
-            //                          mc.DownCount.As("courseDownCount"), mc.StarCount,cs.StarCount.As("StartCount"),
-            //                          vf.FileName.As("VideoName"), vf.FilePath.As("VideoPath"),
-            //                          cf.FileName.As("CoverName"), cf.FilePath.As("CoverPath"),
-            //                          df.FileName.As("DesignName"), df.FilePath.As("DesignPath"),
-            //                          sf.FileName.As("SummaryName"), sf.FilePath.As("SummaryPath"),
-            //                          cwf.FileName.As("CoursewareName"), cwf.FilePath.As("CoursewarePath"),
-            //                          atf.FileName.As("AttachmentName"), atf.FilePath.As("AttachmentPath")
-            //                         )
-            //                   .from(cr,
-            //                         mc.JoinLeft(cr.CrosourceId == mc.ResourceId),
-            //                         et.JoinLeft(et.CourseId == mc.CourseId),
-            //                         eti.JoinLeft(eti.ExerciseId == et.ExerciseId),
-            //                         cs.JoinLeft(cs.ResourceId==resourceId & cs.CourseId==mc.CourseId & cs.UserId==ResSettings.SettingsInSession.UserId),
-            //                         vf.JoinLeft(vf.FileId == mc.VideoId),
-            //                         cf.JoinLeft(cf.FileId == mc.CoverId),
-            //                         df.JoinLeft(df.FileId == mc.DesignId),
-            //                         sf.JoinLeft(sf.FileId == mc.SummaryId),
-            //                         cwf.JoinLeft(cwf.FileId == mc.CoursewareId),
-            //                         atf.JoinLeft(atf.FileId == mc.AttachmentId)
-            //                         )
-            //                    .where(cr.CrosourceId == resourceId);
+            var cr = APDBDef.CroResource;
+            var f = APDBDef.Files;
+            var query = APQuery.select(cr.Asterisk, f.Asterisk)
+                               .from(cr,
+                                     f.JoinInner(cr.AttachmentId == f.FileId)
+                                 )
+                                .where(cr.CrosourceId == resourceId & (cr.Creator==userId | cr.LastModifier==userId));
 
-            //CroResource model = null;
-            //var result = query.query(db, r =>
-            //{
-            //   if (model == null)
-            //   {
-            //      model = new CroResource();
-            //      model.Courses = new List<MicroCourse>();
-            //      cr.Fullup(r, model, false);
-            //   }
+            CroResource model = null;
+            return query.query(db, r =>
+            {
+               model = new CroResource();
+               cr.Fullup(r, model, false);
 
-            //   var course = new MicroCourse();
-            //   course.Exercises = new List<Exercises>();
-            //   mc.Fullup(r, course, false);
-            //   course.CoverPath = cf.FilePath.GetValue(r, "CoverPath");
-            //   course.VideoPath = vf.FilePath.GetValue(r, "VideoPath");
-            //   course.DesignPath = df.FilePath.GetValue(r, "DesignPath");
-            //   course.SummaryPath = sf.FilePath.GetValue(r, "SummaryPath");
-            //   course.CoursewarePath = cwf.FilePath.GetValue(r, "CoursewarePath");
-            //   course.AttachmentPath = atf.FilePath.GetValue(r, "AttachmentPath");
-            //   course.VideoName = vf.FileName.GetValue(r, "VideoName");
-            //   course.CoverName = cf.FileName.GetValue(r, "CoverName");
-            //   course.DesignName = df.FileName.GetValue(r, "DesignName");
-            //   course.SummaryName = sf.FileName.GetValue(r, "SummaryName");
-            //   course.CoursewareName = cwf.FileName.GetValue(r, "CoursewareName");
-            //   course.AttachmentName = atf.FileName.GetValue(r, "AttachmentName");
-            //   course.DownCount = cr.DownCount.GetValue(r, "courseDownCount");
-            //   course.StarCount = (int)cs.StarCount.GetValue(r, "StartCount");
+               model.AttachmentName = f.FileName.GetValue(r);
+               model.AttachmentPath = f.FilePath.GetValue(r);
 
-            //   var exe = new Exercises();
-            //   et.Fullup(r, exe, false);
-            //   exe.Items = new List<ExercisesItem>();
+               return model;
+            }).FirstOrDefault();
 
-            //   var item = new ExercisesItem();
-            //   eti.Fullup(r, item, false);
-
-            //   if (course.CourseId > 0)
-            //      if (!model.Courses.Exists(x => x.CourseId == course.CourseId))
-            //         model.Courses.Add(course);
-            //      else
-            //         course = model.Courses.Find(x => x.CourseId == course.CourseId);
-
-            //   if (exe.ExerciseId > 0)
-            //      if (!course.Exercises.Exists(e => e.ExerciseId == exe.ExerciseId))
-            //         course.Exercises.Add(exe);
-            //      else
-            //         exe = course.Exercises.Find(e => e.ExerciseId == exe.ExerciseId);
-
-            //   if (item.ItemId > 0)
-            //      exe.Items.Add(item);
-
-            //   return model;
-            //}).ToList();
-
-            return null;
          }
 
       }

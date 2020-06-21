@@ -83,12 +83,6 @@ namespace Res.Business
 
       public string Gender { get { return ResUserHelper.Gender.GetName(GenderPKID); } }
 
-      public string CompanyName { get; set; }
-
-      public int FavoriteCount { get; set; }
-      public int DownCount { get; set; }
-      public int CommentCount { get; set; }
-
 
       #endregion
 
@@ -164,13 +158,30 @@ namespace Res.Business
 
       public string WinLevel { get { return CroResourceHelper.WinLevel.GetName(WinLevelPKID); } }
 
-      [Required]
-      public string Attachment { get; set; }
+      public string Theme { get { return CroResourceHelper.Theme.GetName(ThemeId); } }
 
+      [Display(Name = "资源名称")]
+      [Required]
+      public string AttachmentName { get; set; }
 
       [Display(Name = "资源路径")]
       [Required]
-      public string GhostFileName { get; set; }
+      public string AttachmentPath { get; set; }
+
+      [RegularExpression("[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}",ErrorMessage ="请输入正确的手机号码")]
+      [Required]
+      public override string AuthorPhone
+      {
+         get
+         {
+            return base.AuthorPhone;
+         }
+
+         set
+         {
+            base.AuthorPhone = value;
+         }
+      }
 
       [EmailAddress]
       public override string AuthorEmail

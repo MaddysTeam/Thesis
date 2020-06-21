@@ -1,16 +1,12 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity.Owin;
+using Res.Business;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Res;
-using Symber.Web.Data;
-using Res.Business;
-using System.IO;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 
 
 namespace Res.Controllers
@@ -67,18 +63,10 @@ namespace Res.Controllers
 
       public ActionResult Index(long id)
       {
-         var tc = APDBDef.ResCompany;
-         var userid = id;
-
-         var user = db.ResUserDal.PrimaryGet(userid);
-         user.CompanyName = (string)APQuery.select(tc.CompanyName)
-            .from(tc).where(tc.CompanyId == user.CompanyId).executeScale(db);
+         var user = db.ResUserDal.PrimaryGet(id);
 
          return View(user);
       }
-
-
-
 
 
       //
@@ -123,13 +111,12 @@ namespace Res.Controllers
 
       //上传论文
 
-      public ActionResult Upload(long id, long? resid)
+      public ActionResult Upload(long? resid)
       {
          ResSettings.SettingsInSession.CleanCompanyCache();
          var user = ResSettings.SettingsInSession.User;
          var provinces = ResSettings.SettingsInSession.AllProvince();
          var areas = ResSettings.SettingsInSession.AllAreas();
-         var schools = ResSettings.SettingsInSession.AllSchools();
 
          if (user.ProvinceId > 0)
          {
@@ -139,140 +126,55 @@ namespace Res.Controllers
          {
             areas = areas.Where(x => x.CompanyId == user.AreaId).ToList();
          }
-         if (user.CompanyId > 0)
-         {
-            schools = schools.Where(x => x.CompanyId == user.CompanyId).ToList();
-         }
 
          ViewBag.Provinces = provinces;
          ViewBag.Areas = areas;
-         ViewBag.Companies = schools;
-         ViewBag.Actives = APBplDef.ActiveBpl.GetAll().Where(x => x.IsCurrent).ToList();
          ViewBag.ProvincesDic = GetStrengthDict(areas);
          ViewBag.AreasDic = GetStrengthDict(areas);
-         ViewBag.SchoolsDic = GetStrengthDict(schools);
          ViewBag.ResTypes = GetStrengthDict(CroResourceHelper.ResourceType.GetItems());
+         ViewBag.Themes = new List<ResPickListItem>();
 
          var model = resid == null ?
                        new CroResource { ProvinceId = user.ProvinceId, AreaId = user.AreaId } :
-                       APBplDef.CroResourceBpl.GetResource(db, resid.Value);
+                       APBplDef.CroResourceBpl.GetResource(db, resid.Value,user.UserId);
 
          return View(model);
       }
 
 
       [HttpPost]
-      //[ValidateInput(true)]
+      [ValidateInput(true)]
       public ActionResult Upload(CroResource model)
       {
          if (!ModelState.IsValid)
-         {
-            return Upload(ResSettings.SettingsInSession.UserId,model.CrosourceId);
-         }
+            return Upload(model.CrosourceId);
+
+         var user = ResSettings.SettingsInSession.User;
+         var active = APBplDef.ActiveBpl.GetAll().Find(x => x.IsCurrent);
+
+         model.StatePKID = CroResourceHelper.StateAllow;
+         model.AuditedTime = DateTime.Now;
+         
+         model.ActiveId = active.ActiveId;
 
          if (model.CrosourceId > 0)
          {
+            model.LastModifier = ResSettings.SettingsInSession.UserId;
             db.CroResourceDal.Update(model);
          }
          else
          {
+            model.Creator = user.UserId;
+            model.CreatedTime = model.LastModifiedTime = DateTime.Now;
+
             db.CroResourceDal.Insert(model);
          }
 
-         //CroResource current = null;
-         //if (resid != null && resid.Value > 0)
-         //   current = APBplDef.CroResourceBpl.GetResource(db, resid.Value);
-
-         //db.BeginTrans();
-
-         //try
-         //{
-         //   if (current != null)
-         //   {
-         //      var exeIds = new List<long>();
-         //      foreach (var item in current.Courses)
-         //      {
-         //         if (item.Exercises != null && item.Exercises.Count > 0)
-         //            exeIds.AddRange(item.Exercises.Select(x => x.ExerciseId).ToArray());
-         //      }
-
-         //      if (exeIds.Count() > 0)
-         //         APBplDef.ExercisesItemBpl.ConditionDelete(eti.ExerciseId.In(exeIds.ToArray()));
-
-         //      var courseIds = current.Courses.Select(x => x.CourseId).ToArray();
-         //      APBplDef.ExercisesBpl.ConditionDelete(et.CourseId.In(courseIds));
-         //      APBplDef.MicroCourseBpl.ConditionDelete(mc.ResourceId == resid);
-         //      APBplDef.CroResourceBpl.PrimaryDelete(resid.Value);
-
-         //      model.CourseTypePKID = model.CourseTypePKID == 0 ? CroResourceHelper.MicroClass : current.CourseTypePKID;
-         //      model.CreatedTime = current.CreatedTime;
-         //      model.Creator = current.Creator;
-         //      model.LastModifier = id;
-         //      model.LastModifiedTime = DateTime.Now;
-         //      model.StatePKID = current.StatePKID;
-         //      model.PublicStatePKID = current.PublicStatePKID;
-         //      model.DownloadStatePKID = current.DownloadStatePKID;
-         //      model.DownCount = current.DownCount;
-         //      model.ViewCount = current.ViewCount;
-         //      model.Score = current.Score;
-         //      model.WinLevelPKID = current.WinLevelPKID;
-         //      model.StatePKID = current.StatePKID;
-         //   }
-         //   else
-         //   {
-         //      model.CourseTypePKID = model.CourseTypePKID == 0 ? CroResourceHelper.MicroClass : model.CourseTypePKID;
-         //      model.StatePKID = CroResourceHelper.StateWait;
-         //      model.Creator = id;
-         //      model.CreatedTime = model.LastModifiedTime = DateTime.Now;
-         //      model.LastModifier = ResSettings.SettingsInSession.UserId;
-         //      model.DownloadStatePKID = CroResourceHelper.AllowDownload;
-         //      model.PublicStatePKID = CroResourceHelper.Public;
-         //   }
-
-         //   // 微课类型为微课时，微课标题为作品标题
-         //   if (model.CourseTypePKID == CroResourceHelper.MicroClass)
-         //      model.Courses[0].CourseTitle = model.Title;
-
-         //   model.StatePKID = model.StatePKID == CroResourceHelper.StateDeny ? CroResourceHelper.StateWait : model.StatePKID;
-         //   APBplDef.CroResourceBpl.Insert(model);
-
-         //   foreach (var item in model.Courses ?? new List<MicroCourse>())
-         //   {
-         //      var currentCourse = current==null? model.Courses.FirstOrDefault(x => x.CourseId == item.CourseId) : 
-         //                                       current.Courses.FirstOrDefault(x => x.CourseId == item.CourseId);
-         //      item.ResourceId = model.CrosourceId;
-         //      item.PlayCount = currentCourse != null ? currentCourse.PlayCount : 0;
-         //      item.DownCount = currentCourse != null ? currentCourse.DownCount : 0;
-         //      APBplDef.MicroCourseBpl.Insert(item);
-
-         //      foreach (var exer in item.Exercises ?? new List<Exercises>())
-         //      {
-         //         exer.CourseId = item.CourseId;
-         //         APBplDef.ExercisesBpl.Insert(exer);
-
-         //         foreach (var exerItem in exer.Items ?? new List<ExercisesItem>())
-         //         {
-         //            exerItem.ExerciseId = exer.ExerciseId;
-         //            APBplDef.ExercisesItemBpl.Insert(exerItem);
-         //         }
-         //      }
-         //   }
-
-         //   db.Commit();
-         //}
-         //catch
-         //{
-         //   db.Rollback();
-         //}
-
-
-         //return Request.IsAjaxRequest() ? Json(new
-         //{
-         //   state = "ok",
-         //   msg = "本作品审核完成。"
-         //}) : (ActionResult)RedirectToAction("CroMyResource", new { id = id });
-
-         return null;
+         return Request.IsAjaxRequest() ? Json(new
+         {
+            state = "ok",
+            msg = "本作品审核完成。"
+         }) : (ActionResult)RedirectToAction("CroMyResource", new { id = user.Id });
 
       }
 
@@ -302,6 +204,18 @@ namespace Res.Controllers
          ResUser user = new ResUser();
          user.UserId = id;
          return View(user);
+      }
+
+
+      public ActionResult ZcView(long id)
+      {
+         var user = ResSettings.SettingsInSession.User;
+         var model = APBplDef.CroResourceBpl.GetResource(db, id, user.UserId);
+
+         ViewBag.Title = model.Title;
+
+         return View(model);
+
       }
 
 

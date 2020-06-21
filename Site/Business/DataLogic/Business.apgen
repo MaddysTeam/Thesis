@@ -99,6 +99,7 @@
 					<add name="Question" type="string" dataLength="255" display="密码问题"/>
 					<add name="Answer" type="string" dataLength="255" display="密码答案"/>
 					<add name="UserTypePKID" type="long" display="用户角色"/>
+					<add name="Company" type="string" dataLength="200" required="true"  display="单位全称"/>
 					
 					<!-- Content -->
 					<add name="RealName" type="string" dataLength="255" required="false" display="实名"/>
@@ -233,10 +234,11 @@
 					<add name="ProvinceId" type="long" display="所属省份"/>
 					<add name="AreaId" type="long" display="所属地区"/>
 					<add name="ActiveId" type="long" display="所属项目"/>
+					<add name="ThemeId" type="long" display="所属主题"/>
 
 					<!-- Author -->
 					<add name="Author" type="string" dataLength="50" required="true" display="论文作者"/>
-					<add name="AuthorCompany" type="string" dataLength="50" required="true"  display="作者单位"/>
+					<add name="AuthorCompany" type="string" dataLength="200" required="true"  display="作者单位"/>
 					<add name="AuthorAddress" type="string" dataLength="50" display="指导教师"/>
 					<add name="AuthorEmail" type="string" dataLength="50" display="作者邮箱"/>
 					<add name="AuthorPhone" type="string" dataLength="50" display="作者电话"/>
