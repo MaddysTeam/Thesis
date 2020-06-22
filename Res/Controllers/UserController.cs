@@ -212,7 +212,7 @@ namespace Res.Controllers
       }
 
       [HttpPost]
-      public ActionResult Search(long provinceId, long areaId, long companyId, int current, int rowCount, string searchPhrase, FormCollection fc)
+      public ActionResult Search(long provinceId, long areaId, int current, int rowCount, string searchPhrase, FormCollection fc)
       {
          var user = ResSettings.SettingsInSession.User;
 
@@ -251,12 +251,6 @@ namespace Res.Controllers
                where &= (t.UserName.Match(searchPhrase) | t.RealName.Match(searchPhrase));
          }
 
-         if (companyId != 0)
-         {
-            where &= new APSqlConditionPhrase(c.Path, APSqlConditionOperator.Like,
-               APQuery.select(APSqlThroughExpr.Expr("path + '%'"))
-               .from(c).where(c.CompanyId == companyId));
-         }
 
          // 用户数据范围
          if (user.ProvinceId > 0)

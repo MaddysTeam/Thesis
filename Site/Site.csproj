@@ -193,6 +193,7 @@
     <Compile Include="Business\Utils\IDCardCheck.cs" />
     <Compile Include="Business\Utils\ResApproveHelper.cs" />
     <Compile Include="Business\Utils\ResModelBinder.cs" />
+    <Compile Include="Business\Utils\MailHelper.cs" />
     <Compile Include="Business\Utils\ResUserHelper.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AttachmentController.cs" />
@@ -206,7 +207,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Business\Utils\SentisiveWordHelper.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1024,7 +1024,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\ForgetPassword.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\_Bootstrap3Pagination.cshtml" />
@@ -1335,6 +1335,8 @@
     <Content Include="Views\CroMy\ChgPwd.cshtml" />
     <Content Include="Views\CroMy\CroMyMedal.cshtml" />
     <Content Include="Views\CroMy\ZcView.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\ChgPwd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

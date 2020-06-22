@@ -7,9 +7,9 @@ using System.Web;
 namespace Res.Business
 {
 
-   public static class ActiveHelper
-   {
+	public static class MailHelper
+	{
 
-   }
 
+	}
 }

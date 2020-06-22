@@ -116,33 +116,33 @@ namespace Res.Business
 		public string Password { get; set; }
 
 		[Required]
-      [DataType(DataType.EmailAddress)]
+		[DataType(DataType.EmailAddress)]
 		[Display(Name = "电子邮箱")]
 		public string Email { get; set; }
 
-      [Required]
-      [Display(Name = "真实姓名")]
-      public string RealName { get; set; }
+		[Required]
+		[Display(Name = "真实姓名")]
+		public string RealName { get; set; }
 
 
-      [Required]
-      [Display(Name = "省市")]
-      public long ProvinceId { get; set; }
+		[Required]
+		[Display(Name = "省市")]
+		public long ProvinceId { get; set; }
 
-      [Required]
-      [Display(Name = "地区")]
-      public long AreaId { get; set; }
+		[Required]
+		[Display(Name = "地区")]
+		public long AreaId { get; set; }
 
-      [Required]
-      [Display(Name = "单位全称")]
-      public string Company { get; set; }
+		[Required]
+		[Display(Name = "单位全称")]
+		public string Company { get; set; }
 
-      [Required]
-      [RegularExpression(@"[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]", ErrorMessage="请输入正确的身份证号码")]
-      [Display(Name ="身份证件号")]
-      public string IdCard { get; set; }
+		[Required]
+		[RegularExpression(@"[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]", ErrorMessage = "请输入正确的身份证号码")]
+		[Display(Name = "身份证件号")]
+		public string IdCard { get; set; }
 
-   }
+	}
 
 	public class ChgPwd
 	{
@@ -160,5 +160,16 @@ namespace Res.Business
 		public string ConfirmPassword { get; set; }
 
 
+		public long UserId { get; set; }
+
+
+	}
+
+
+	public class ForgetPassword
+	{
+		[Required]
+		[EmailAddress]
+		public string Email { get; set; }
 	}
 }

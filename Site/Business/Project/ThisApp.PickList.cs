@@ -24,16 +24,16 @@ namespace Res.Business
 		/// </summary>
 		public static readonly string PLKey_Gender = "PLKey_Gender";
 
-      /// <summary>
-      /// 奖项
-      /// </summary>
-      public static readonly string PLKey_WinLevel = "PLKey_WinLevel";
+		/// <summary>
+		/// 奖项
+		/// </summary>
+		public static readonly string PLKey_WinLevel = "PLKey_WinLevel";
 
 
-      /// <summary>
-      /// 主题
-      /// </summary>
-      public static readonly string PLKey_ThemeType = "PLKey_ThemeType";
-   }
+		/// <summary>
+		/// 主题
+		/// </summary>
+		public static readonly string PLKey_ThemeType = "PLKey_ThemeType";
+	}
 
 }

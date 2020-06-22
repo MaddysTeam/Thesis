@@ -22,7 +22,7 @@ namespace Res.Business
 		public const int CacheMinutes = 5;
 
 		// 默认密码
-		public const string Default_Password = "teacher";
+		public const string Default_Password = "Win@123";
 
 		// 默认评分星数
 		public const int TotalStar = 5;
@@ -32,7 +32,7 @@ namespace Res.Business
 
 		public static string DomainCookie = "csj";
 
-		public static long CurrentActiveId = 3;
+		public static long CurrentActiveId = 1001;
 
 	}
 

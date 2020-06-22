@@ -4,4 +4,4 @@
 }
 
 <h2>@ViewBag.Title</h2>
-<p>您请求的页面不存在或不具有访问权限。</p>
+<p>@(string.IsNullOrEmpty(Model.Message)?"您请求的页面不存在或不具有访问权限":Model.Message)。</p>

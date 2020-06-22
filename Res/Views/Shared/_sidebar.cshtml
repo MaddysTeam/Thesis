@@ -32,12 +32,12 @@
 
 	@if (ResSettings.SettingsInSession.User.UserTypePKID == ResUserHelper.Admin)
 	{
-			<li>
+			@*<li>
 				<a href="@Url.Action("Search", "Active")">
 					<i class="fa fa-fax fa-fw"></i>
 					<span class="text">项目管理</span>
 				</a>
-			</li>
+			</li>*@
 	}
 			@*@if (ResSettings.SettingsInSession.User.UserTypePKID != ResUserHelper.RegistedUser
 				&& ResSettings.SettingsInSession.User.UserTypePKID != ResUserHelper.SchoolAdmin

@@ -59,7 +59,7 @@
 								<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 论文主题</label>
 								<div class="col-sm-9">
 									@Html.DropDownListFor(m => m.ThemeId, (ViewBag.Themes as List<ResPickListItem>).Select(x => new SelectListItem { Text = x.Name, Value = x.PickListItemId.ToString() }), "选择主题", new { @class = "form-control" })
-									@Html.ValidationMessageFor(m => m.AreaId, null, new { @class = "text-danger" })
+									@Html.ValidationMessageFor(m => m.ThemeId, null, new { @class = "text-danger" })
 								</div>
 							</div>
 							<div class="form-group ">
@@ -129,7 +129,6 @@
 									</div>
 								</div>
 								@Html.HiddenFor(x => x.AttachmentId, new { @class = "fileId" })
-								
 								@*<input type="hidden" class="fileId" value="@Model.AttachmentId" />*@
 							</div>
 
@@ -158,11 +157,22 @@
 @section Plugins {
 	@Scripts.Render("~/js/dropzone")
 	@Scripts.Render("~/js/tagsinput")
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+<style>
+</style>
+
 }
+
 @section Scripts {
+@Scripts.Render("~/bundles/jqueryval")
 
 	<script type="text/javascript">
 		$(function () {
+
+			var areas=@Html.Raw(Json.Encode(ViewBag.AreasDic));
+			RelationSelect($("#ProvinceId"), $("#AreaId"), areas, "选择地区");
 
 			bindResourceUploader($('.attachmentUploader'), 'attachment', '.doc,.docx');
 

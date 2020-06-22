@@ -88,13 +88,12 @@ namespace Res.Controllers
 
          ViewBag.Provinces = provinces;
          ViewBag.Areas = areas;
-         ViewBag.Companies = schools;
+			//ViewBag.Companies = schools;
 
-         ViewBag.Actives = ResSettings.SettingsInSession.Actives;
+		 ViewBag.Actives = ResSettings.SettingsInSession.Actives;
 
          ViewBag.ProvincesDic = CrosourceController.GetStrengthDict(areas);
          ViewBag.AreasDic = CrosourceController.GetStrengthDict(areas);
-         ViewBag.SchoolsDic = CrosourceController.GetStrengthDict(schools);
          
       }
 

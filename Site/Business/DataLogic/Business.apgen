@@ -186,18 +186,8 @@
 			<table name="Active" comment="项目">
 				<columns>
 					<add name="ActiveId" columnName="id" type="long" identityType="Provider" primaryKey="true" display="项目ID"/>
-
-					<!-- Content -->
 					<add name="ActiveName" type="string" dataLength="100" required="true" display="项目名称"/>
 					<add name="Description" type="string" dataLength="255" required="true" display="描述"/>
-					<add name="Year" type="int"  display="项目年份" required="true"/>
-
-					<add name="Company" type="string" dataLength="100" required="true" display="主办单位" />
-					<add name="LevelPKID" type="long"  display="项目级别"/>
-					<add name="SemesterPKID" type="long"  display="学期"/>
-					<add name="PublicStatePKID" type="long" display="公开设置"  defaultValue="10450" comment="PickList - APEdu.net key is PLKey_PublicState"/>
-					<add name="DownloadStatePKID" type="long" display="下载设置" defaultValue="10452" comment="PickList - APEdu.net key is PLKey_DownloadState"/>
-
 					<add name="StartDate" columnName="StartDate" type="DateTime"  display="起始时间" />
 					<add name="EndDate" columnName="EndDate" type="DateTime"  display="结束时间" />
 					<add name="UploadStartDate" columnName="UploadStartDate" type="DateTime"  display="上传起始时间" />

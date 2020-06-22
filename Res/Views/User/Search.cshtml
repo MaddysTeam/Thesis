@@ -45,9 +45,9 @@
 						<div class="col-sm-2">
 							@Html.DropDownList("Area", (ViewBag.Areas as List<ResCompany>).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择地区", new { @class = "form-control area" })
 						</div>
-						<div class="col-sm-2">
+						@*<div class="col-sm-2">
 							@Html.DropDownList("Company", (ViewBag.Companies as List<ResCompany>).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择单位", new { @class = "form-control company" })
-						</div>
+						</div>*@
 						<div class="col-sm-2">
 							<button id="search" class="btn btn-info btn-search"><i class="fa fa-search"></i>查询</button>
 						</div>
@@ -125,8 +125,7 @@
 		function getGlobalRequest() {
 			return {
 				provinceId: $('#Province').val()=='' ? 0:$('#Province').val(),
-				areaId: $('#Area').val()=='' ? 0:$('#Area').val(),
-				companyId: $('#Company').val() == '' ? 0 : $('#Company').val()
+				areaId: $('#Area').val()=='' ? 0:$('#Area').val()
 			}
 		}
 
