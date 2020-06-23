@@ -110,7 +110,7 @@ namespace Res.Controllers
          var a = APDBDef.Active;
          var er = APDBDef.EvalResult;
 
-         var model = APBplDef.CroResourceBpl.GetResource(db, resId);
+         var model = APBplDef.CroResourceBpl.GetResource(db,resId);
 
          var query = APQuery.select(i.IndicationId, i.Description, i.LevelPKID, i.Score, i.IndicationName,
                                     i.TypePKID, i.ActiveId, a.ActiveName, a.ActiveId,

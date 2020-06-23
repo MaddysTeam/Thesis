@@ -209,8 +209,6 @@ namespace Res.Controllers
 
 			if (user != null)
 			{
-				//var result = await SignInManager.PasswordSignInAsync(user.UserName, user.Password, false, shouldLockout: false);
-
 				return RedirectToLocal(Url.Action("ChgPwd", "Account", new { id = user.Id }));
 			}
 			else

@@ -121,7 +121,7 @@ namespace Res.Controllers
 				throw new ApplicationException("没有任何活动，请联系管理员");
 			}
 
-			ResSettings.SettingsInSession.CleanCompanyCache();
+			//ResSettings.SettingsInSession.CleanCompanyCache();
 			var user = ResSettings.SettingsInSession.User;
 			var provinces = ResSettings.SettingsInSession.AllProvince();
 			var areas = ResSettings.SettingsInSession.AllAreas();
@@ -143,27 +143,27 @@ namespace Res.Controllers
 			ViewBag.Themes = CroResourceHelper.Theme.GetItems();
 
 
-			CroResource model = null;
+         CroResource model = null;
 
-			if (resid > 0)
-			{
-				model = APBplDef.CroResourceBpl.GetResource(db, resid.Value, user.UserId);
-			}
+         if (resid > 0)
+         {
+            model = APBplDef.CroResourceBpl.GetResource(db, resid.Value, user.UserId);
+         }
 
-			// 如果是新增，判断是否在当前活动上传过论文
-			if (model == null)
-			{
-				var r = APDBDef.CroResource;
-				model = APBplDef.CroResourceBpl.GetActiveResource(db, active.ActiveId, user.UserId);
-			}
+         // 如果是新增，判断是否在当前活动上传过论文
+         if (model == null)
+         {
+            var r = APDBDef.CroResource;
+            model = APBplDef.CroResourceBpl.GetActiveResource(db, active.ActiveId, user.UserId);
+         }
 
-			if (model == null)
-			{
-				model = new CroResource { ProvinceId = user.ProvinceId, AreaId = user.AreaId };
-			}
+         if (model == null)
+         {
+            model = new CroResource { ProvinceId = user.ProvinceId, AreaId = user.AreaId };
+         }
 
-			return View(model);
-		}
+         return View(model);
+      }
 
 
 		[HttpPost]
@@ -197,7 +197,7 @@ namespace Res.Controllers
 			return Request.IsAjaxRequest() ? Json(new
 			{
 				state = "ok",
-				msg = "本作品审核完成。"
+				msg = "论文作品上传成功"
 			}) : (ActionResult)RedirectToAction("CroMyResource", new { id = user.Id });
 
 		}

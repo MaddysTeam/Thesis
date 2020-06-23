@@ -194,6 +194,8 @@
 					<add name="EndDate" columnName="EndDate" type="DateTime"  display="结束时间" />
 					<add name="UploadStartDate" columnName="UploadStartDate" type="DateTime"  display="上传起始时间" />
 					<add name="UploadEndDate" columnName="UploadEndDate" type="DateTime"  display="上传结束时间" />
+					<add name="EvalStartDate" columnName="EvalStartDate" type="DateTime"  display="评审起始时间" />
+					<add name="EvalEndDate" columnName="EvalEndDate" type="DateTime"  display="评审结束时间" />
 					<add name="IsCurrent" columnName="IsCurrent" type="bool"  display="是否当前项目" />
 
 				</columns>
@@ -226,7 +228,8 @@
 					<add name="ProvinceId" type="long" display="所属省份"/>
 					<add name="AreaId" type="long" display="所属地区"/>
 					<add name="ActiveId" type="long" display="所属项目"/>
-
+					<add name="ThemeId" type="long" display="所属主题"/>
+					
 					<!-- Author -->
 					<add name="Author" type="string" dataLength="50" required="true" display="论文作者"/>
 					<add name="AuthorCompany" type="string" dataLength="200" required="true"  display="作者单位"/>

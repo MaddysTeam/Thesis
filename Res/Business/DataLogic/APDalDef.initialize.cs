@@ -38,94 +38,6 @@ namespace Res.Business
 
 				#endregion
 
-				#region [ 10110 < 10120 : PLKey_ResourceStage ]
-
-				{
-					key = 10110; lessthen = 10120;
-
-					var pk = new ResPickList(key, ThisApp.PLKey_ResourceStage, "学段", "对学段进行选择的字典项。");
-					var items = FromArray(
-						0,
-						new string[] {
-							"学前教育", "义务教育", "高中教育", "初职教育", "中职教育", "高等教育",
-							"终身教育"
-						},
-						null,
-						null);
-
-					SyncInitData(db, ThisApp.AppId, pk, items);
-				}
-
-				#endregion
-
-				#region [ 10120 < 10200 : PLKey_ResourceGrade ]
-
-				{
-					key = 10120; lessthen = 10200;
-					long stage;
-
-					var pk = new ResPickList(key, ThisApp.PLKey_ResourceGrade, "年级", "对年级进行选择的字典项。");
-					List<ResPickListItem> items = new List<ResPickListItem>();
-
-					key = 10121; stage = 10112;
-					AddItemToList(items, stage, key, new string[] { "一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "七年级", "八年级", "九年级", "低年级", "中年级", "高年级", "小学段", "初中段" }, null, null);
-					key = 10141; stage = 10113;
-					AddItemToList(items, stage, key, new string[] { "高一", "高二", "高三", "高四" }, null, null);
-					key = 10151; stage = 10114;
-					AddItemToList(items, stage, key, new string[] { "初职一", "初职二", "初职三", "初职四" }, null, null);
-					key = 10161; stage = 10115;
-					AddItemToList(items, stage, key, new string[] { "中职一", "中职二", "中职三", "中职四" }, null, null);
-
-					SyncInitData(db, ThisApp.AppId, pk, items);
-				}
-
-				#endregion
-
-				#region [ 10200 < 10210 : PLKey_ResourceImportSource ]
-
-				{
-					key = 10200; lessthen = 10210;
-
-					var pk = new ResPickList(key, ThisApp.PLKey_ResourceImportSource, "来源类型", "对来源类型进行选择的字典项。");
-					var items = FromArray(
-						0,
-						new string[] {
-							"系统导入", "用户上传"
-						},
-						null,
-						null);
-
-					SyncInitData(db, ThisApp.AppId, pk, items);
-				}
-
-				#endregion
-
-				#region [ 10210 < 10230 : PLKey_ResourceMedium ]
-
-				{
-					key = 10210; lessthen = 10230;
-
-					var pk = new ResPickList(key, ThisApp.PLKey_ResourceMedium, "媒体类型", "对媒体类型进行选择的字典项。");
-					var items = FromArray(
-						0,
-						new string[] {
-							"文本(含OFFICE文档)", "图形（图像）", "视频", "音频", "动画", "综合多种媒体"
-						},
-						new string[] {
-							".txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.rtf,.log,.pdf",
-							".jpg,.jpeg,.png,.gif,.bmp",
-							".mpg,.mpeg,.avi,.wmv,.asf,.rm,.rmvb,.flv,.mp4",
-							".mid,.wma,.asx,.mp3,.wav",
-							".swf",
-							".exe,.zip"
-						},
-						null);
-
-					SyncInitData(db, ThisApp.AppId, pk, items);
-				}
-
-				#endregion
-
 				#region [ 10230 < 10270 : PLKey_ResourceType ]
 
 				{
@@ -155,31 +67,6 @@ namespace Res.Business
 					{
 						items[i].StrengthenValue = strengths[i];
 					}
-
-					SyncInitData(db, ThisApp.AppId, pk, items);
-				}
-
-				#endregion
-
-				#region [ 10270 < 10350 : PLKey_ResourceSubject ]
-
-				{
-					key = 10270; lessthen = 10350;
-
-					var pk = new ResPickList(key, ThisApp.PLKey_ResourceSubject, "学科", "对学科进行选择的字典项。");
-					var items = FromArray(
-						0,
-						new string[] {
-							"生活自理", "语文", "数学", "英语", "科学",
-							"生活", "品德与社会", "社会", "信息技术", "艺术",
-							"劳动技术", "职业技术", "体育与健康", "言语沟通训练", "感知运动训练",
-							"行为训练", "定向行走训练", "综合康复", "拓展", "综合实践活动",
-							"学前特教", "物理", "精细动作训练", "认知", "按摩职业教育",
-							"个训或小组训练","其他学科"
-						},
-						null,
-						null);
-					items[items.Count - 1].PickListItemId = lessthen - 1;
 
 					SyncInitData(db, ThisApp.AppId, pk, items);
 				}

@@ -1,14 +1,18 @@
 ﻿@model CroResource
 @{
-	ViewBag.Title = "作品评审";
+	ViewBag.Title = "论文评审";
 
 	var indications = ViewBag.Indications as List<Indication>;
 	var resultId = Request["id"] ==null? 0:Convert.ToInt32(Request["id"]);
 	var groupId = Request["groupId"] == null ? 0 : Convert.ToInt32(Request["groupId"]);
 
 	var comment = (string)ViewBag.Comment;
-	var course = ViewBag.CurrentCourse as MicroCourse;
 }
+<style>
+	#pdf {
+		height: 750px;
+	}
+</style>
 <div class="col-md-10 content-wrapper">
 	<div class="row">
 		<div class="col-lg-4 ">
@@ -39,26 +43,7 @@
 						<div class="col-lg-4 col-print-4">
 							<h3><strong>@Model.Title</strong></h3>
 						</div>
-						<div class="col-lg-8 col-print-8 text-right">
-							<ul class="list-inline">
-								<li>
-									点击次数:
-									<strong class="badge">@Model.ViewCount</strong>
-								</li>
-								@*<li>
-										下载次数:
-										<strong class="badge">@Model.DownCount</strong>
-									</li>*@
-								<li>
-									收藏次数:
-									<strong class="badge">@Model.FavoriteCount</strong>
-								</li>
-								<li>
-									评论次数:
-									<strong class="badge">@Model.CommentCount</strong>
-								</li>
-							</ul>
-						</div>
+						
 					</div>
 				</div>
 				<!-- end details header -->
@@ -68,55 +53,11 @@
 						<!-- left side, main content -->
 						<div class="col-lg-7">
 							<div class="row">
-								@if (course.VideoPath != null)
-								{
-									if (course.VideoPath.IndexOf(".mp4") >= 0 || course.VideoPath.IndexOf(".flv") >= 0)
-									{
-										<div id="video" class="carousel slide" style="width:100%;height:500px">
-											<div id='player'></div>
-										</div>
-									}
-									else if (!string.IsNullOrEmpty(course.CoverPath))
-									{
-										<img style="width:100%" height="100%" src="@course.FitCoverPath" />
-									}
 
-									<div style="margin:10px;">
-										<a href="@course.VideoPath" class="btn btn-lg btn-block btn-info"><i class="fa fa-download"></i> 下载课程文件</a>
-									</div>
-
-								}
-								else
-								{
-									<img style="width:100%" height="100%" src="@course.FitCoverPath" />
-								}
-							</div> <!-- row -->
-							<hr />
-							<div>
-
-								<div class="panel">
-									<div class="panel-body">
-										@Model.Description
-									</div>
-
+								<div class="pdf" id="pdf">
+									<iframe></iframe>
 								</div>
 
-								<div style="overflow-y:hidden; overflow-x:auto; white-space: nowrap;">
-									<div class="details-courses">
-										<ul class="course-list">
-											@foreach (var item in Model.Courses)
-											{
-												<li style="display:inline-block;list-style-type: none;">
-													<a href="/Eval/Details/?id=@resultId&resId=@Model.CrosourceId&courseId=@course.CourseId&groupId=@groupId">
-													<img src="@item.FitCoverPath" style="width:184px; height:115px;" /></a>
-													<div class="text-center">@item.CourseTitle</div>
-												</li>
-                                 }
-										</ul>
-									</div>
-								</div>
-							   
-							  
 							</div> <!-- row -->
 						</div>
 						<!-- end left side, main content -->
@@ -179,24 +120,7 @@
 									<ul class="list-group">
 
 										<li class="list-group-item">作品名称：@Model.Title</li>
-										@if (!string.IsNullOrEmpty(Model.Keywords))
-										{
-											<li class="list-group-item">关键字: &nbsp;@foreach (var item in Model.Keywords.Split(',')){<span class="badge" style="float:none;">  @item</span> }</li>
-										}
-
-										<li class="list-group-item">作品类型：@Model.CourseType</li>
-										@if (@Model.SubjectPKID != 0)
-										{
-										<li class="list-group-item">学科：@Model.Subject</li>
-										}
-										@if (@Model.StagePKID != 0)
-										{
-										<li class="list-group-item">学段：@Model.Stage</li>
-										}
-										@if (@Model.GradePKID != 0)
-										{
-										<li class="list-group-item">年级：@Model.Grade</li>
-										}
+									
 										@if (!string.IsNullOrEmpty(Model.Province))
 										{
 										<li class="list-group-item">省份：@Model.Province</li>
@@ -204,10 +128,6 @@
 										@if (!string.IsNullOrEmpty(Model.Province))
 										{
 										<li class="list-group-item">市区：@Model.Area</li>
-										}
-										@if (!string.IsNullOrEmpty(Model.Province))
-										{
-										<li class="list-group-item">学校：@Model.School</li>
 										}
 		
 										<li class="list-group-item">创建时间：@Model.CreatedTime.ToString("yyyy-MM-dd")</li>
@@ -233,41 +153,13 @@
 								<div class="widget-content">
 									<ul class="list-group">
 										<li class="list-group-item">
-											<span>微课名称：@course.CourseTitle</span>
-										</li>
-										<li  class="list-group-item">
-											<span>播放次数： @course.PlayCount</span>
-									   </li>
-
-									   <li  class="list-group-item">
-											<span>下载次数： @course.DownCount</span>
+											<span>微课名称：@Model.Title</span>
 										</li>
 
-									
-										@if(course.DesignId != 0)
+										@if (Model.AttachmentId != 0)
 										{
 											<li  class="list-group-item">
-												<span>教学设计： <a href="@course.DesignPreviewPath" target="_blank" class="btn-info btn-sm">预 览</a></span>
-										   </li>
-										}
-
-										@if (course.SummaryId != 0)
-										{
-											<li  class="list-group-item">
-												<span>教学反思： <a href="@course.SummaryPreviewPath" target="_blank" class="btn-info btn-sm">预 览</a></span>
-										   </li>
-										}
-
-										@if (course.CoursewareId != 0)
-										{
-											<li  class="list-group-item">
-												<span>课&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;件：&nbsp;<a href="@course.CoursewarePath" target="_blank" data-id="@course.CoursewareId" class="btn-info btn-sm btn-download">下 载</a></span>
-											</li>
-										}
-										@if (course.AttachmentId != 0)
-										{
-											<li  class="list-group-item">
-												<span>其他附件： <a href="@course.AttachmentPath" target="_blank" data-id="@course.AttachmentId" class="btn-info btn-sm btn-download">下 载</a></span>
+												<span>其他附件： <a href="@Model.AttachmentPath" target="_blank" data-id="@Model.AttachmentId" class="btn-info btn-sm btn-download">下 载</a></span>
 											</li>
 										}
 
@@ -326,6 +218,7 @@
 </style>
 }
 @section Plugins{
+<script src="~/assets/js/pdf.js"></script>
 }
 @section Scripts {
 <script src="~/assets/plugins/ckplayer/ckplayer/ckplayer.js"></script>
@@ -340,10 +233,13 @@
 
 		$(function () {
 
+			var pdfPath = '@Model.AttachmentPath' + '.pdf';
+			PDFObject.embed(pdfPath, "#pdf");
+
 			$("#comment").keyup(function () {
 				$(".img_ta_num").html("评语还可以填写"+(150 - $(this).val().length)+"个字")
 			})
-			var videoPath='@course.VideoPath';
+			@*var videoPath='@course.VideoPath';
 			var hasVideo=videoPath!='' && (videoPath.indexOf('.mp4')>=0 || videoPath.indexOf('.flv')>=0 );
 			var id = @Model.CrosourceId;
 			var path='@course.VideoPath';
@@ -375,7 +271,7 @@
 				player.onPlay(function(){
 					$.post('@Url.Action("Play", "Crosource")',{id:'@Model.CrosourceId',courseId:'@course.CourseId'},function(){});
 				});
-			}
+			}*@
 
 
 			$('.btn-eval').on('click',function(){
@@ -408,7 +304,7 @@
 				});
 			});
 
-			$('.btn-download').on('click',function(){
+			@*$('.btn-download').on('click',function(){
 				var $this=$(this);
 				var fileId=$(this).data('id');
 				if(fileId>0){
@@ -417,7 +313,7 @@
 				else{
 					alert('暂无文件可下载');
 				}
-			});
+			});*@
 
 		});
 	</script>

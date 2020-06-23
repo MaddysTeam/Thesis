@@ -25,26 +25,7 @@
 						@Html.ValidationMessageFor(a=>a.ActiveName)
 						</div>
 					</div>
-	
-					<div class="form-group">
-						@Html.LabelFor(a => a.StartDate, new { @class = "control-label col-md-3" })
-						<div class="col-md-9">
-							<div class="input-group date" data-provide="datepicker" data-date-language="zh-CN" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
-								@Html.TextBoxFor(a => a.StartDate, "{0:yyyy-MM-dd}", new { @class = "form-control plan", @hasValue = Model!=null && Model.StartDate != DateTime.MinValue })
-								<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-							</div>
-						</div>
-					</div>
 
-					<div class="form-group">
-						@Html.LabelFor(a => a.EndDate, new { @class = "control-label col-md-3" })
-						<div class="col-md-9">
-							<div class="input-group date" data-provide="datepicker" data-date-language="zh-CN" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
-								@Html.TextBoxFor(a => a.EndDate, "{0:yyyy-MM-dd}", new { @class = "form-control plan", @hasValue = Model != null && Model.StartDate != DateTime.MinValue })
-								<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-							</div>
-						</div>
-					</div>
 
 					<div class="form-group">
 						@Html.LabelFor(a => a.UploadStartDate, new { @class = "control-label col-md-3" })
@@ -61,6 +42,26 @@
 						<div class="col-md-9">
 							<div class="input-group date" data-provide="datepicker" data-date-language="zh-CN" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
 								@Html.TextBoxFor(a => a.UploadEndDate, "{0:yyyy-MM-dd}", new { @class = "form-control plan", @hasValue = Model != null && Model.StartDate != DateTime.MinValue })
+								<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(a => a.EvalStartDate, new { @class = "control-label col-md-3" })
+						<div class="col-md-9">
+							<div class="input-group date" data-provide="datepicker" data-date-language="zh-CN" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
+								@Html.TextBoxFor(a => a.EvalStartDate, "{0:yyyy-MM-dd}", new { @class = "form-control plan", @hasValue = Model != null && Model.StartDate != DateTime.MinValue })
+								<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						@Html.LabelFor(a => a.EvalEndDate, new { @class = "control-label col-md-3" })
+						<div class="col-md-9">
+							<div class="input-group date" data-provide="datepicker" data-date-language="zh-CN" data-date-format="yyyy-mm-dd" data-date-autoclose="true">
+								@Html.TextBoxFor(a => a.EvalEndDate, "{0:yyyy-MM-dd}", new { @class = "form-control plan", @hasValue = Model != null && Model.StartDate != DateTime.MinValue })
 								<div class="input-group-addon"><i class="fa fa-calendar"></i></div>
 							</div>
 						</div>
@@ -93,16 +94,6 @@
 			return false;
 
 		$.post($form.attr("action"), $form.serialize(), function (data, status) {
-			//if (status == "success") {
-			//	if (data.error != 'none') {
-			//		alertify.error(data.msg);
-			//		return;
-			//	}
-
-			//	alertify.success(data.msg);
-			//	$('#inner-edit-form').modal('hide');
-			//	$('#bootgrid').bootgrid('reload');
-			//}
 
 			$('#inner-edit-form').modal('hide');
 			$('#bootgrid').bootgrid('reload');

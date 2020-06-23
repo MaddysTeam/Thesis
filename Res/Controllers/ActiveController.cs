@@ -30,7 +30,7 @@ namespace Res.Controllers
       {
          var a = APDBDef.Active;
          var query = APQuery
-             .select(a.ActiveId, a.ActiveName, a.Description, a.StartDate, a.EndDate)
+             .select(a.ActiveId, a.ActiveName, a.Description, a.StartDate, a.EndDate, a.EvalStartDate, a.EvalEndDate)
              .from(a);
 
          if (!string.IsNullOrEmpty(searchPhrase))
@@ -49,10 +49,12 @@ namespace Res.Controllers
                      {
                         id = ac.ActiveId,
                         name = ac.ActiveName,
-                       // company = ac.Company,
+                        // company = ac.Company,
                         description = ac.Description,
                         start = ac.StartDate.ToString("yyyy-MM-dd"),
-                        end = ac.EndDate.ToString("yyyy-MM-dd")
+                        end = ac.EndDate.ToString("yyyy-MM-dd"),
+                        evalStart = ac.EvalStartDate.ToString("yyyy-MM-dd"),
+                        evalEnd = ac.EvalEndDate.ToString("yyyy-MM-dd"),
                      }).ToList();
 
 
@@ -89,6 +91,10 @@ namespace Res.Controllers
       public ActionResult Edit(long? id, Active model, FormCollection fc)
       {
          ThrowNotAjax();
+
+
+         model.StartDate = model.UploadStartDate;
+         model.EndDate = model.EvalEndDate;
 
          if (id == null)
          {

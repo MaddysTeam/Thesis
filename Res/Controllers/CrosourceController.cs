@@ -13,13 +13,13 @@ namespace Res.Controllers
 {
 
 	/// <summary>
-	/// 微课作品控制器
+	/// 论文作品控制器
 	/// </summary>
 	public class CrosourceController : BaseController
 	{
 
 		//
-		//	作品 - 首页
+		//	论文- 首页
 		// GET:		/Crosource/Index
 		//
 
@@ -30,7 +30,7 @@ namespace Res.Controllers
 
 
 		//
-		//	作品 - 查询
+		//	论文- 查询
 		// GET:		/Crosource/Search
 		// POST:		/Crosource/Search
 		//
@@ -137,7 +137,7 @@ namespace Res.Controllers
 
 
 		//
-		//	作品 - 分类查询
+		//	论文- 分类查询
 		// GET:		/Crosource/Category
 		// POST:		/Crosource/Category
 		//
@@ -234,7 +234,7 @@ namespace Res.Controllers
 
 
 		//
-		//	作品 - 删除
+		//	论文- 删除
 		// POST:		/Crosource/Delete
 		//
 
@@ -252,7 +252,7 @@ namespace Res.Controllers
 
 
 		//
-		//	作品 - 加精/取消
+		//	论文- 加精/取消
 		// POST:		/Crosource/Elite
 		//
 
@@ -270,7 +270,7 @@ namespace Res.Controllers
 
 
 		//
-		//	作品 - 编辑/创建
+		//	论文- 编辑/创建
 		// GET:		/Resource/Edit
 		// POST:		/Resource/Edit
 		//
@@ -279,110 +279,74 @@ namespace Res.Controllers
 		{
 			InitAreaDropDownData();
 
-			var user = ResSettings.SettingsInSession.User;
-			var model = id == null ?
-						  new CroResource { ProvinceId = user.ProvinceId, AreaId = user.AreaId } :
-						  APBplDef.CroResourceBpl.GetResource(db, id.Value);
+         var active = APBplDef.ActiveBpl.GetAll().Find(x => x.IsCurrent);
 
-			return View(model);
-		}
+         var user = ResSettings.SettingsInSession.User;
+         var provinces = ResSettings.SettingsInSession.AllProvince();
+         var areas = ResSettings.SettingsInSession.AllAreas();
+
+         ViewBag.Provinces = provinces;
+         ViewBag.Areas = areas;
+         ViewBag.ProvincesDic = GetStrengthDict(areas);
+         ViewBag.AreasDic = GetStrengthDict(areas);
+         ViewBag.ResTypes = GetStrengthDict(CroResourceHelper.ResourceType.GetItems());
+         ViewBag.Themes = CroResourceHelper.Theme.GetItems();
+
+         CroResource model = null;
+
+         if (id > 0)
+         {
+            model = APBplDef.CroResourceBpl.GetResource(db, id.Value);
+         }
+
+         // 如果是新增，判断是否在当前活动上传过论文
+         //if (model == null)
+         //{
+         //   var r = APDBDef.CroResource;
+         //   model = APBplDef.CroResourceBpl.GetActiveResource(db, active.ActiveId, user.UserId);
+         //}
+
+         if (model == null)
+         {
+            model = new CroResource { ProvinceId = user.ProvinceId, AreaId = user.AreaId };
+         }
+
+         return View(model);
+      }
 
 		[HttpPost]
 		[ValidateInput(false)]
 		public ActionResult Edit(long? resid, CroResource model, FormCollection fc)
 		{
-			//var mc = APDBDef.MicroCourse;
-			//var et = APDBDef.Exercises;
-			//var eti = APDBDef.ExercisesItem;
+         if (!ModelState.IsValid)
+            return Edit(model.CrosourceId);
 
-			//CroResource current = null;
-			//if (resid != null && resid.Value > 0)
-			//   current = APBplDef.CroResourceBpl.GetResource(db, resid.Value);
+         var user = ResSettings.SettingsInSession.User;
+         var active = APBplDef.ActiveBpl.GetAll().Find(x => x.IsCurrent);
 
-			//db.BeginTrans();
+         model.StatePKID = CroResourceHelper.StateAllow;
+         model.AuditedTime = DateTime.Now;
+         model.ActiveId = active.ActiveId;
 
-			//try
-			//{
-			//   if (current != null)
-			//   {
-			//      var exeIds = new List<long>();
-			//      foreach (var item in current.Courses)
-			//      {
-			//         if (item.Exercises != null && item.Exercises.Count > 0)
-			//            exeIds.AddRange(item.Exercises.Select(x => x.ExerciseId).ToArray());
-			//      }
+         if (model.CrosourceId > 0)
+         {
+            model.LastModifier = ResSettings.SettingsInSession.UserId;
+            db.CroResourceDal.Update(model);
+         }
+         else
+         {
+            model.Creator = user.UserId;
+            model.CreatedTime = model.LastModifiedTime = DateTime.Now;
 
-			//      if (exeIds.Count() > 0)
-			//         APBplDef.ExercisesItemBpl.ConditionDelete(eti.ExerciseId.In(exeIds.ToArray()));
+            db.CroResourceDal.Insert(model);
+         }
 
-			//      var courseIds = current.Courses.Select(x => x.CourseId).ToArray();
-			//      APBplDef.ExercisesBpl.ConditionDelete(et.CourseId.In(courseIds));
-			//      APBplDef.MicroCourseBpl.ConditionDelete(mc.ResourceId == resid);
-			//      APBplDef.CroResourceBpl.PrimaryDelete(resid.Value);
+         return Request.IsAjaxRequest() ? Json(new
+         {
+            state = "ok",
+            msg = "论文作品上传成功"
+         }) : (ActionResult)RedirectToAction("Details", new { id = model.CrosourceId});
 
-			//      model.CourseTypePKID = model.CourseTypePKID == 0 ? CroResourceHelper.MicroClass : current.CourseTypePKID;
-			//      model.CreatedTime = current.CreatedTime;
-			//      model.Creator = current.Creator;
-			//      model.LastModifier = ResSettings.SettingsInSession.UserId;
-			//      model.LastModifiedTime = DateTime.Now;
-			//      model.StatePKID = CroResourceHelper.StateWait;
-			//      model.PublicStatePKID = current.PublicStatePKID;
-			//      model.DownloadStatePKID = current.DownloadStatePKID;
-			//      model.DownCount = current.DownCount;
-			//      model.ViewCount = current.ViewCount;
-			//      model.Score = current.Score;
-			//      model.WinLevelPKID = current.WinLevelPKID;
-			//      model.StatePKID = current.StatePKID;
-			//      // model.DeliveryTypePKID = current.DeliveryTypePKID;
-			//   }
-			//   else
-			//   {
-			//      model.CourseTypePKID = model.CourseTypePKID == 0 ? CroResourceHelper.MicroClass : model.CourseTypePKID;
-			//      model.StatePKID = CroResourceHelper.StateWait;
-			//      model.Creator = ResSettings.SettingsInSession.UserId;
-			//      model.CreatedTime = model.LastModifiedTime = DateTime.Now;
-			//      model.LastModifier = ResSettings.SettingsInSession.UserId;
-			//      model.DownloadStatePKID = CroResourceHelper.AllowDownload;
-			//      model.PublicStatePKID = CroResourceHelper.Public;
-			//   }
-
-			//   // 微课类型为微课时，微课标题为作品标题
-			//   if (model.CourseTypePKID == CroResourceHelper.MicroClass)
-			//      model.Courses[0].CourseTitle = model.Title;
-
-			//   model.StatePKID = model.StatePKID == CroResourceHelper.StateDeny ? CroResourceHelper.StateWait : model.StatePKID;
-			//   APBplDef.CroResourceBpl.Insert(model);
-
-			//   foreach (var item in model.Courses ?? new List<MicroCourse>())
-			//   {
-			//      var currentCourse = current == null ? model.Courses.FirstOrDefault(x => x.CourseId == item.CourseId) :
-			//                               current.Courses.FirstOrDefault(x => x.CourseId == item.CourseId);
-			//      item.ResourceId = model.CrosourceId;
-			//      item.PlayCount = currentCourse != null ? currentCourse.PlayCount : 0;
-			//      item.DownCount = currentCourse != null ? currentCourse.DownCount : 0;
-			//      APBplDef.MicroCourseBpl.Insert(item);
-
-			//      foreach (var exer in item.Exercises ?? new List<Exercises>())
-			//      {
-			//         exer.CourseId = item.CourseId;
-			//         APBplDef.ExercisesBpl.Insert(exer);
-
-			//         foreach (var exerItem in exer.Items ?? new List<ExercisesItem>())
-			//         {
-			//            exerItem.ExerciseId = exer.ExerciseId;
-			//            APBplDef.ExercisesItemBpl.Insert(exerItem);
-			//         }
-			//      }
-			//   }
-
-			//   db.Commit();
-			//}
-			//catch
-			//{
-			//   db.Rollback();
-			//}
-
-			return RedirectToAction("Details", new { id = model.CrosourceId });
 		}
 
 
@@ -396,7 +360,7 @@ namespace Res.Controllers
 
 
 		//
-		//	作品 - 详情
+		//	论文- 详情
 		// GET:		/Crosource/Details
 		//
 
@@ -409,7 +373,7 @@ namespace Res.Controllers
 
 
 		//
-		//	作品 - 审核合格/不合格
+		//	论文- 审核合格/不合格
 		// GET:    /Resource/Approve
 		// POST:		/Resource/MultiApprove
 		// POST:		/Resource/Approve

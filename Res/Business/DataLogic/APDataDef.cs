@@ -165,9 +165,43 @@ namespace Res.Business
 
       public string Area { get { return GetCompanyName(AreaId); } }
 
-      [Display(Name = "资源路径")]
+      public string Theme { get { return CroResourceHelper.Theme.GetName(ThemeId); } }
+
+      [Display(Name = "资源名称")]
       [Required]
-      public string GhostFileName { get; set; }
+      public string AttachmentName { get; set; }
+
+      [Display(Name = "资源路径")]
+      public string AttachmentPath { get; set; }
+
+      [RegularExpression("[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}", ErrorMessage = "请输入正确的手机号码")]
+      [Required]
+      public override string AuthorPhone
+      {
+         get
+         {
+            return base.AuthorPhone;
+         }
+         set
+         {
+            base.AuthorPhone = value;
+         }
+      }
+
+      [EmailAddress]
+      [Required]
+      public override string AuthorEmail
+      {
+         get
+         {
+            return base.AuthorEmail;
+         }
+
+         set
+         {
+            base.AuthorEmail = value;
+         }
+      }
 
       #endregion
 

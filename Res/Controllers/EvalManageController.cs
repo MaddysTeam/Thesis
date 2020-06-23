@@ -273,8 +273,7 @@ namespace Res.Controllers
       }
 
       [HttpPost]
-      public ActionResult ResList(long id, long activeId, long provinceId, long areaId, long companyId, long subjectId,
-                                 long gradeId, int current, int rowCount, string searchPhrase)
+      public ActionResult ResList(long id, long activeId, long provinceId, long areaId, int current, int rowCount, string searchPhrase)
       {
          ThrowNotAjax();
 

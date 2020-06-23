@@ -14,7 +14,7 @@ namespace Res.Business
 		public const long AppId = 1;
 
 
-		// 系统开发商 ID				= 1
+		// 系统开发商 ID
 		public const long AppUser_Designer_Id = 1;
 
 
@@ -30,7 +30,7 @@ namespace Res.Business
 		// 后台地址
 		public static string AdminSystemUrl = ConfigurationManager.AppSettings["adminSystemUrl"].ToString();
 
-		public static string DomainCookie = "csj";
+		public static string DomainCookie = "thesis";
 
 		public static long CurrentActiveId = 1001;
 

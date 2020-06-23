@@ -65,10 +65,8 @@ namespace Res.Controllers
          ResSettings.SettingsInSession.RemoveCache(typeof(List<ResCompany>));
 
          var user = ResSettings.SettingsInSession.User;
-
          var provinces = ResSettings.SettingsInSession.AllProvince();
          var areas = ResSettings.SettingsInSession.AllAreas();
-         var schools = ResSettings.SettingsInSession.AllSchools();
 
          if (filterByuser)
          {
@@ -79,10 +77,6 @@ namespace Res.Controllers
             if (user.AreaId > 0)
             {
                areas = areas.Where(x => x.CompanyId == user.AreaId).ToList();
-            }
-            if (user.CompanyId > 0)
-            {
-               schools = schools.Where(x => x.CompanyId == user.CompanyId).ToList();
             }
          }
 

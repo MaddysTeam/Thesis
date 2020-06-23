@@ -53,8 +53,14 @@
 								@Html.DropDownListFor(m => m.AreaId, (ViewBag.Areas as List<ResCompany>).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择地区", new { @class = "form-control" })
 							</div>
 						</div>
-
-						<div class="form-group">
+						<div class="form-group hidden"  id="idCard">
+							@Html.LabelFor(m => m.IDCard, new { @class = "control-label col-sm-3" })
+							<div class="col-sm-9">
+								@Html.TextBoxFor(m => m.IDCard, new { @class = "form-control", maxlength = "80", placeholder = "身份证件号" })
+								@Html.ValidationMessageFor(m => m.IDCard)
+							</div>
+						</div>
+						<div class="form-group" id="email">
 							@Html.LabelFor(m => m.Email, new { @class = "control-label col-sm-3" })
 							<div class="col-sm-9">
 								@Html.TextBoxFor(m => m.Email, new { @class = "form-control", maxlength = "80", placeholder = "邮箱" })
@@ -175,6 +181,9 @@
 			}
 			if (userType == '@ResUserHelper.SchoolAdmin'  ||  userType == '@ResUserHelper.Export' || userType=='@ResUserHelper.RegistedUser') {
 				$('#company').removeClass('hidden').show()
+			}
+			if (userType== '@ResUserHelper.RegistedUser'){
+				$('#idCard').removeClass('hidden').show()
 			}
 
 		});

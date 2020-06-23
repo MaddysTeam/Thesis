@@ -72,7 +72,7 @@ namespace Res.Controllers
 
 
       //
-      //	作品 - 删除
+      //	论文- 删除
       // POST:		/Role/Delete
       //
 

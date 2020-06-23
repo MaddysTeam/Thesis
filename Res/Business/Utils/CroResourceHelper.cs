@@ -24,12 +24,14 @@ namespace Res.Business
       public static PickListAPRptColumn WinLevel;
       public static PickListAPRptColumn PublicState;
       public static PickListAPRptColumn DownloadState;
+      public static PickListAPRptColumn Theme;
 
       static CroResourceHelper()
       {
          ResourceType = new PickListAPRptColumn(APDBDef.CroResource.ResourceTypePKID, ThisApp.PLKey_ResourceType);
          State = new PickListAPRptColumn(APDBDef.CroResource.StatePKID, ThisApp.PLKey_ResourceState);     
          WinLevel = new PickListAPRptColumn(APDBDef.CroResource.WinLevelPKID, ThisApp.PLKey_WinLevel);
+         Theme = new PickListAPRptColumn(APDBDef.CroResource.WinLevelPKID, ThisApp.PLKey_ThemeType);
 
          DictWinLevel = new Dictionary<long, string> {
             { WinLevelSpecial, WinLevel.GetName(WinLevelSpecial)},
@@ -41,16 +43,6 @@ namespace Res.Business
          {
             { StateAllow, State.GetName(StateAllow)},
             { StateDeny, State.GetName(StateDeny)}
-         };
-         DictPublicSetting = new Dictionary<long, string>
-         {
-            { Public, PublicState.GetName(Public)},
-            { Private, PublicState.GetName(Private)}
-         };
-         DictDownloadSetting = new Dictionary<long, string>
-         {
-            { AllowDownload, DownloadState.GetName(AllowDownload)},
-            { DenyDownload, DownloadState.GetName(DenyDownload)}
          };
       }
 
@@ -85,13 +77,6 @@ namespace Res.Business
       public static long Shanghai = 1161;
       public static long Anhui = 1425;
 
-      // 公开状态
-      public static long Public = 10450;
-      public static long Private = 10451;
-
-      // 下载状态
-      public static long AllowDownload = 10452;
-      public static long DenyDownload = 10453;
 
       // 奖项
       public static long WinLevelSpecial = 208;
@@ -99,26 +84,12 @@ namespace Res.Business
       public static long WinLevel2 = 206;
       public static long WinLevel3 = 207;
 
-      //报送类型
-      public static long CityLevelDelivery = 10457;
-      public static long ProviceLevelDelivery = 10456;
-      public static long NotSelect = -1;
-
-      public static string CityDelivery = "市级报送";
-      public static string ProviceDelivery = "省级报送";
-      public static string NotDelivery = "未报送";
 
       // 奖项级别字典
       public static Dictionary<long, string> DictWinLevel;
 
       // 状态字典
       public static Dictionary<long, string> DictApprove;
-
-      // 公开设定字典
-      public static Dictionary<long, string> DictPublicSetting;
-
-      // 下载设定字典
-      public static Dictionary<long, string> DictDownloadSetting;
    }
 
 }

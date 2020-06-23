@@ -282,6 +282,7 @@
     <Content Include="assets\img\user4.png" />
     <Content Include="assets\img\user5.png" />
     <Content Include="assets\js\app.js" />
+    <Content Include="assets\js\pdf.js" />
     <Content Include="assets\plugins\alertify.js-0.3.11\example\assets\css\main.css" />
     <Content Include="assets\plugins\alertify.js-0.3.11\example\assets\fonts\fontawesome-webfont.svg" />
     <Content Include="assets\plugins\alertify.js-0.3.11\example\assets\img\banner.jpg" />
@@ -1858,7 +1859,6 @@
     <Content Include="Views\Company\Edit.cshtml" />
     <Content Include="Views\Crosource\Report.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
-    <Content Include="Views\Crosource\Courses.cshtml" />
     <Content Include="Views\EvalManage\Search.cshtml" />
     <Content Include="Views\EvalManage\Edit.cshtml" />
     <Content Include="Views\EvalManage\_expList.cshtml" />
@@ -1874,13 +1874,10 @@
     <Content Include="Views\EvalManage\EvalResultList.cshtml" />
     <Content Include="Views\Crosource\_winLevel.cshtml" />
     <Content Include="Views\EvalManage\EvalProgress.cshtml" />
-    <Content Include="Views\Crosource\_exercies.cshtml" />
     <Content Include="Views\Crosource\_approve.cshtml" />
     <Content Include="userTemplate.xlsx" />
     <Content Include="Views\Company\_preview.cshtml" />
     <Content Include="Views\User\_preview.cshtml" />
-    <Content Include="Views\Crosource\_publicSetting.cshtml" />
-    <Content Include="Views\Crosource\_downloadSetting.cshtml" />
     <Content Include="Views\Eval\Export.cshtml" />
     <Content Include="Views\Shared\_PDFLayout.cshtml" />
     <Content Include="Views\Eval\ExportAll.cshtml" />

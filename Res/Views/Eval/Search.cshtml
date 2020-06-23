@@ -1,5 +1,5 @@
 ﻿@{
-	ViewBag.Title = "评审作品";
+	ViewBag.Title = "评审论文作品";
 }
 <div class="col-md-10 content-wrapper">
 	<div class="row">
@@ -18,14 +18,14 @@
 	<div class="content">
 		<div class="main-header">
 			<h2>@ViewBag.Title</h2>
-			<em>作品列表</em>
+			<em>论文作品列表</em>
 		</div>
 
 		<div class="main-content">
-			<div class="buttons">
+			@*<div class="buttons">
 				<a href="@Url.Action("ExportAll", "Eval")" id="exportAll" class="btn btn-danger btn-md">导出至PDF</a>&nbsp;
 				<a href="@Url.Action("ExpoertAllToExcel", "Eval")" id="exportAll" class="btn btn-success btn-md">导出至Excel</a>&nbsp;
-			</div>
+			</div>*@
 			<!-- widget -->
 			<div class="widget">
 				<div class="widget-header">
@@ -46,8 +46,6 @@
 									<th data-column-id="groupName">所属评审组</th>
 									<th data-column-id="company">学校</th>
 									<th data-column-id="author">作者</th>
-									<th data-column-id="subject">学科</th>
-									<th data-column-id="grade">年级</th>
 									<th data-column-id="score">得分</th>
 									<th data-column-id="commands" data-formatter="commands" data-sortable="false" data-header-Css-Class="width400">操作</th>
 								</tr>
