@@ -99,6 +99,7 @@
 					<add name="Question" type="string" dataLength="255" display="密码问题"/>
 					<add name="Answer" type="string" dataLength="255" display="密码答案"/>
 					<add name="UserTypePKID" type="long" display="用户角色"/>
+					<add name="Phone" type="string" dataLength="11" display="手机号码"/>
 					<add name="Company" type="string" dataLength="200"   display="单位全称"/>
 
 					<!-- Content -->

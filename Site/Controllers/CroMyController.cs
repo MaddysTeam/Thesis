@@ -11,136 +11,145 @@ using System.Web.Mvc;
 
 namespace Res.Controllers
 {
-	[Authorize]
-	public class CroMyController : CroBaseController
-	{
-		#region [ UserManager ]
+   [Authorize]
+   public class CroMyController : CroBaseController
+   {
+      #region [ UserManager ]
 
-		private ApplicationSignInManager _signInManager;
-		private ApplicationUserManager _userManager;
+      private ApplicationSignInManager _signInManager;
+      private ApplicationUserManager _userManager;
 
-		public CroMyController()
-		{
-		}
+      public CroMyController()
+      {
+      }
 
-		public CroMyController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-		{
-			UserManager = userManager;
-			SignInManager = signInManager;
-		}
+      public CroMyController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+      {
+         UserManager = userManager;
+         SignInManager = signInManager;
+      }
 
-		public ApplicationSignInManager SignInManager
-		{
-			get
-			{
-				return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-			}
-			private set
-			{
-				_signInManager = value;
-			}
-		}
+      public ApplicationSignInManager SignInManager
+      {
+         get
+         {
+            return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+         }
+         private set
+         {
+            _signInManager = value;
+         }
+      }
 
-		public ApplicationUserManager UserManager
-		{
-			get
-			{
-				return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-			}
-			private set
-			{
-				_userManager = value;
-			}
-		}
+      public ApplicationUserManager UserManager
+      {
+         get
+         {
+            return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+         }
+         private set
+         {
+            _userManager = value;
+         }
+      }
 
-		#endregion
-
-
-		//
-		// 我的信息
-		// GET:		/My/Index
-		//
-
-		public ActionResult Index(long id)
-		{
-			var user = db.ResUserDal.PrimaryGet(id);
-
-			return View(user);
-		}
+      #endregion
 
 
-		//
-		// 修改个人信息
-		// GET:		/My/Edit
-		// POST:		/My/Edit
-		//
+      //
+      // 我的信息
+      // GET:		/My/Index
+      //
 
-		public ActionResult Edit()
-		{
-			var model = APBplDef.ResUserBpl.PrimaryGet(ResSettings.SettingsInSession.UserId);
+      public ActionResult Index(long id)
+      {
+         var user = db.ResUserDal.PrimaryGet(id);
 
-			return Request.IsAjaxRequest() ? (ActionResult)PartialView(model) : View(model);
-		}
-
-		[HttpPost]
-		public ActionResult Edit(ResUser model)
-		{
-			APBplDef.ResUserBpl.UpdatePartial(ResSettings.SettingsInSession.UserId, new { model.RealName, model.Email, model.PhotoPath });
-
-			return RedirectToAction("Index", new { id = ResSettings.SettingsInSession.UserId, });
-		}
+         return View(user);
+      }
 
 
-		//平台 公告
-		public ActionResult More(long id, string type, int page = 1)
-		{
-			var t = APDBDef.CroBulletin;
-			int total;
-			ViewBag.RankingBulletin = HomeCroBulltinList(t.CreatedTime.Desc, out total, 10, (page - 1) * 10);
-			ViewBag.Title = "公告列表";
-			ViewBag.ParamType = type;
-			ViewBag.PageSize = 10;
-			ViewBag.PageNumber = page;
-			ViewBag.TotalItemCount = total;
-			ResUser user = new ResUser();
-			user.UserId = id;
-			return View(user);
+      //
+      // 修改个人信息
+      // GET:		/My/Edit
+      // POST:		/My/Edit
+      //
 
-		}
+      public ActionResult Edit()
+      {
+         var model = APBplDef.ResUserBpl.PrimaryGet(ResSettings.SettingsInSession.UserId);
+
+         return Request.IsAjaxRequest() ? (ActionResult)PartialView(model) : View(model);
+      }
+
+      [HttpPost]
+      [ValidateInput(true)]
+      public ActionResult Edit(ResUser model)
+      {
+         var currentUser = ResSettings.SettingsInSession.User;
+         var t = APDBDef.ResUser;
+
+         if (model.UserId != currentUser.UserId)
+         {
+            var errormsg = "抱歉，您无法修改他人的信息！";
+            ModelState.AddModelError("Email", errormsg);
+            return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new { error = "error", msg = errormsg });
+         }
+
+         if (APBplDef.ResUserBpl.ConditionQueryCount(t.UserId != currentUser.UserId & t.Email == model.Email) > 0)
+         {
+            var errormsg = "该邮箱已被使用";
+            ModelState.AddModelError("Email", errormsg);
+            return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new { error = "error", msg = errormsg });
+         }
 
 
-		//上传论文
+         APBplDef.ResUserBpl.UpdatePartial(ResSettings.SettingsInSession.UserId, new { model.RealName, model.Email, model.PhotoPath });
 
-		public ActionResult Upload(long? resid)
-		{
+         return RedirectToAction("Index", new { id = ResSettings.SettingsInSession.UserId, });
+      }
 
-			var active = APBplDef.ActiveBpl.GetAll().Find(x => x.IsCurrent);
 
-			if (active == null)
-			{
-				throw new ApplicationException("没有任何活动，请联系管理员");
-			}
+      //平台 公告
+      public ActionResult More(long id, string type, int page = 1)
+      {
+         var t = APDBDef.CroBulletin;
+         int total;
+         ViewBag.RankingBulletin = HomeCroBulltinList(t.CreatedTime.Desc, out total, 10, (page - 1) * 10);
+         ViewBag.Title = "公告列表";
+         ViewBag.ParamType = type;
+         ViewBag.PageSize = 10;
+         ViewBag.PageNumber = page;
+         ViewBag.TotalItemCount = total;
+         ResUser user = new ResUser();
+         user.UserId = id;
+         return View(user);
 
-			//ResSettings.SettingsInSession.CleanCompanyCache();
-			var user = ResSettings.SettingsInSession.User;
-			var provinces = ResSettings.SettingsInSession.AllProvince();
-			var areas = ResSettings.SettingsInSession.AllAreas();
+      }
 
-			if (user.ProvinceId > 0)
-			{
-				provinces = provinces.Where(x => x.CompanyId == user.ProvinceId).ToList();
-			}
-			if (user.AreaId > 0)
-			{
-				areas = areas.Where(x => x.CompanyId == user.AreaId).ToList();
-			}
 
-			ViewBag.Provinces = provinces;
-			ViewBag.Areas = areas;
-			ViewBag.ProvincesDic = GetStrengthDict(areas);
-			ViewBag.AreasDic = GetStrengthDict(areas);
-			ViewBag.ResTypes = GetStrengthDict(CroResourceHelper.ResourceType.GetItems());
-			ViewBag.Themes = CroResourceHelper.Theme.GetItems();
+      //上传论文
+
+      public ActionResult Upload(long? resid)
+      {
+
+         var active = APBplDef.ActiveBpl.GetAll().Find(x => x.IsCurrent);
+
+         if (active == null)
+         {
+            throw new ApplicationException("没有任何活动，请联系管理员");
+         }
+
+         var user = ResSettings.SettingsInSession.User;
+         var provinces = ResSettings.SettingsInSession.AllProvince();
+         var areas = ResSettings.SettingsInSession.AllAreas();
+
+         ViewBag.Provinces = provinces;
+         ViewBag.Areas = areas;
+         ViewBag.ProvincesDic = GetStrengthDict(areas);
+         ViewBag.AreasDic = GetStrengthDict(areas);
+         ViewBag.ResTypes = GetStrengthDict(CroResourceHelper.ResourceType.GetItems());
+         ViewBag.Themes = CroResourceHelper.Theme.GetItems();
 
 
          CroResource model = null;
@@ -166,163 +175,170 @@ namespace Res.Controllers
       }
 
 
-		[HttpPost]
-		[ValidateInput(true)]
-		public ActionResult Upload(CroResource model)
-		{
-			if (!ModelState.IsValid)
-				return Upload(model.CrosourceId);
+      [HttpPost]
+      [ValidateInput(true)]
+      public ActionResult Upload(CroResource model)
+      {
+         if (!ModelState.IsValid)
+            return Upload(model.CrosourceId);
 
-			var user = ResSettings.SettingsInSession.User;
-			var active = APBplDef.ActiveBpl.GetAll().Find(x => x.IsCurrent);
+         var t = APDBDef.ResUser;
 
-			model.StatePKID = CroResourceHelper.StateAllow;
-			model.AuditedTime = DateTime.Now;
-
-			model.ActiveId = active.ActiveId;
-
-			if (model.CrosourceId > 0)
-			{
-				model.LastModifier = ResSettings.SettingsInSession.UserId;
-				db.CroResourceDal.Update(model);
-			}
-			else
-			{
-				model.Creator = user.UserId;
-				model.CreatedTime = model.LastModifiedTime = DateTime.Now;
-
-				db.CroResourceDal.Insert(model);
-			}
-
-			return Request.IsAjaxRequest() ? Json(new
-			{
-				state = "ok",
-				msg = "论文作品上传成功"
-			}) : (ActionResult)RedirectToAction("CroMyResource", new { id = user.Id });
-
-		}
+         //检查作者邮箱是否被用
 
 
-		private string GetSafeExt(string path)
-		{
-			int idx = path.IndexOf('?');
-			if (idx != -1)
-				path = path.Substring(0, idx);
-			string ext = Path.GetExtension(path);
-			if (ext.Length >= 20)
-				ext = "";
-			return ext;
-		}
+         //检查手机号是否被用
+
+         var user = ResSettings.SettingsInSession.User;
+         var active = APBplDef.ActiveBpl.GetAll().Find(x => x.IsCurrent);
+
+         model.StatePKID = CroResourceHelper.StateAllow;
+         model.AuditedTime = DateTime.Now;
+
+         model.ActiveId = active.ActiveId;
+
+         if (model.CrosourceId > 0)
+         {
+            model.LastModifier = ResSettings.SettingsInSession.UserId;
+            db.CroResourceDal.Update(model);
+         }
+         else
+         {
+            model.Creator = user.UserId;
+            model.CreatedTime = model.LastModifiedTime = DateTime.Now;
+
+            db.CroResourceDal.Insert(model);
+         }
+
+         return Request.IsAjaxRequest() ? Json(new
+         {
+            state = "ok",
+            msg = "论文作品上传成功"
+         }) : (ActionResult)RedirectToAction("ZcView", "CroMy", new { id = model.CrosourceId });
+
+      }
 
 
-		//我的论文
-		public ActionResult CroMyResource(long id, int page = 1)
-		{
-			int total = 0;
-			ViewBag.ListofResource = MyCroResource(id, out total, 10, (page - 1) * 10);
-
-			// 分页器
-			ViewBag.PageSize = 10;
-			ViewBag.PageNumber = page;
-			ViewBag.TotalItemCount = total;
-			ResUser user = new ResUser();
-			user.UserId = id;
-			return View(user);
-		}
+      private string GetSafeExt(string path)
+      {
+         int idx = path.IndexOf('?');
+         if (idx != -1)
+            path = path.Substring(0, idx);
+         string ext = Path.GetExtension(path);
+         if (ext.Length >= 20)
+            ext = "";
+         return ext;
+      }
 
 
-		public ActionResult ZcView(long id)
-		{
-			var user = ResSettings.SettingsInSession.User;
-			var model = APBplDef.CroResourceBpl.GetResource(db, id, user.UserId);
+      //我的论文
+      public ActionResult CroMyResource(long id, int page = 1)
+      {
+         int total = 0;
+         ViewBag.ListofResource = MyCroResource(id, out total, 10, (page - 1) * 10);
 
-			ViewBag.Title = model.Title;
-
-			return View(model);
-
-		}
-
-
-		public ActionResult CroMyMedal(long id, int page = 1)
-		{
-			int total = 0;
-			ViewBag.ListofMedals = MyMedals(id, out total, 10, (page - 1) * 10);
-
-			// 分页器
-			ViewBag.PageSize = 10;
-			ViewBag.PageNumber = page;
-			ViewBag.TotalItemCount = total;
-
-			ResUser user = new ResUser();
-			user.UserId = id;
-			return View(user);
-		}
-
-		//
-		// 微课作品查看
-		// GET:		/CroResource/View
-		//
+         // 分页器
+         ViewBag.PageSize = 10;
+         ViewBag.PageNumber = page;
+         ViewBag.TotalItemCount = total;
+         ResUser user = new ResUser();
+         user.UserId = id;
+         return View(user);
+      }
 
 
-		public ActionResult Details(long id)
-		{
+      public ActionResult ZcView(long id)
+      {
+         var user = ResSettings.SettingsInSession.User;
+         var model = APBplDef.CroResourceBpl.GetResource(db, id, user.UserId);
 
-			var model = APBplDef.CroResourceBpl.PrimaryGet(id);
-			// model.GhostFileName = model.ResourcePath;// model.IsLink ? model.ResourcePath : Path.GetFileName(model.ResourcePath);
-			return View(model);
-		}
+         ViewBag.Title = model.Title;
 
-		//删除微课作品
+         return View(model);
 
-		public ActionResult Delete(long id, long resid)
-		{
-			APBplDef.CroResourceBpl.UpdatePartial(resid, new { StatePKID = CroResourceHelper.StateDelete });
-
-			return RedirectToAction("CroMyResource", new { id = id });
-		}
+      }
 
 
-		public ActionResult NewsView(long id)
-		{
-			var model = APBplDef.CroBulletinBpl.PrimaryGet(id);
+      public ActionResult CroMyMedal(long id, int page = 1)
+      {
+         int total = 0;
+         ViewBag.ListofMedals = MyMedals(id, out total, 10, (page - 1) * 10);
 
-			return View(model);
+         // 分页器
+         ViewBag.PageSize = 10;
+         ViewBag.PageNumber = page;
+         ViewBag.TotalItemCount = total;
 
-		}
+         ResUser user = new ResUser();
+         user.UserId = id;
+         return View(user);
+      }
 
-
-		public ActionResult Declare(long id)
-		{
-			ResUser user = new ResUser();
-			user.UserId = id;
-			return View(user);
-		}
-
-
-		//
-		// 修改个人密码
-		// GET:		/My/ChgPwd
-		// POST:		/My/ChgPwd
-		//
-		public ActionResult ChgPwd(long id)
-		{
-			return View();
-		}
-
-		[HttpPost]
-		public async Task<ActionResult> ChgPwd(ChgPwd model)
-		{
-			var newPassword = model.Password;
-			var user = APBplDef.ResUserBpl.PrimaryGet(ResSettings.SettingsInSession.UserId);
-			var result = await UserManager.ChangePasswordAsync(user.UserId, user.Password, newPassword);
-
-			if (result.Succeeded)
-				APBplDef.ResUserBpl.UpdatePartial(user.UserId, new { Password = newPassword });
-
-			return RedirectToAction("Index", new { id = ResSettings.SettingsInSession.UserId, });
-		}
+      //
+      // 微课作品查看
+      // GET:		/CroResource/View
+      //
 
 
-	}
+      public ActionResult Details(long id)
+      {
+
+         var model = APBplDef.CroResourceBpl.PrimaryGet(id);
+         // model.GhostFileName = model.ResourcePath;// model.IsLink ? model.ResourcePath : Path.GetFileName(model.ResourcePath);
+         return View(model);
+      }
+
+      //删除微课作品
+
+      public ActionResult Delete(long id, long resid)
+      {
+         APBplDef.CroResourceBpl.UpdatePartial(resid, new { StatePKID = CroResourceHelper.StateDelete });
+
+         return RedirectToAction("CroMyResource", new { id = id });
+      }
+
+
+      public ActionResult NewsView(long id)
+      {
+         var model = APBplDef.CroBulletinBpl.PrimaryGet(id);
+
+         return View(model);
+
+      }
+
+
+      public ActionResult Declare(long id)
+      {
+         ResUser user = new ResUser();
+         user.UserId = id;
+         return View(user);
+      }
+
+
+      //
+      // 修改个人密码
+      // GET:		/My/ChgPwd
+      // POST:		/My/ChgPwd
+      //
+      public ActionResult ChgPwd(long id)
+      {
+         return View();
+      }
+
+      [HttpPost]
+      public async Task<ActionResult> ChgPwd(ChgPwd model)
+      {
+         var newPassword = model.Password;
+         var user = APBplDef.ResUserBpl.PrimaryGet(ResSettings.SettingsInSession.UserId);
+         var result = await UserManager.ChangePasswordAsync(user.UserId, user.Password, newPassword);
+
+         if (result.Succeeded)
+            APBplDef.ResUserBpl.UpdatePartial(user.UserId, new { Password = newPassword });
+
+         return RedirectToAction("Index", new { id = ResSettings.SettingsInSession.UserId, });
+      }
+
+
+   }
 
 }

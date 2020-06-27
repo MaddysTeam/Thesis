@@ -58,6 +58,13 @@
 				</div>
 			</div>
 			<div class="form-group">
+				<label for="IdNo" class="control-label sr-only">手机号码</label>
+				<div class="col-sm-12">
+					@Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "单位全称" })
+					@Html.ValidationMessageFor(m => m.Phone, null, new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="form-group">
 				<label for="Email" class="control-label sr-only">真实姓名</label>
 				<div class="col-sm-12">
 					@Html.TextBoxFor(m => m.RealName, new { @class = "form-control", placeholder = "真实姓名" })
@@ -70,6 +77,22 @@
 				<div class="col-sm-12">
 					@Html.TextBoxFor(m => m.Company, new { @class = "form-control", placeholder = "单位全称" })
 					@Html.ValidationMessageFor(m => m.Company, null, new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="Email" class="control-label sr-only">密保问题</label>
+				<div class="col-sm-12">
+					@Html.TextBoxFor(m => m.Question, new { @class = "form-control", placeholder = "密保问题" })
+					@Html.ValidationMessageFor(m => m.Question, null, new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="Email" class="control-label sr-only">密保答案</label>
+				<div class="col-sm-12">
+					@Html.TextBoxFor(m => m.Answer, new { @class = "form-control", placeholder = "密保答案" })
+					@Html.ValidationMessageFor(m => m.Answer, null, new { @class = "text-danger" })
 				</div>
 			</div>
 
@@ -120,13 +143,12 @@
 
 				$.post($form.attr("action"), $form.serialize(), function (data, status) {
 					if (status == "success") {
-						if (data.error != 'none') {
+						if (data.error && data.msg) {
 							alert(data.msg);
 							return false;
 						}
 
-						alert(data.msg);
-						if(data.returnUrl!=''){
+						if(data.returnurl!=''){
 							location.href=data.returnUrl;
 						}
 					}

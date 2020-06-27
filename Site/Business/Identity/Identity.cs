@@ -142,7 +142,21 @@ namespace Res.Business
 		[Display(Name = "身份证件号")]
 		public string IdCard { get; set; }
 
-	}
+      [Required]
+      [RegularExpression(@"[1][3,4,5,7,8][0-9]{9}", ErrorMessage = "请输入正确的手机号码")]
+      [Display(Name = "手机号码")]
+      public string Phone { get; set; }
+
+      [Required]
+      [Display(Name = "密保问题")]
+      public string Question { get; set; }
+
+      [Required]
+      [Display(Name = "密保答案")]
+      public String Answer { get; set; }
+
+
+   }
 
 	public class ChgPwd
 	{
@@ -170,6 +184,16 @@ namespace Res.Business
 	{
 		[Required]
 		[EmailAddress]
-		public string Email { get; set; }
-	}
+      [Display(Name = "电子邮箱")]
+      public string Email { get; set; }
+
+
+      [Required]
+      [Display(Name = "密保问题")]
+      public string Question { get; set; }
+
+      [Required]
+      [Display(Name = "密保答案")]
+      public String Answer { get; set; }
+   }
 }

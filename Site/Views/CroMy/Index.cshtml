@@ -29,7 +29,7 @@
 		</div>*@
 		<div class="u_t">
 			
-			<img id="photo" src="@ResActiveUser.FitPhotoPathWithUser(Model)" />
+			@*<img id="photo" src="@ResActiveUser.FitPhotoPathWithUser(Model)" />*@
 			<div class="u_text">
 				<p class="u_name">@Model.RealName</p>
 				<p>
@@ -41,6 +41,7 @@
 				<p>
 					<span>注册时间：@Model.RegisterTime.ToShortDateString()</span><span>最近登录：@Model.LastLoginTime </span>
 				</p>
+				<p><span>手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：@Model.Phone</span></p>
 			</div>
 		</div>
 		<div class="cb"></div>
