@@ -194,7 +194,7 @@ namespace Res.Business
 
       public List<ResCompany> AllAreas()
       {
-         return Companies.FindAll(x => x.Path.Length == 10);
+         return Companies.FindAll(x => x.ParentId!=0);
       }
 
       public List<ResCompany> AllSchools()

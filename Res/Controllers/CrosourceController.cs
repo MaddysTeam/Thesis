@@ -102,7 +102,7 @@ namespace Res.Controllers
 			var list = APBplDef.CroResourceBpl.TolerantSearch(out total, current, rowCount, where, order);
 
 
-			if (Request.IsAjaxRequest())
+				if (Request.IsAjaxRequest())
 			{
 				return Json(
 				   new

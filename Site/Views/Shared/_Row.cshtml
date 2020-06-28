@@ -4,18 +4,27 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="renderer" content="webkit" />
-	<title>@ViewBag.Title - </title>
+	<title>2020年长三角教育信息化论文大赛</title>
 	<!-- CSS -->
 	@Styles.Render("~/css/bootstrap")
 	@RenderSection("css", required: false)
 	@Styles.Render("~/css/app")
+	<style>
+		.header_link {
+			width: 70%;
+			margin: 0px auto;
+			display: block;
+		}
+
+		.header_link img {
+				width: 100%;
+		}
+	</style>
 </head>
 <body>
 	<div class="d_top">
-		<div class="container top_nav">
-		</div>
 		<div class="container">
-			@*<a href="@Url.Action("Index", "Home")"><img src="~/assets/img/t_banner.jpg" /></a>*@
+			<a class="header_link"><img src="~/assets/img/thesis_banner.jpg"/></a>
 		</div>
 	</div>
 	<div class="container bk_gray">
