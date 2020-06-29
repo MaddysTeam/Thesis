@@ -106,24 +106,22 @@ namespace Res.Business
 
 		[Required]
 		[Display(Name = "登录名称")]
-		[StringLength(100, ErrorMessage = "{0} 必须至少包含 {2} 个字符。", MinimumLength = 6)]
+		[RegularExpression("[a-zA-Z0-9_-]{6,12}",ErrorMessage ="用户名可以包含字母和数字，长度为6至12位")]
 		public string Username { get; set; }
 
 		[Required]
 		[Display(Name = "登录密码")]
-		[DataType(DataType.Password)]
-		[StringLength(100, ErrorMessage = "{0} 必须至少包含 {2} 个字符。", MinimumLength = 8)]
+      [RegularExpression("(?=.*[0-9])(?=.*[a-zA-Z])(.{8,16})",ErrorMessage ="密码必须包含数字和字母，且长度为8至16位！")]
 		public string Password { get; set; }
 
 		[Required]
-		[DataType(DataType.EmailAddress)]
-		[Display(Name = "电子邮箱")]
+      [Display(Name = "电子邮箱")]
+      [RegularExpression(@"[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}", ErrorMessage = "请填写正确的邮箱地址！")]
 		public string Email { get; set; }
 
 		[Required]
 		[Display(Name = "真实姓名")]
 		public string RealName { get; set; }
-
 
 		[Required]
 		[Display(Name = "省市")]
@@ -147,11 +145,10 @@ namespace Res.Business
       [Display(Name = "手机号码")]
       public string Phone { get; set; }
 
-      [Required]
+     
       [Display(Name = "密保问题")]
       public string Question { get; set; }
 
-      [Required]
       [Display(Name = "密保答案")]
       public String Answer { get; set; }
 

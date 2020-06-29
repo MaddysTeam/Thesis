@@ -61,9 +61,10 @@ namespace Res.Controllers
       // GET:		/My/Index
       //
 
-      public ActionResult Index(long id)
+      public ActionResult Index()
       {
-         var user = db.ResUserDal.PrimaryGet(id);
+         var userId = ResSettings.SettingsInSession.UserId;
+         var user = db.ResUserDal.PrimaryGet(userId);
 
          return View(user);
       }
@@ -111,8 +112,10 @@ namespace Res.Controllers
 
 
       //平台 公告
-      public ActionResult More(long id, string type, int page = 1)
+      public ActionResult More(string type, int page = 1)
       {
+         var userId = ResSettings.SettingsInSession.UserId;
+
          var t = APDBDef.CroBulletin;
          int total;
          ViewBag.RankingBulletin = HomeCroBulltinList(t.CreatedTime.Desc, out total, 10, (page - 1) * 10);
@@ -122,7 +125,7 @@ namespace Res.Controllers
          ViewBag.PageNumber = page;
          ViewBag.TotalItemCount = total;
          ResUser user = new ResUser();
-         user.UserId = id;
+         user.UserId = userId;
          return View(user);
 
       }
@@ -182,20 +185,40 @@ namespace Res.Controllers
          if (!ModelState.IsValid)
             return Upload(model.CrosourceId);
 
-         var t = APDBDef.ResUser;
+         var userId = ResSettings.SettingsInSession.UserId;
+         var currentActive = ResSettings.SettingsInSession.Actives.First(x => x.IsCurrent);
+         var existThesis = APBplDef.CroResourceBpl.GetActiveResource(db, currentActive.ActiveId, userId);
 
-         //检查作者邮箱是否被用
+         // ensure upload thesis for once only, if model.crosourceId is been changed the original id will replace
+         if (existThesis != null)
+            model.CrosourceId = existThesis.CrosourceId;
 
+         var cr = APDBDef.CroResource;
 
-         //检查手机号是否被用
+         if (model.AreaId <= 0)
+         {
+            var errormsg = "必须选择地区！";
+            ModelState.AddModelError("AreaId", errormsg);
+            return !Request.IsAjaxRequest() ? Upload(model.CrosourceId) : (ActionResult)Json(new { error = "error", msg = errormsg });
+         }
 
-         var user = ResSettings.SettingsInSession.User;
-         var active = APBplDef.ActiveBpl.GetAll().Find(x => x.IsCurrent);
+         if (APBplDef.CroResourceBpl.ConditionQueryCount((cr.Creator != userId & cr.LastModifier != userId) & cr.AuthorEmail == model.AuthorEmail) > 0)
+         {
+            var errormsg = "作者邮箱已经使用,一个作者仅能上传一篇论文！";
+            ModelState.AddModelError("AuthorEmail", errormsg);
+            return !Request.IsAjaxRequest() ? Upload(model.CrosourceId) : (ActionResult)Json(new { error = "error", msg = errormsg });
+         }
+         else if (APBplDef.CroResourceBpl.ConditionQueryCount((cr.Creator != userId & cr.LastModifier != userId) & cr.AuthorPhone == model.AuthorPhone) > 0)
+         {
+            var errormsg = "作者手机号码已被使用,一个作者仅能上传一篇论文！";
+            ModelState.AddModelError("AuthorPhone", errormsg);
+            return !Request.IsAjaxRequest() ? Upload(model.CrosourceId) : (ActionResult)Json(new { error = "error", msg = errormsg });
+         }
+
 
          model.StatePKID = CroResourceHelper.StateAllow;
          model.AuditedTime = DateTime.Now;
-
-         model.ActiveId = active.ActiveId;
+         model.ActiveId = currentActive.ActiveId;
 
          if (model.CrosourceId > 0)
          {
@@ -204,7 +227,7 @@ namespace Res.Controllers
          }
          else
          {
-            model.Creator = user.UserId;
+            model.Creator = userId;
             model.CreatedTime = model.LastModifiedTime = DateTime.Now;
 
             db.CroResourceDal.Insert(model);
@@ -232,17 +255,18 @@ namespace Res.Controllers
 
 
       //我的论文
-      public ActionResult CroMyResource(long id, int page = 1)
+      public ActionResult CroMyResource(int page = 1)
       {
+         var userId = ResSettings.SettingsInSession.UserId;
          int total = 0;
-         ViewBag.ListofResource = MyCroResource(id, out total, 10, (page - 1) * 10);
+         ViewBag.ListofResource = MyCroResource(userId, out total, 10, (page - 1) * 10);
 
          // 分页器
          ViewBag.PageSize = 10;
          ViewBag.PageNumber = page;
          ViewBag.TotalItemCount = total;
          ResUser user = new ResUser();
-         user.UserId = id;
+         user.UserId = userId;
          return View(user);
       }
 
@@ -259,10 +283,12 @@ namespace Res.Controllers
       }
 
 
-      public ActionResult CroMyMedal(long id, int page = 1)
+      public ActionResult CroMyMedal(int page = 1)
       {
+         var userId = ResSettings.SettingsInSession.UserId;
+
          int total = 0;
-         ViewBag.ListofMedals = MyMedals(id, out total, 10, (page - 1) * 10);
+         ViewBag.ListofMedals = MyMedals(userId, out total, 10, (page - 1) * 10);
 
          // 分页器
          ViewBag.PageSize = 10;
@@ -270,7 +296,7 @@ namespace Res.Controllers
          ViewBag.TotalItemCount = total;
 
          ResUser user = new ResUser();
-         user.UserId = id;
+         user.UserId = userId;
          return View(user);
       }
 

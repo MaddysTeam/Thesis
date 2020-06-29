@@ -5,6 +5,7 @@
 }
 
 <div class="page-login text-center">
+	<div class="error text-danger text-left"></div>
 	<div class="login-box center-block">
 		@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @id="form", role = "form", @class = "form-horizontal" }))
 		{
@@ -13,74 +14,72 @@
 
 			<p class="title">用户注册</p>
 			<div class="form-group">
-				<label for="CardNo" class="control-label sr-only">用户名</label>
-				<div class="col-sm-12">
+				<label for="Username" class="control-label col-sm-2"><i class="text-danger">* &nbsp;</i>用户</label>
+				<div class="col-sm-9">
 					@Html.TextBoxFor(m => m.Username, new { @class = "form-control", placeholder = "用户名" })
 					@Html.ValidationMessageFor(m => m.Username, null, new { @class = "text-danger" })
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="Password" class="control-label sr-only">密码</label>
-				<div class="col-sm-12">
+				<label for="Password" class="control-label col-sm-2 text-left"><i class="text-danger">* &nbsp;</i>密码</label>
+				<div class="col-sm-9">
 					@Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "密码" })
 					@Html.ValidationMessageFor(m => m.Password, null, new { @class = "text-danger" })
 				</div>
 			</div>
 			<div class="form-group" id="province">
-				<div class="col-sm-12">
+				<label for="ProvinceId" class="control-label col-sm-2 text-left"><i class="text-danger">* &nbsp;</i>省份</label>
+				<div class="col-sm-9">
 					@Html.DropDownListFor(m => m.ProvinceId, (ViewBag.Provinces as List<ResCompany>?? new List<ResCompany>()).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择省份", new { @class = "form-control" })
 					@Html.ValidationMessageFor(m => m.ProvinceId, null, new { @class = "text-danger" })
 				</div>
 			</div>
 			<div class="form-group" id="area">
-				<div class="col-sm-12">
+				<label for="AreaId" class="control-label col-sm-2 text-left"><i class="text-danger">* &nbsp;</i>地区</label>
+				<div class="col-sm-9">
 					@Html.DropDownListFor(m => m.AreaId, (ViewBag.Areas as List<ResCompany> ?? new List<ResCompany>()).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择地区", new { @class = "form-control" })
 				   @Html.ValidationMessageFor(m => m.AreaId, null, new { @class = "text-danger" })
 				</div>
 			</div>
-			@*<div class="form-group" id="company">
-				<div class="col-sm-12">
-					@Html.DropDownListFor(m => m.CompanyId, (ViewBag.Companies as List<ResCompany> ?? new List<ResCompany>()).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择学校", new { @class = "form-control" })	 
-				</div>
-			</div>*@
 			<div class="form-group">
-				<label for="IdNo" class="control-label sr-only">身份证件号</label>
-				<div class="col-sm-12">
+				<label for="IdNo" class="control-label col-sm-2"><i class="text-danger">* &nbsp;</i>证件号</label>
+				<div class="col-sm-9">
 					@Html.TextBoxFor(m => m.IdCard, new { @class = "form-control", placeholder = "身份证件号" })
 					@Html.ValidationMessageFor(m => m.IdCard, null, new { @class = "text-danger" })
 				</div>
 			</div>
+			
 			<div class="form-group">
-				<label for="Email" class="control-label sr-only">电子邮箱</label>
-				<div class="col-sm-12">
-					@Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "电子邮箱" })
-					@Html.ValidationMessageFor(m => m.Email, null, new { @class = "text-danger" })
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="IdNo" class="control-label sr-only">手机号码</label>
-				<div class="col-sm-12">
-					@Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "单位全称" })
+				<label for="Phone" class="control-label col-sm-2"><i class="text-danger">* &nbsp;</i>手机</label>
+				<div class="col-sm-9">
+					@Html.TextBoxFor(m => m.Phone, new { @class = "form-control", placeholder = "手机号码" })
 					@Html.ValidationMessageFor(m => m.Phone, null, new { @class = "text-danger" })
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="Email" class="control-label sr-only">真实姓名</label>
-				<div class="col-sm-12">
+				<label for="RealName" class="control-label col-sm-2"><i class="text-danger">* &nbsp;</i>姓名</label>
+				<div class="col-sm-9">
 					@Html.TextBoxFor(m => m.RealName, new { @class = "form-control", placeholder = "真实姓名" })
 					@Html.ValidationMessageFor(m => m.RealName, null, new { @class = "text-danger" })
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label for="IdNo" class="control-label sr-only">单位全称</label>
-				<div class="col-sm-12">
+				<label for="Company" class="control-label col-sm-2"><i class="text-danger">* &nbsp;</i>单位</label>
+				<div class="col-sm-9">
 					@Html.TextBoxFor(m => m.Company, new { @class = "form-control", placeholder = "单位全称" })
 					@Html.ValidationMessageFor(m => m.Company, null, new { @class = "text-danger" })
 				</div>
 			</div>
-
+			@*<div class="alert alert-info">以下信息为找回密码使用，请谨慎填写</div>*@
 			<div class="form-group">
+				<label for="Email" class="control-label col-sm-2"><i class="text-danger">* &nbsp;</i>邮箱</label>
+				<div class="col-sm-9">
+					@Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "电子邮箱" })
+					@Html.ValidationMessageFor(m => m.Email, null, new { @class = "text-danger" })
+				</div>
+			</div>
+			@*<div class="form-group">
 				<label for="Email" class="control-label sr-only">密保问题</label>
 				<div class="col-sm-12">
 					@Html.TextBoxFor(m => m.Question, new { @class = "form-control", placeholder = "密保问题" })
@@ -94,7 +93,7 @@
 					@Html.TextBoxFor(m => m.Answer, new { @class = "form-control", placeholder = "密保答案" })
 					@Html.ValidationMessageFor(m => m.Answer, null, new { @class = "text-danger" })
 				</div>
-			</div>
+			</div>*@
 
 			<button class="btn btn-block btn-login" type="submit">提交<i class="fa fa-sign-in fa-lg"></i></button>
 		}
@@ -103,10 +102,10 @@
 				<a href="@Url.Action("Login", "Account")">登录</a>
 			</p>
 		</div>
-		<div class="alert-danger">
+		@*<div class="alert-danger">
 			 <i class="fa fa-bell"></i> 注意事项：
 			  用户名需包含英文和数字，且不能使用中文 
-		</div>
+		</div>*@
 	</div>
 </div>
 
@@ -128,15 +127,6 @@
 
 			$.validator.unobtrusive.parse("#form");
 			$("#form").submit(function () {
-				if (isEmpty($('#ProvinceId').val()) || isEmpty($('#AreaId').val())) {
-					alert('必须选择省市，地区和单位');
-					return false;
-				}    
-				else if (!new RegExp('^(?=.*[0-9])(?=.*[a-zA-Z])(.{6,16})$').test($('#Password').val())) {
-					alert('密码强度不够，密码长度为6到16位，且包含数字和字母');
-					return false;
-				}
-
 				var $form = $(this);
 				if (!$form.valid())
 					return false;
@@ -144,7 +134,7 @@
 				$.post($form.attr("action"), $form.serialize(), function (data, status) {
 					if (status == "success") {
 						if (data.error && data.msg) {
-							alert(data.msg);
+							$('.error').text(data.msg);
 							return false;
 						}
 
@@ -166,9 +156,7 @@
 			});
 
 			var areas=@Html.Raw(Json.Encode(ViewBag.AreasDic));
-			var schools=@Html.Raw(Json.Encode(ViewBag.SchoolsDic));
 			RelationSelect($("#ProvinceId"), $("#AreaId"), areas, "选择地区");
-			RelationSelect($("#AreaId"), $("#CompanyId"), schools, "选择学校");
 		});
 	</script>
 }

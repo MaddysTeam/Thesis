@@ -61,6 +61,16 @@
 				</li>
 			}
 
+			@if (ResSettings.SettingsInSession.User.UserTypePKID == ResUserHelper.ProvinceAdmin)
+			{
+				<li>
+					<a href="@Url.Action("Search", "Crosource")">
+						<i class="fa fa-image fa-fw"></i>
+						<span class="text">论文管理</span>
+					</a>
+				</li>
+			}
+
 			@if (ResSettings.SettingsInSession.User.UserTypePKID == ResUserHelper.Export)
 			{
 				<li>

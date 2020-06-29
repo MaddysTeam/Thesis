@@ -176,7 +176,7 @@ namespace Res.Business
             //   SetCache(_companys, typeof(List<ResCompany>));
             //}
 
-            return APBplDef.ActiveBpl.GetAll().FindAll(x=>x.IsCurrent);
+            return APBplDef.ActiveBpl.GetAll().FindAll(x => x.IsCurrent);
          }
       }
 
@@ -188,18 +188,19 @@ namespace Res.Business
 
       public List<ResCompany> AllProvince()
       {
-         return Companies.FindAll(x=>x.ParentId==0);
-         //return Companies.FindAll(x => x.CompanyId == ResCompanyHelper.ShangHai);//TODO:shagnhai version
+         return Companies.FindAll(x => x.ParentId == 0);
       }
 
       public List<ResCompany> AllAreas()
       {
-         return Companies.FindAll(x => x.ParentId!=0);
+         string[] cityTailNumbers = { "100", "200", "300", "400", "500", "600", "700", "800", "900" };
+
+         return Companies.FindAll(x => x.ParentId > 0 && cityTailNumbers.Any(y => x.CompanyId.ToString().LastIndexOf(y) ==3));
       }
 
       public List<ResCompany> AllSchools()
       {
-         return Companies.FindAll(x => x.Path.LastIndexOf(@"\") >= 9);
+         return new List<ResCompany>();// Companies.FindAll(x => x.Path.LastIndexOf(@"\") >= 9);
       }
 
       public void CleanCompanyCache() => RemoveCache(typeof(List<ResCompany>));

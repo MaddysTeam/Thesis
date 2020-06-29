@@ -13,7 +13,6 @@
 		}
 	}
 </script>
-
 <div class="menu">
 	<div class="fl">首页 > <span>论文上传</span></div>
 </div>
@@ -58,7 +57,7 @@
 							<div class="form-group">
 								<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 论文主题</label>
 								<div class="col-sm-9">
-									@Html.DropDownListFor(m => m.ThemeId, (ViewBag.Themes as List<ResPickListItem>).Select(x => new SelectListItem { Text = x.Name, Value = x.PickListItemId.ToString() }), "选择主题", new { @class = "form-control" })
+									@Html.DropDownListFor(	m => m.ThemeId, (ViewBag.Themes as List<ResPickListItem>).Select(x => new SelectListItem { Text = x.Name, Value = x.PickListItemId.ToString() }), "选择主题", new { @class = "form-control" })
 									@Html.ValidationMessageFor(m => m.ThemeId, null, new { @class = "text-danger" })
 								</div>
 							</div>
@@ -173,6 +172,13 @@
 
 			var areas=@Html.Raw(Json.Encode(ViewBag.AreasDic));
 			RelationSelect($("#ProvinceId"), $("#AreaId"), areas, "选择地区");
+
+			$('#AreaId,#ProvinceId').select2({ 
+				language:{
+					noResults:function(param){
+						return "暂无数据";
+					}} 
+			});
 
 			bindResourceUploader($('.attachmentUploader'), 'attachment', '.doc,.docx');
 

@@ -84,10 +84,14 @@ namespace Res.Business
 		public string Gender { get { return ResUserHelper.Gender.GetName(GenderPKID); } }
 
 
-		#endregion
+      public string Province { get { return ResCompanyHelper.GetCompanyName(ProvinceId); } }
+
+      public string Area { get { return ResCompanyHelper.GetCompanyName(AreaId); } }
+
+      #endregion
 
 
-	}
+   }
 
 
 	#endregion
@@ -152,9 +156,9 @@ namespace Res.Business
 
 		public string State { get { return CroResourceHelper.State.GetName(StatePKID); } }
 
-		public string Province { get { return GetCompanyName(ProvinceId); } }
+		public string Province { get { return ResCompanyHelper.GetCompanyName(ProvinceId); } }
 
-		public string Area { get { return GetCompanyName(AreaId); } }
+		public string Area { get { return ResCompanyHelper.GetCompanyName(AreaId); } }
 
 		public string WinLevel { get { return CroResourceHelper.WinLevel.GetName(WinLevelPKID); } }
 
@@ -199,12 +203,6 @@ namespace Res.Business
 
 		#endregion
 
-
-		private string GetCompanyName(long companyId)
-		{
-			var company = ResSettings.SettingsInSession.Companies.Find(x => x.CompanyId == companyId);
-			return company != null ? company.CompanyName : string.Empty;
-		}
 
 	}
 

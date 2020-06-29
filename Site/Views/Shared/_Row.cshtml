@@ -6,12 +6,15 @@
 	<meta name="renderer" content="webkit" />
 	<title>2020年长三角教育信息化论文大赛</title>
 	<!-- CSS -->
-	@Styles.Render("~/css/bootstrap")
+	@*@Styles.Render("~/css/bootstrap")
 	@RenderSection("css", required: false)
-	@Styles.Render("~/css/app")
+	@Styles.Render("~/css/app")*@
+	<link href="/assets/plugins/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
+	<link href="/assets/plugins/bootstrap-3.3.2/css/bootstrap.css" rel="stylesheet">
+	<link href="/assets/css/app.css" rel="stylesheet">
 	<style>
 		.header_link {
-			width: 70%;
+			width: 100%;
 			margin: 0px auto;
 			display: block;
 		}
@@ -19,6 +22,16 @@
 		.header_link img {
 				width: 100%;
 		}
+
+		.container {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  max-width:1200px;
+  min-width:800px;
+}
+
 	</style>
 </head>
 <body>

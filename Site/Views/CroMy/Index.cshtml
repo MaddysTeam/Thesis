@@ -21,15 +21,8 @@
 
 
 	<div class="user">
-		@*<div class="u_c">
-			<span>登录次数：@Model.LoginCount</span>
-			<span>收藏次数：@Model.FavoriteCount</span>
-			<span>下载次数：@Model.DownCount</span>
-			<span>评论次数：@Model.CommentCount</span>
-		</div>*@
 		<div class="u_t">
 			
-			@*<img id="photo" src="@ResActiveUser.FitPhotoPathWithUser(Model)" />*@
 			<div class="u_text">
 				<p class="u_name">@Model.RealName</p>
 				<p>
@@ -40,6 +33,9 @@
 				</p>
 				<p>
 					<span>注册时间：@Model.RegisterTime.ToShortDateString()</span><span>最近登录：@Model.LastLoginTime </span>
+				</p>
+				<p>
+					<span>省&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;份：@Model.Province</span><span>市&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区：@Model.Area </span>
 				</p>
 				<p><span>手&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;机：@Model.Phone</span></p>
 			</div>

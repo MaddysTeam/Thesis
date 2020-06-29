@@ -206,12 +206,14 @@ namespace Res.Business
 			return Companies.FindAll(x => x.ParentId == 0);
 		}
 
-		public List<ResCompany> AllAreas()
-		{
-			return Companies.FindAll(x => x.ParentId > 0);
-		}
+      public List<ResCompany> AllAreas()
+      {
+         string[] cityTailNumbers = { "100", "200", "300", "400", "500", "600", "700", "800", "900" };
 
-		public List<ResCompany> AllSchools()
+         return Companies.FindAll(x => x.ParentId > 0 && cityTailNumbers.Any(y => x.CompanyId.ToString().LastIndexOf(y) == 3));
+      }
+
+      public List<ResCompany> AllSchools()
 		{
 			return new List<ResCompany>();
 			//return Companies.FindAll(x => x.Path.LastIndexOf(@"\") >= 9);

@@ -158,6 +158,12 @@ namespace Res.Controllers
          model.Email = model.Email.Trim();
 
          var t = APDBDef.ResUser;
+         if (model.AreaId <= 0)
+         {
+            var errormsg = "必须选择地区";
+            ModelState.AddModelError("Username", errormsg);
+            return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new { error = "error", msg = errormsg });
+         }
          if (APBplDef.ResUserBpl.ConditionQueryCount(t.UserName == model.Username) > 0)
          {
             var errormsg = "登录名称已被使用";
