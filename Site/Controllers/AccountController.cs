@@ -241,7 +241,7 @@ namespace Res.Controllers
          string email = model.Email;
 
          var u = APDBDef.ResUser;
-         var user = db.ResUserDal.ConditionQuery(u.Email == email & u.Question == model.Question & u.Answer == model.Answer, null, null, null).FirstOrDefault();
+         var user = db.ResUserDal.ConditionQuery(u.Email == email, null, null, null).FirstOrDefault();
 
          if (user != null)
          {
@@ -257,7 +257,7 @@ namespace Res.Controllers
 
 
 
-      public ActionResult ChgPwd(long id)
+      public ActionResult ChgPwd(stirng id)
       {
          return View(new ChgPwd() { UserId = id });
       }

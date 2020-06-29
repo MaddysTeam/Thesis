@@ -184,12 +184,9 @@ namespace Res.Business
       [Display(Name = "电子邮箱")]
       public string Email { get; set; }
 
-
-      [Required]
       [Display(Name = "密保问题")]
       public string Question { get; set; }
 
-      [Required]
       [Display(Name = "密保答案")]
       public String Answer { get; set; }
    }
