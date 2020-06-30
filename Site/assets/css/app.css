@@ -55,6 +55,7 @@ body {
 }
 .page-login .btn-login {
   background-color: #ee6b01;
+  color:#eee;
 }
 .page-login label.rememberme {
   display: block;

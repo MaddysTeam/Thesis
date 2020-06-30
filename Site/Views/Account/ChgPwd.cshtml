@@ -9,6 +9,7 @@
 	<div class="login-box center-block">
 		@using (Html.BeginForm("ChgPwd", "Account", FormMethod.Post, new { id = "form", role = "form", @class = "form-horizontal" }))
 		{
+			@Html.AntiForgeryToken()
 			@Html.HiddenFor(x => x.UserId)
 			<div class="row">
 				<fieldset class="col-sm-12">

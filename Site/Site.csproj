@@ -187,6 +187,7 @@
     <Compile Include="Business\Project\ThisApp.Config.cs" />
     <Compile Include="Business\Project\ThisApp.PickList.cs" />
     <Compile Include="Business\Utils\CroResourceHelper.cs" />
+    <Compile Include="Business\Utils\MD5Helper.cs" />
     <Compile Include="Business\Utils\ResCompanyHelper.cs" />
     <Compile Include="Business\Utils\FileHelper.cs" />
     <Compile Include="Business\Utils\GridOrder.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="Business\Utils\ResModelBinder.cs" />
     <Compile Include="Business\Utils\MailHelper.cs" />
     <Compile Include="Business\Utils\ResUserHelper.cs" />
+    <Compile Include="Business\Utils\SecurityScenario.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AttachmentController.cs" />
     <Compile Include="Controllers\CroBulletinController.cs" />
@@ -304,6 +306,7 @@
     <Content Include="assets\img\rr5.jpg" />
     <Content Include="assets\img\star.png" />
     <Content Include="assets\img\s_btn.jpg" />
+    <Content Include="assets\img\thesis_banner.jpg" />
     <Content Include="assets\img\t_banner.jpg" />
     <Content Include="assets\img\u1.jpg" />
     <Content Include="assets\img\u2.jpg" />
@@ -327,6 +330,8 @@
     <Content Include="assets\js\app.js" />
     <Content Include="assets\js\bootstrap.js" />
     <Content Include="assets\js\bootstrap.min.js" />
+    <Content Include="assets\plugins\select2\select2.min.css" />
+    <Content Include="assets\plugins\select2\select2.min.js" />
     <Content Include="assets\js\flv.js" />
     <Content Include="assets\js\flv.min.js" />
     <Content Include="assets\js\jquery-1.11.2.min.js" />

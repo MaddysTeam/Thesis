@@ -16,13 +16,14 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using System.IO;
+using Business.Security;
 
 /**/
 
 
 namespace Res.Controllers
 {
-
+	[Security]
 	public class BaseController : Controller
 	{
 
@@ -182,7 +183,7 @@ namespace Res.Controllers
       protected void InitAreaDropDownData(bool filterByuser = false)
       {
          //删除单位的缓存信息
-         ResSettings.SettingsInSession.RemoveCache(typeof(List<ResCompany>));
+         //ResSettings.SettingsInSession.RemoveCache(typeof(List<ResCompany>));
 
          var user = ResSettings.SettingsInSession.User;
 
@@ -212,7 +213,7 @@ namespace Res.Controllers
 
          ViewBag.Actives = ResSettings.SettingsInSession.Actives;
 
-         ViewBag.ProvincesDic =GetStrengthDict(areas);
+         ViewBag.ProvincesDic =GetStrengthDict(provinces);
          ViewBag.AreasDic = GetStrengthDict(areas);
          ViewBag.SchoolsDic = GetStrengthDict(schools);
 

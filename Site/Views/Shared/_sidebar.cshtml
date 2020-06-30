@@ -6,7 +6,7 @@
 }
 <p>管理菜单</p>
 <ul class="nav navmanager @act">
-   <li><a href="http://weike.yrdedu.cn/">返回首页</a></li>
+   @*<li><a href="http://weike.yrdedu.cn/">返回首页</a></li>*@
 	<li><a class="a_More" href="@Url.Action("More", "CroMy", new { id = id })" >通知公告</a></li>
 		<li><a class="a_Index" href="@Url.Action("Index", "CroMy", new { id = id })" >个人信息</a></li>
 	@*@if (HttpContext.Current.Request.IsAuthenticated & ResSettings.SettingsInSession.UserId == Convert.ToInt64(id))
@@ -17,6 +17,7 @@
 			<a href="@Url.Action("CroMyResource", "CroMy", new { id = id })" class=" a_sczy">我的论文</a>
 		</li>
 		<li><a class="a_CroMyMedal" href="@Url.Action("CroMyMedal", "CroMy", new { id = id })">我的奖状</a></li>
+	<li><a class="a_CroMyMedal" href="@Url.Action("LogOff2", "Account", new { id = id })">退出登录</a></li>
 	@*@if (user.UserTypePKID != ResUserHelper.Teacher)
 	{
    	<li><a class="a_CroMyDownload" href="@link" target="_blank">后台管理</a></li>

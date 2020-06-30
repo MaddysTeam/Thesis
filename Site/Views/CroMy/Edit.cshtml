@@ -5,14 +5,13 @@
 	ViewBag.Title = "我的信息";
 }
 
-
 <div class="menu">
 	<div class="fl">首页 ><a href="@Url.Action("Index", "CroMy",new {id=ResSettings.SettingsInSession.UserId })"><span>个人信息</span></a>> <span>修改个人信息</span></div>
 
 
 </div>
 <div class="user">
-
+	<div class="error text-danger"></div>
 	<div class="u_t">
 
 		<br />
@@ -20,37 +19,84 @@
 
 		@using (Html.BeginForm("Edit", "CroMy", FormMethod.Post, new { id = "form", role = "form", @class = "form-horizontal" }))
 		{
-
+			@Html.HiddenFor(m=>m.Password)
 			@Html.HiddenFor(m => m.UserId)
+			@Html.HiddenFor(m=>m.UserName)
+
 
 			<div class="form-group">
 
 				<div class="control-label col-sm-3">
-
-					姓名
+					<i class="text-danger">* &nbsp;</i>用户名
 				</div>
 				<div class="col-sm-9">
-					@Html.TextBoxFor(m => m.RealName, new { @class = "form-control", maxlength = "80", placeholder = "姓名" })
-					@Html.ValidationMessageFor(m => m.RealName)
+					@Html.Label("", Model.UserName, new { @class = "control-label" })
+				</div>
+			</div>
+			<div class="form-group">
+
+				<div class="control-label col-sm-3">
+					<i class="text-danger">* &nbsp;</i>姓名
+				</div>
+				<div class="col-sm-9">
+					@Html.TextBoxFor(m => m.RealName, new { @class = "form-control"})
+					<div class="text-danger">@Html.ValidationMessageFor(m => m.RealName)</div>
 				</div>
 			</div>
 
+			<div class="form-group" id="province">
+				<div class="control-label col-sm-3"><i class="text-danger">* &nbsp;</i>省份</div>
+				<div class="col-sm-9">
+					@Html.DropDownListFor(m => m.ProvinceId, (ViewBag.Provinces as List<ResCompany> ?? new List<ResCompany>()).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择省份", new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.ProvinceId, null, new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="form-group" id="area">
+				<div class="control-label col-sm-3"><i class="text-danger">* &nbsp;</i>地区</div>
+				<div class="col-sm-9">
+					@Html.DropDownListFor(m => m.AreaId, (ViewBag.Areas as List<ResCompany> ?? new List<ResCompany>()).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择地区", new { @class = "form-control" })
+					@Html.ValidationMessageFor(m => m.AreaId, null, new { @class = "text-danger" })
+				</div>
+			</div>
 
 			<div class="form-group">
-				<div class="control-label col-sm-3">电子邮件</div>
+				<div class="control-label col-sm-3"><i class="text-danger">* &nbsp;</i>单位</div>
 				<div class="col-sm-9">
-					@Html.TextBoxFor(m => m.Email, new { @class = "form-control", maxlength = "80", placeholder = "电子邮件" })
-					@Html.ValidationMessageFor(m => m.Email)
+					@Html.TextBoxFor(m => m.Company, new { @class = "form-control", maxlength = "80", placeholder = "单位全称" })
+					<div class="text-danger">@Html.ValidationMessageFor(m => m.Company)</div>
 				</div>
 			</div>
 
-			<div class="form-group hidden">
-				<div class="control-label col-sm-3">头像缩略图</div>
-				<div class="col-sm-9 coverImageArea">
-					<img src="@Model.PhotoPath" id="showCover" class="btn-upload" style="width:440px; height:226px;"  onerror=""/>
+			<div class="form-group">
+				<div class="control-label col-sm-3"><i class="text-danger">* &nbsp;</i>证件</div>
+				<div class="col-sm-9">
+					@Html.TextBoxFor(m => m.IDCard, new { @class = "form-control", maxlength = "80", placeholder = "身证件号码" })
+					<div class="text-danger">@Html.ValidationMessageFor(m => m.IDCard)</div>
 				</div>
-				@Html.HiddenFor(m => m.PhotoPath)
 			</div>
+			<div class="form-group">
+				<div class="control-label col-sm-3"><i class="text-danger">* &nbsp;</i>手机</div>
+				<div class="col-sm-9">
+					@Html.TextBoxFor(m => m.Phone, new { @class = "form-control", maxlength = "80", placeholder = "手机号码" })
+					<div class="text-danger">@Html.ValidationMessageFor(m => m.Phone)</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="control-label col-sm-3"><i class="text-danger">* &nbsp;</i>电子邮件</div>
+				<div class="col-sm-9">
+					@Html.TextBoxFor(m => m.Email, new { @class = "form-control", maxlength = "80", placeholder = "电子邮件" })
+					<div class="text-danger">@Html.ValidationMessageFor(m => m.Email)</div>
+				</div>
+			</div>
+
+			@*<div class="form-group hidden">
+					<div class="control-label col-sm-3">头像缩略图</div>
+					<div class="col-sm-9 coverImageArea">
+						<img src="@Model.PhotoPath" id="showCover" class="btn-upload" style="width:440px; height:226px;"  onerror=""/>
+					</div>
+					@Html.HiddenFor(m => m.PhotoPath)
+				</div>*@
 
 			<div class="form-group">
 				<div class="col-sm-9 col-lg-offset-3">
@@ -68,34 +114,69 @@
 
 @section Plugins {
 	@Scripts.Render("~/js/dropzone")
+	<link href="~/assets/plugins/select2/select2.min.css" rel="stylesheet" />
+	<script src="~/assets/plugins/select2/select2.min.js"></script>
 }
 
 @section Scripts{
 	<script>
 		$(function () {
 
-			Dropzone.autoDiscover = false;
+			//Dropzone.autoDiscover = false;
 			// init dropzone upload plugin.
-			$(".dropzone.photo").dropzone({
-				addRemoveLinks: !0,
-				maxFiles: 100,
-				acceptedFiles:".jpg", //"image/*",
-				dictResponseError: "File Upload Error.",
-				init: function () {
-					this.on("success", function (file, data) {
-						$("#ShowCover").attr("src", data.showPath);
-						$("#PhotoPath").val(data.showPath);
-					});
-					this.on("error", function (file, message) {
-						alert(message)
-					});
-				}
-			});
+			//$(".dropzone.photo").dropzone({
+			//	addRemoveLinks: !0,
+			//	maxFiles: 100,
+			//	acceptedFiles: ".jpg", //"image/*",
+			//	dictResponseError: "File Upload Error.",
+			//	init: function () {
+			//		this.on("success", function (file, data) {
+			//			$("#ShowCover").attr("src", data.showPath);
+			//			$("#PhotoPath").val(data.showPath);
+			//		});
+			//		this.on("error", function (file, message) {
+			//			alert(message)
+			//		});
+			//	}
+			//});
 
 
-			$('#showCover').on('click', function () {
-				$(".dropzone.photo").trigger('click');
+			//$('#showCover').on('click', function () {
+			//	$(".dropzone.photo").trigger('click');
+			//});
+
+			$.validator.unobtrusive.parse("#form");
+			$("#form").submit(function () {
+				var $form = $(this);
+				if (!$form.valid())
+					return false;
+
+				$.post($form.attr("action"), $form.serialize(), function (data, status) {
+					if (status == "success") {
+						if (data.error && data.msg) {
+							$('.error').text(data.msg);
+							return false;
+						}
+
+						if(data.returnurl!=''){
+							location.href=data.returnUrl;
+						}
+					}
+				});
+
+				return false;
 			});
+
+			var areas=@Html.Raw(Json.Encode(ViewBag.AreasDic));
+			RelationSelect($("#ProvinceId"), $("#AreaId"), areas, "选择地区");
+
+			$('#ProvinceId,#AreaId').select2({
+				language:{
+					noResults:function(param){
+						return "暂无数据";
+					}}
+			});
+
 
 		});
 	</script>

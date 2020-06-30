@@ -84,14 +84,112 @@ namespace Res.Business
 		public string Gender { get { return ResUserHelper.Gender.GetName(GenderPKID); } }
 
 
-      public string Province { get { return ResCompanyHelper.GetCompanyName(ProvinceId); } }
+		public string Province { get { return ResCompanyHelper.GetCompanyName(ProvinceId); } }
 
-      public string Area { get { return ResCompanyHelper.GetCompanyName(AreaId); } }
+		public string Area { get { return ResCompanyHelper.GetCompanyName(AreaId); } }
 
-      #endregion
+		[Required(ErrorMessage = "必须填写电子邮箱")]
+		[Display(Name = "电子邮箱")]
+		[RegularExpression(@"[A-Za-z0-9]+([_\.][A-Za-z0-9]+)*@([A-Za-z0-9\-]+\.)+[A-Za-z]{2,6}", ErrorMessage = "请填写正确的邮箱地址！")]
+		public override string Email
+		{
+			get
+			{
+				return base.Email;
+			}
+
+			set
+			{
+				base.Email = value;
+			}
+		}
+
+		[Required(ErrorMessage = "必须填写手机号码")]
+		[RegularExpression(@"[1][3,4,5,7,8][0-9]{9}", ErrorMessage = "请输入正确的手机号码")]
+		[Display(Name = "手机号码")]
+		public override string Phone
+		{
+			get
+			{
+				return base.Phone;
+			}
+
+			set
+			{
+				base.Phone = value;
+			}
+		}
+
+		[Required(ErrorMessage ="必须选择省份")]
+		[Display(Name = "省份")]
+		public override long ProvinceId
+		{
+			get
+			{
+				return base.ProvinceId;
+			}
+
+			set
+			{
+				base.ProvinceId = value;
+			}
+		}
+
+		[Required(ErrorMessage = "必须填写证件号码")]
+		[RegularExpression(@"[1-9]\d{5}(18|19|20|(3\d))\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]", ErrorMessage = "请输入正确的身份证号码")]
+		[Display(Name = "证件号")]
+		public override string IDCard
+		{
+			get
+			{
+				return base.IDCard;
+			}
+
+			set
+			{
+				base.IDCard = value;
+			}
+		}
+
+		[Required(ErrorMessage = "必须填写姓名")]
+		[MaxLength(50, ErrorMessage = "姓名过长")]
+		public override string RealName
+		{
+			get
+			{
+				return base.RealName;
+			}
+
+			set
+			{
+				base.RealName = value;
+			}
+		}
+
+		[Required(ErrorMessage = "必须填写单位全称")]
+		[MaxLength(200, ErrorMessage = "单位全称过长")]
+		public override string Company
+		{
+			get
+			{
+				return base.Company;
+			}
+
+			set
+			{
+				base.Company = value;
+			}
+		}
 
 
-   }
+
+		#endregion
+
+		public override string ToString()
+		{
+			return this.Email + this.Password + this.UserId;
+		}
+	}
 
 
 	#endregion
@@ -209,6 +307,15 @@ namespace Res.Business
 
 	#endregion
 
+
+	#region [ Active ]
+
+	public partial class Active : ActiveBase
+	{
+		public bool IsInUploadPeriod => DateTime.UtcNow >= this.UploadStartDate && DateTime.UtcNow <= this.UploadEndDate;
+	}
+
+	#endregion
 
 	#region [Mendals]
 
