@@ -121,7 +121,8 @@ namespace Res.Business
 
 		[Required(ErrorMessage = "必须填写真实姓名")]
 		[MaxLength(50, ErrorMessage ="姓名过长")]
-		[Display(Name = "真实姓名")]
+      [RegularExpression(@"[\u4E00-\u9FA5A-Za-z0-9_]+", ErrorMessage = "真实姓名不能包含特殊符号！")]
+      [Display(Name = "真实姓名")]
 		public string RealName { get; set; }
 
 		[Required(ErrorMessage = "必须选择省市")]
@@ -147,8 +148,12 @@ namespace Res.Business
 		[Display(Name = "手机号码")]
 		public string Phone { get; set; }
 
+      //[Required(ErrorMessage = "必须填写手机号码")]
+      [MaxLength(50, ErrorMessage = "职称/职位内容过长")]
+      [Display(Name = "职称/职位")]
+      public string Position { get; set; }
 
-		[Display(Name = "密保问题")]
+      [Display(Name = "密保问题")]
 		public string Question { get; set; }
 
 		[Display(Name = "密保答案")]

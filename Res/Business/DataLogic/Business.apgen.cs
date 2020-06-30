@@ -1163,6 +1163,8 @@ namespace Res.Business {
             
             private StringAPColumnDef _company;
             
+            private StringAPColumnDef _position;
+            
             private StringAPColumnDef _realName;
             
             private StringAPColumnDef _photoPath;
@@ -1328,6 +1330,19 @@ namespace Res.Business {
                         _company.Display = "单位全称";
                     }
                     return _company;
+                }
+            }
+            
+            /// <summary>
+            /// Position ColumnDef
+            /// </summary>
+            public virtual StringAPColumnDef Position {
+                get {
+                    if (Object.ReferenceEquals(_position, null)) {
+                        _position = new StringAPColumnDef(this, "Position", false, 50);
+                        _position.Display = "职称/职务";
+                    }
+                    return _position;
                 }
             }
             
@@ -1544,6 +1559,7 @@ namespace Res.Business {
                 data.UserTypePKID = UserTypePKID.GetValue<long>(reader, throwIfValidColumnName);
                 data.Phone = Phone.GetValue<string>(reader, throwIfValidColumnName);
                 data.Company = Company.GetValue<string>(reader, throwIfValidColumnName);
+                data.Position = Position.GetValue<string>(reader, throwIfValidColumnName);
                 data.RealName = RealName.GetValue<string>(reader, throwIfValidColumnName);
                 data.PhotoPath = PhotoPath.GetValue<string>(reader, throwIfValidColumnName);
                 data.GenderPKID = GenderPKID.GetValue<long>(reader, throwIfValidColumnName);
@@ -5154,7 +5170,7 @@ namespace Res.Business {
                 if ((data.UserId == 0)) {
                     data.UserId = ((long)(GetNewId(APDBDef.ResUser.UserId)));
                 }
-                var query = APQuery.insert(APDBDef.ResUser).values(APDBDef.ResUser.UserId.SetValue(data.UserId), APDBDef.ResUser.UserName.SetValue(data.UserName), APDBDef.ResUser.Password.SetValue(data.Password), APDBDef.ResUser.PasswordHash.SetValue(data.PasswordHash), APDBDef.ResUser.SecurityStamp.SetValue(data.SecurityStamp), APDBDef.ResUser.Question.SetValue(data.Question), APDBDef.ResUser.Answer.SetValue(data.Answer), APDBDef.ResUser.UserTypePKID.SetValue(data.UserTypePKID), APDBDef.ResUser.Phone.SetValue(data.Phone), APDBDef.ResUser.Company.SetValue(data.Company), APDBDef.ResUser.RealName.SetValue(data.RealName), APDBDef.ResUser.PhotoPath.SetValue(data.PhotoPath), APDBDef.ResUser.GenderPKID.SetValue(data.GenderPKID), APDBDef.ResUser.IDCard.SetValue(data.IDCard), APDBDef.ResUser.Email.SetValue(data.Email), APDBDef.ResUser.CompanyId.SetValue(data.CompanyId), APDBDef.ResUser.ProvinceId.SetValue(data.ProvinceId), APDBDef.ResUser.AreaId.SetValue(data.AreaId), APDBDef.ResUser.Actived.SetValue(data.Actived), APDBDef.ResUser.Removed.SetValue(data.Removed), APDBDef.ResUser.RegisterTime.SetValue(data.RegisterTime), APDBDef.ResUser.LastLoginTime.SetValue(data.LastLoginTime), APDBDef.ResUser.LoginCount.SetValue(data.LoginCount), APDBDef.ResUser.MD5.SetValue(data.MD5));
+                var query = APQuery.insert(APDBDef.ResUser).values(APDBDef.ResUser.UserId.SetValue(data.UserId), APDBDef.ResUser.UserName.SetValue(data.UserName), APDBDef.ResUser.Password.SetValue(data.Password), APDBDef.ResUser.PasswordHash.SetValue(data.PasswordHash), APDBDef.ResUser.SecurityStamp.SetValue(data.SecurityStamp), APDBDef.ResUser.Question.SetValue(data.Question), APDBDef.ResUser.Answer.SetValue(data.Answer), APDBDef.ResUser.UserTypePKID.SetValue(data.UserTypePKID), APDBDef.ResUser.Phone.SetValue(data.Phone), APDBDef.ResUser.Company.SetValue(data.Company), APDBDef.ResUser.Position.SetValue(data.Position), APDBDef.ResUser.RealName.SetValue(data.RealName), APDBDef.ResUser.PhotoPath.SetValue(data.PhotoPath), APDBDef.ResUser.GenderPKID.SetValue(data.GenderPKID), APDBDef.ResUser.IDCard.SetValue(data.IDCard), APDBDef.ResUser.Email.SetValue(data.Email), APDBDef.ResUser.CompanyId.SetValue(data.CompanyId), APDBDef.ResUser.ProvinceId.SetValue(data.ProvinceId), APDBDef.ResUser.AreaId.SetValue(data.AreaId), APDBDef.ResUser.Actived.SetValue(data.Actived), APDBDef.ResUser.Removed.SetValue(data.Removed), APDBDef.ResUser.RegisterTime.SetValue(data.RegisterTime), APDBDef.ResUser.LastLoginTime.SetValue(data.LastLoginTime), APDBDef.ResUser.LoginCount.SetValue(data.LoginCount), APDBDef.ResUser.MD5.SetValue(data.MD5));
                 ExecuteNonQuery(query);
             }
             
@@ -5162,7 +5178,7 @@ namespace Res.Business {
             /// Update Data.
             /// </summary>
             public virtual void Update(ResUser data) {
-                var query = APQuery.update(APDBDef.ResUser).values(APDBDef.ResUser.UserName.SetValue(data.UserName), APDBDef.ResUser.Password.SetValue(data.Password), APDBDef.ResUser.PasswordHash.SetValue(data.PasswordHash), APDBDef.ResUser.SecurityStamp.SetValue(data.SecurityStamp), APDBDef.ResUser.Question.SetValue(data.Question), APDBDef.ResUser.Answer.SetValue(data.Answer), APDBDef.ResUser.UserTypePKID.SetValue(data.UserTypePKID), APDBDef.ResUser.Phone.SetValue(data.Phone), APDBDef.ResUser.Company.SetValue(data.Company), APDBDef.ResUser.RealName.SetValue(data.RealName), APDBDef.ResUser.PhotoPath.SetValue(data.PhotoPath), APDBDef.ResUser.GenderPKID.SetValue(data.GenderPKID), APDBDef.ResUser.IDCard.SetValue(data.IDCard), APDBDef.ResUser.Email.SetValue(data.Email), APDBDef.ResUser.CompanyId.SetValue(data.CompanyId), APDBDef.ResUser.ProvinceId.SetValue(data.ProvinceId), APDBDef.ResUser.AreaId.SetValue(data.AreaId), APDBDef.ResUser.Actived.SetValue(data.Actived), APDBDef.ResUser.Removed.SetValue(data.Removed), APDBDef.ResUser.RegisterTime.SetValue(data.RegisterTime), APDBDef.ResUser.LastLoginTime.SetValue(data.LastLoginTime), APDBDef.ResUser.LoginCount.SetValue(data.LoginCount), APDBDef.ResUser.MD5.SetValue(data.MD5)).where((APDBDef.ResUser.UserId == data.UserId));
+                var query = APQuery.update(APDBDef.ResUser).values(APDBDef.ResUser.UserName.SetValue(data.UserName), APDBDef.ResUser.Password.SetValue(data.Password), APDBDef.ResUser.PasswordHash.SetValue(data.PasswordHash), APDBDef.ResUser.SecurityStamp.SetValue(data.SecurityStamp), APDBDef.ResUser.Question.SetValue(data.Question), APDBDef.ResUser.Answer.SetValue(data.Answer), APDBDef.ResUser.UserTypePKID.SetValue(data.UserTypePKID), APDBDef.ResUser.Phone.SetValue(data.Phone), APDBDef.ResUser.Company.SetValue(data.Company), APDBDef.ResUser.Position.SetValue(data.Position), APDBDef.ResUser.RealName.SetValue(data.RealName), APDBDef.ResUser.PhotoPath.SetValue(data.PhotoPath), APDBDef.ResUser.GenderPKID.SetValue(data.GenderPKID), APDBDef.ResUser.IDCard.SetValue(data.IDCard), APDBDef.ResUser.Email.SetValue(data.Email), APDBDef.ResUser.CompanyId.SetValue(data.CompanyId), APDBDef.ResUser.ProvinceId.SetValue(data.ProvinceId), APDBDef.ResUser.AreaId.SetValue(data.AreaId), APDBDef.ResUser.Actived.SetValue(data.Actived), APDBDef.ResUser.Removed.SetValue(data.Removed), APDBDef.ResUser.RegisterTime.SetValue(data.RegisterTime), APDBDef.ResUser.LastLoginTime.SetValue(data.LastLoginTime), APDBDef.ResUser.LoginCount.SetValue(data.LoginCount), APDBDef.ResUser.MD5.SetValue(data.MD5)).where((APDBDef.ResUser.UserId == data.UserId));
                 ExecuteNonQuery(query);
             }
             
@@ -11546,6 +11562,11 @@ namespace Res.Business {
         private string _company = string.Empty;
         
         /// <summary>
+        /// Position
+        /// </summary>
+        private string _position = string.Empty;
+        
+        /// <summary>
         /// RealName
         /// </summary>
         private string _realName = string.Empty;
@@ -11635,6 +11656,7 @@ namespace Res.Business {
                     long userTypePKID, 
                     string phone, 
                     string company, 
+                    string position, 
                     string realName, 
                     string photoPath, 
                     long genderPKID, 
@@ -11659,6 +11681,7 @@ namespace Res.Business {
             _userTypePKID = userTypePKID;
             _phone = phone;
             _company = company;
+            _position = position;
             _realName = realName;
             _photoPath = photoPath;
             _genderPKID = genderPKID;
@@ -11902,6 +11925,29 @@ namespace Res.Business {
         public static StringAPColumnDef CompanyDef {
             get {
                 return APDBDef.ResUser.Company;
+            }
+        }
+        
+        /// <summary>
+        /// Position
+        /// </summary>
+        [Display(Name="职称/职务")]
+        [StringLength(50)]
+        public virtual string Position {
+            get {
+                return _position;
+            }
+            set {
+                _position = value;
+            }
+        }
+        
+        /// <summary>
+        /// Position APColumnDef
+        /// </summary>
+        public static StringAPColumnDef PositionDef {
+            get {
+                return APDBDef.ResUser.Position;
             }
         }
         
@@ -12248,6 +12294,7 @@ namespace Res.Business {
             UserTypePKID = data.UserTypePKID;
             Phone = data.Phone;
             Company = data.Company;
+            Position = data.Position;
             RealName = data.RealName;
             PhotoPath = data.PhotoPath;
             GenderPKID = data.GenderPKID;
@@ -12296,6 +12343,9 @@ namespace Res.Business {
                 return false;
             }
             if ((Company != data.Company)) {
+                return false;
+            }
+            if ((Position != data.Position)) {
                 return false;
             }
             if ((RealName != data.RealName)) {
@@ -12447,6 +12497,7 @@ namespace Res.Business {
                     long userTypePKID, 
                     string phone, 
                     string company, 
+                    string position, 
                     string realName, 
                     string photoPath, 
                     long genderPKID, 
@@ -12461,7 +12512,7 @@ namespace Res.Business {
                     System.DateTime lastLoginTime, 
                     int loginCount, 
                     string mD5) : 
-                base(userId, userName, password, passwordHash, securityStamp, question, answer, userTypePKID, phone, company, realName, photoPath, genderPKID, iDCard, email, companyId, provinceId, areaId, actived, removed, registerTime, lastLoginTime, loginCount, mD5) {
+                base(userId, userName, password, passwordHash, securityStamp, question, answer, userTypePKID, phone, company, position, realName, photoPath, genderPKID, iDCard, email, companyId, provinceId, areaId, actived, removed, registerTime, lastLoginTime, loginCount, mD5) {
         }
     }
     

@@ -65,13 +65,19 @@
 			</div>
 
 			<div class="form-group">
+				<label for="Position" class="control-label col-sm-2">职称/职务</label>
+				<div class="col-sm-9">
+					@Html.TextBoxFor(m => m.Position, new { @class = "form-control", placeholder = "职称/职位" })
+					@Html.ValidationMessageFor(m => m.Position, null, new { @class = "text-danger" })
+				</div>
+			</div>
+			<div class="form-group">
 				<label for="Company" class="control-label col-sm-2"><i class="text-danger">* &nbsp;</i>单位</label>
 				<div class="col-sm-9">
 					@Html.TextBoxFor(m => m.Company, new { @class = "form-control", placeholder = "单位全称" })
 					@Html.ValidationMessageFor(m => m.Company, null, new { @class = "text-danger" })
 				</div>
 			</div>
-			@*<div class="alert alert-info">以下信息为找回密码使用，请谨慎填写</div>*@
 			<div class="form-group">
 				<label for="Email" class="control-label col-sm-2"><i class="text-danger">* &nbsp;</i>邮箱</label>
 				<div class="col-sm-9">
@@ -125,27 +131,27 @@
 
 		$(function () {
 
-			$.validator.unobtrusive.parse("#form");
-			$("#form").submit(function () {
-				var $form = $(this);
-				if (!$form.valid())
-					return false;
+			//$.validator.unobtrusive.parse("#form");
+			//$("#form").submit(function () {
+			//	var $form = $(this);
+			//	if (!$form.valid())
+			//		return false;
 
-				$.post($form.attr("action"), $form.serialize(), function (data, status) {
-					if (status == "success") {
-						if (data.error && data.msg) {
-							$('.error').text(data.msg);
-							return false;
-						}
+			//	$.post($form.attr("action"), $form.serialize(), function (data, status) {
+			//		if (status == "success") {
+			//			if (data.error && data.msg) {
+			//				$('.error').text(data.msg);
+			//				return false;
+			//			}
 
-						if(data.returnurl!=''){
-							location.href=data.returnUrl;
-						}
-					}
-				});
+			//			if(data.returnurl!=''){
+			//				location.href=data.returnUrl;
+			//			}
+			//		}
+			//	});
 
-				return false;
-			});
+			//	return false;
+			//});
 
 
 			$('#CompanyId,#ProvinceId,#AreaId').select2({ 

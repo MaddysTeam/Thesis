@@ -150,7 +150,7 @@ namespace Res.Controllers
 		{
 			if (!ModelState.IsValid)
 			{
-				return View(model);
+				return Register();
 			}
 
 			model.Username = model.Username.Trim();
@@ -161,35 +161,35 @@ namespace Res.Controllers
 			if (model.AreaId <= 0)
 			{
 				var errormsg = "必须选择地区";
-				ModelState.AddModelError("Username", errormsg);
-				return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new { error = "error", msg = errormsg });
+				ModelState.AddModelError("AreaId", errormsg);
+				return !Request.IsAjaxRequest() ? Register() : (ActionResult)Json(new { error = "error", msg = errormsg });
 			}
 			if (APBplDef.ResUserBpl.ConditionQueryCount(t.UserName == model.Username) > 0)
 			{
 				var errormsg = "用户名已被使用";
 				ModelState.AddModelError("Username", errormsg);
-				return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new { error = "error", msg = errormsg });
+				return !Request.IsAjaxRequest() ? Register() : (ActionResult)Json(new { error = "error", msg = errormsg });
 			}
 
 			if (APBplDef.ResUserBpl.ConditionQueryCount(t.Email == model.Email) > 0)
 			{
 				var errormsg = "该邮箱已经使用";
 				ModelState.AddModelError("Email", errormsg);
-				return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new { error = "error", msg = errormsg });
+				return !Request.IsAjaxRequest() ? Register() : (ActionResult)Json(new { error = "error", msg = errormsg });
 			}
 
 			if (APBplDef.ResUserBpl.ConditionQueryCount(t.IDCard == model.IdCard) > 0)
 			{
 				var errormsg = "该身份证件号已被使用";
 				ModelState.AddModelError("IdCard", errormsg);
-				return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new { error = "error", msg = errormsg });
+				return !Request.IsAjaxRequest() ? Register() : (ActionResult)Json(new { error = "error", msg = errormsg });
 			}
 
 			if (APBplDef.ResUserBpl.ConditionQueryCount(t.Phone == model.Phone) > 0)
 			{
 				var errormsg = "该手机号码已被使用";
 				ModelState.AddModelError("Phone", errormsg);
-				return !Request.IsAjaxRequest() ? View(model) : (ActionResult)Json(new { error = "error", msg = errormsg });
+				return !Request.IsAjaxRequest() ? Register() : (ActionResult)Json(new { error = "error", msg = errormsg });
 			}
 
 

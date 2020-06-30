@@ -251,6 +251,11 @@ namespace Res.Controllers
                where &= (t.UserName.Match(searchPhrase) | t.RealName.Match(searchPhrase));
          }
 
+         if (provinceId > 0)
+            where &= t.ProvinceId == provinceId;
+         if(areaId>0)
+            where &= t.AreaId == areaId;
+
 
          // 用户数据范围
          if (user.ProvinceId > 0)

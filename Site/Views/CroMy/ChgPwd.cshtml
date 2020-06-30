@@ -11,6 +11,7 @@
 <div class="user">
 	@using (Html.BeginForm("ChgPwd", "CroMy", FormMethod.Post, new { id = "form", role = "form", @class = "form-horizontal" }))
 	{
+		@Html.AntiForgeryToken()
 		<div class="row">
 			<fieldset class="col-sm-12">
 
@@ -44,25 +45,25 @@
 @section Scripts{
 
 	<script type="text/javascript">
-		$(function () {
+		//$(function () {
 
-			// add validate new form.
-			$.validator.unobtrusive.parse("#form");
-			$("#form").submit(function () {
+		//	// add validate new form.
+		//	$.validator.unobtrusive.parse("#form");
+		//	$("#form").submit(function () {
 
-				var $form = $(this);
-				if (!$form.valid())
-					return false;
+		//		var $form = $(this);
+		//		if (!$form.valid())
+		//			return false;
 
-				$.post($form.attr("action"), $form.serialize(), function (data, status) {
-					alert("修改成功");
-					window.location.reload(true);
-				});
+		//		$.post($form.attr("action"), $form.serialize(), function (data, status) {
+		//			alert("修改成功");
+		//			window.location.reload(true);
+		//		});
 
-				return false;
-			});
+		//		return false;
+		//	});
 
-		});
+		//});
 	</script>
 }
 

@@ -153,7 +153,8 @@ namespace Res.Business
 
 		[Required(ErrorMessage = "必须填写姓名")]
 		[MaxLength(50, ErrorMessage = "姓名过长")]
-		public override string RealName
+      [RegularExpression(@"[\u4E00-\u9FA5A-Za-z0-9_]+", ErrorMessage = "真实姓名不能包含特殊符号！")]
+      public override string RealName
 		{
 			get
 			{
@@ -299,10 +300,24 @@ namespace Res.Business
 			}
 		}
 
-		#endregion
+      [RegularExpression(@"[\u4E00-\u9FA5A-Za-z0-9_]+", ErrorMessage = "作者姓名不能包含特殊符号！")]
+      public override string Author
+      {
+         get
+         {
+            return base.Author;
+         }
+
+         set
+         {
+            base.Author = value;
+         }
+      }
+
+      #endregion
 
 
-	}
+   }
 
 
 	#endregion

@@ -101,6 +101,7 @@
 					<add name="UserTypePKID" type="long" display="用户角色"/>
 					<add name="Phone" type="string" dataLength="11" display="手机号码"/>
 					<add name="Company" type="string" dataLength="200" required="true"  display="单位全称"/>
+					<add name="Position" type="string" dataLength="50"   display="职称/职务"/>
 					
 					<!-- Content -->
 					<add name="RealName" type="string" dataLength="255" required="false" display="实名"/>

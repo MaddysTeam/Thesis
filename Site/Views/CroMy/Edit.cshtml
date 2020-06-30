@@ -19,9 +19,10 @@
 
 		@using (Html.BeginForm("Edit", "CroMy", FormMethod.Post, new { id = "form", role = "form", @class = "form-horizontal" }))
 		{
-			@Html.HiddenFor(m=>m.Password)
+			@Html.AntiForgeryToken()
+			@*@Html.HiddenFor(m=>m.Password)*@
 			@Html.HiddenFor(m => m.UserId)
-			@Html.HiddenFor(m=>m.UserName)
+			@*@Html.HiddenFor(m=>m.UserName)*@
 
 
 			<div class="form-group">
@@ -56,6 +57,14 @@
 				<div class="col-sm-9">
 					@Html.DropDownListFor(m => m.AreaId, (ViewBag.Areas as List<ResCompany> ?? new List<ResCompany>()).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择地区", new { @class = "form-control" })
 					@Html.ValidationMessageFor(m => m.AreaId, null, new { @class = "text-danger" })
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="control-label col-sm-3"><i class="text-danger">* &nbsp;</i>职称/职务</div>
+				<div class="col-sm-9">
+					@Html.TextBoxFor(m => m.Position, new { @class = "form-control", maxlength = "80", placeholder = "职称/职务" })
+					<div class="text-danger">@Html.ValidationMessageFor(m => m.Position)</div>
 				</div>
 			</div>
 
@@ -145,27 +154,27 @@
 			//	$(".dropzone.photo").trigger('click');
 			//});
 
-			$.validator.unobtrusive.parse("#form");
-			$("#form").submit(function () {
-				var $form = $(this);
-				if (!$form.valid())
-					return false;
+			//$.validator.unobtrusive.parse("#form");
+			//$("#form").submit(function () {
+			//	var $form = $(this);
+			//	if (!$form.valid())
+			//		return false;
 
-				$.post($form.attr("action"), $form.serialize(), function (data, status) {
-					if (status == "success") {
-						if (data.error && data.msg) {
-							$('.error').text(data.msg);
-							return false;
-						}
+			//	$.post($form.attr("action"), $form.serialize(), function (data, status) {
+			//		if (status == "success") {
+			//			if (data.error && data.msg) {
+			//				$('.error').text(data.msg);
+			//				return false;
+			//			}
 
-						if(data.returnurl!=''){
-							location.href=data.returnUrl;
-						}
-					}
-				});
+			//			if(data.returnurl!=''){
+			//				location.href=data.returnUrl;
+			//			}
+			//		}
+			//	});
 
-				return false;
-			});
+			//	return false;
+			//});
 
 			var areas=@Html.Raw(Json.Encode(ViewBag.AreasDic));
 			RelationSelect($("#ProvinceId"), $("#AreaId"), areas, "选择地区");

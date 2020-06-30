@@ -1,6 +1,6 @@
 ﻿@model CroResource
 @{
-	ViewBag.Title = "作品详情";
+	ViewBag.Title = "论文作品详情";
 }
 <style>
 	#pdf{
@@ -25,7 +25,7 @@
 	<div class="content">
 		<div class="main-header">
 			<h2>@ViewBag.Title</h2>
-			<em>本页面查看选中作品的详细信息</em>
+			<em>本页面查看选中论文的详细信息</em>
 		</div>
 
 		<div class="main-content">
@@ -63,17 +63,17 @@
 						<!-- right side, main content -->
 						<div class="col-lg-3">
 							<div class="buttons">
-								<a href="@Url.Action("Edit", "Crosource", new { id = Model.CrosourceId })" class="btn btn-primary btn-block"><i class="fa fa-edit"></i> 修改作品信息</a>
+								<a href="@Url.Action("Edit", "Crosource", new { id = Model.CrosourceId })" class="btn btn-primary btn-block"><i class="fa fa-edit"></i> 修改论文信息</a>
 							</div>
 							<div class="widget">
 								<div class="widget-header">
-									<h3><i class="fa fa-paperclip"></i> 作品信息</h3>
+									<h3><i class="fa fa-paperclip"></i> 论文信息</h3>
 								</div>
 
 								<div class="widget-content">
 									<ul class="list-group">
 
-										<li class="list-group-item">作品名称：@Model.Title</li>
+										<li class="list-group-item">论文名称：@Model.Title</li>
 										@if (!string.IsNullOrEmpty(Model.Province))
 										{
 										<li class="list-group-item">省份：@Model.Province</li>
@@ -84,6 +84,12 @@
 										}
 		
 										<li class="list-group-item">创建时间：@Model.CreatedTime.ToString("yyyy-MM-dd")</li>
+										@if (Model.AttachmentId != 0)
+										{
+											<li  class="list-group-item">
+												<span>论文文件： <a href="@Model.AttachmentPath" target="_blank" data-id="@Model.AttachmentId" class="btn-info btn-sm btn-download">下 载</a></span>
+											</li>
+										}
 
 										@*@if (!string.IsNullOrEmpty(Model.Province))
 										{
@@ -102,27 +108,22 @@
 							</div>
 
 							<!-- widget -->
-							<div class="widget">
+							@*<div class="widget">
 								<div class="widget-header">
-									<h3><i class="fa fa-paperclip"></i> 当前微课信息</h3>
+									<h3><i class="fa fa-paperclip"></i> 当前论文信息</h3>
 								</div>
 
 								<div class="widget-content">
 									<ul class="list-group">
 										<li class="list-group-item">
-											<span>论文作品名称：@Model.Title</span>
+											<span>论文名称：@Model.Title</span>
 										</li>
 
-										@if (Model.AttachmentId != 0)
-										{
-											<li  class="list-group-item">
-												<span>作品文件： <a href="@Model.AttachmentPath" target="_blank" data-id="@Model.AttachmentId" class="btn-info btn-sm btn-download">下 载</a></span>
-											</li>
-										}
+									
 
 									</ul>
 								</div>
-							</div>
+							</div>*@
 							<!-- end widget -->
 
 							<!-- widget -->
