@@ -271,7 +271,7 @@ namespace Res.Controllers
          {
             state = "ok",
             msg = "论文作品上传成功"
-         }) : (ActionResult)RedirectToAction("ZcView", "CroMy", new { id = model.CrosourceId });
+         }) : (ActionResult)RedirectToAction("CroMyResource", "CroMy");
 
       }
 

@@ -131,27 +131,27 @@
 
 		$(function () {
 
-			//$.validator.unobtrusive.parse("#form");
-			//$("#form").submit(function () {
-			//	var $form = $(this);
-			//	if (!$form.valid())
-			//		return false;
+			$.validator.unobtrusive.parse("#form");
+			$("#form").submit(function () {
+				var $form = $(this);
+				if (!$form.valid())
+					return false;
 
-			//	$.post($form.attr("action"), $form.serialize(), function (data, status) {
-			//		if (status == "success") {
-			//			if (data.error && data.msg) {
-			//				$('.error').text(data.msg);
-			//				return false;
-			//			}
+				$.post($form.attr("action"), $form.serialize(), function (data, status) {
+					if (status == "success") {
+						if (data.error && data.msg) {
+							$('.error').text(data.msg);
+							return false;
+						}
 
-			//			if(data.returnurl!=''){
-			//				location.href=data.returnUrl;
-			//			}
-			//		}
-			//	});
+						if(data.returnurl!=''){
+							location.href=data.returnUrl;
+						}
+					}
+				});
 
-			//	return false;
-			//});
+				return false;
+			});
 
 
 			$('#CompanyId,#ProvinceId,#AreaId').select2({ 

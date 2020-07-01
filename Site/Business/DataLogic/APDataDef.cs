@@ -314,10 +314,25 @@ namespace Res.Business
          }
       }
 
-      #endregion
+		[Required]
+		[MaxLength(100, ErrorMessage ="论文标题太长")]
+		public override string Title
+		{
+			get
+			{
+				return base.Title;
+			}
+
+			set
+			{
+				base.Title = value;
+			}
+		}
+
+		#endregion
 
 
-   }
+	}
 
 
 	#endregion

@@ -30,7 +30,7 @@ namespace Res.Controllers
       {
          var a = APDBDef.Active;
          var query = APQuery
-             .select(a.ActiveId, a.ActiveName, a.Description, a.StartDate, a.EndDate, a.EvalStartDate, a.EvalEndDate)
+             .select(a.ActiveId, a.ActiveName, a.Description, a.UploadStartDate, a.UploadEndDate, a.EvalStartDate, a.EvalEndDate)
              .from(a);
 
          if (!string.IsNullOrEmpty(searchPhrase))
@@ -51,8 +51,8 @@ namespace Res.Controllers
                         name = ac.ActiveName,
                         // company = ac.Company,
                         description = ac.Description,
-                        start = ac.StartDate.ToString("yyyy-MM-dd"),
-                        end = ac.EndDate.ToString("yyyy-MM-dd"),
+                        start = ac.UploadStartDate.ToString("yyyy-MM-dd"),
+                        end = ac.UploadEndDate.ToString("yyyy-MM-dd"),
                         evalStart = ac.EvalStartDate.ToString("yyyy-MM-dd"),
                         evalEnd = ac.EvalEndDate.ToString("yyyy-MM-dd"),
                      }).ToList();
