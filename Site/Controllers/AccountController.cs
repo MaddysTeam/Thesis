@@ -12,6 +12,7 @@ using Symber.Web.Data;
 using Res.Business;
 using System.Security.Cryptography;
 using System.Text;
+using Util.Security;
 
 namespace Res.Controllers
 {
@@ -57,15 +58,15 @@ namespace Res.Controllers
 			}
 		}
 
-		#endregion
+      #endregion
 
 
-		//
-		//	用户登录
-		// GET:		/Account/Login
-		// POST:		/Account/Login
+      //
+      //	用户登录
+      // GET:		/Account/Login
+      // POST:		/Account/Login
 
-		[AllowAnonymous]
+      [AllowAnonymous]
 		public ActionResult Login(string returnUrl)
 		{
 			ViewBag.ReturnUrl = returnUrl;
@@ -116,18 +117,18 @@ namespace Res.Controllers
 		// GET:		/Account/LogOff
 		//
 
-		public ActionResult LogOff()
-		{
-			AuthenticationManager.SignOut();
-			ResSettings.SettingsInSession.ResetCurrent();
-			return RedirectToAction("Index", "CroHome");
-		}
+		//public ActionResult LogOff()
+		//{
+		//	AuthenticationManager.SignOut();
+		//	ResSettings.SettingsInSession.ResetCurrent();
+		//	return RedirectToAction("Login", "Account");
+		//}
 
 		public ActionResult LogOff2()
 		{
 			AuthenticationManager.SignOut();
 			ResSettings.SettingsInSession.ResetCurrent();
-			return RedirectToAction("Index", "CroHome");
+			return RedirectToAction("Login", "Account");
 		}
 
 
