@@ -160,7 +160,7 @@ namespace Res.Controllers
                });
             }
 
-            var password = "teacher";
+            var password = ThisApp.DefaultPassword;
             model.RegisterTime = DateTime.Now;
             model.LastLoginTime = DateTime.Now;
             model.Password = password;

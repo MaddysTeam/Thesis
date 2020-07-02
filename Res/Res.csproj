@@ -1881,6 +1881,7 @@
     <Content Include="Views\Eval\Export.cshtml" />
     <Content Include="Views\Shared\_PDFLayout.cshtml" />
     <Content Include="Views\Eval\ExportAll.cshtml" />
+    <Content Include="Views\Eval\FirstTrailDetails.cshtml" />
     <None Include="xml.schema.definition\apgen.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -45,7 +45,7 @@ namespace Res.Controllers
       {
          var user = ResSettings.SettingsInSession.User;
          var expertId = ResSettings.SettingsInSession.UserId;
-         var query = APQuery.select(r.CrosourceId, r.Title, r.Author, r.AuthorCompany,
+         var query = APQuery.select(r.CrosourceId, r.Title, r.Author, r.AuthorCompany, eg.GroupType,
                                    eg.GroupName, eg.GroupId.As("groupId"), er.ResultId, er.Score, er.ResultId.As("resultId"))
                             .from(egr,
                                   r.JoinInner(egr.ResourceId == r.CrosourceId),
@@ -82,7 +82,9 @@ namespace Res.Controllers
                groupName = eg.GroupName.GetValue(rd),
                groupId = eg.GroupId.GetValue(rd, "groupId"),
                score = er.Score.GetValue(rd),
-               isEval = er.ResultId.GetValue(rd) > 0
+               isEval = er.ResultId.GetValue(rd) > 0,
+               //evalType=eg.GroupType.GetValue(rd) // 初审 或 最终评审
+               isFirstTrail = eg.GroupType.GetValue(rd) == EvalGroupHelper.FirstTrial
             };
          }).ToList();
 
@@ -110,7 +112,7 @@ namespace Res.Controllers
          var a = APDBDef.Active;
          var er = APDBDef.EvalResult;
 
-         var model = APBplDef.CroResourceBpl.GetResource(db,resId);
+         var model = APBplDef.CroResourceBpl.GetResource(db, resId);
 
          var query = APQuery.select(i.IndicationId, i.Description, i.LevelPKID, i.Score, i.IndicationName,
                                     i.TypePKID, i.ActiveId, a.ActiveName, a.ActiveId,
@@ -150,6 +152,28 @@ namespace Res.Controllers
          ViewBag.Indications = list;
 
          ViewBag.Comment = comment;
+
+         return View(model);
+      }
+
+
+
+      public ActionResult FirstTrailDetails(long id, long resId, long groupId, long? expertId)
+      {
+         var expert = expertId == null ? ResSettings.SettingsInSession.User : APBplDef.ResUserBpl.PrimaryGet(expertId.Value);
+         if (expert == null) throw new ArgumentException("expert can not be null");
+
+       
+         var a = APDBDef.Active;
+         var er = APDBDef.EvalResult;
+
+         string comment = string.Empty, expId = string.Empty;
+
+         var model = APBplDef.CroResourceBpl.GetResource(db, resId);
+
+         ViewBag.isFirstTrailDone = APBplDef.EvalResultBpl.ConditionQueryCount(er.ResourceId == resId & er.EvalType == EvalGroupHelper.FirstTrial) > 0;
+
+         ViewBag.isSlef = (string.IsNullOrEmpty(expId) ? 0 : Convert.ToInt32(expId)) == ResSettings.SettingsInSession.UserId || (id == 0 && expert.UserTypePKID == ResUserHelper.Export);
 
          return View(model);
       }
@@ -273,7 +297,7 @@ namespace Res.Controllers
       }
 
       //
-      //	评审 - 执行评审
+      //	评审 - 最终专家执行评审
       // POST:		/Eval/Execute
       //
 
@@ -361,6 +385,17 @@ namespace Res.Controllers
          }
 
          return Request.IsAjaxRequest() ? (ActionResult)Json(new { error = "none", msg = "操作成功" }) : IsNotAjax();
+      }
+
+
+      //
+      //	评审 - 执行初审，各地区专家执行初审
+      // POST:		/Eval/Execute
+      //
+      [HttpPost]
+      public ActionResult ExecuteFirstTrial(EvalResult model)
+      {
+         return View();
       }
 
 
@@ -474,7 +509,8 @@ namespace Res.Controllers
          row1.CreateCell(4).SetCellValue("评审指标");
          row1.CreateCell(8).SetCellValue("总分");
          row1.CreateCell(9).SetCellValue("评审意见");
-         row1.Cells.ForEach(ce=> {
+         row1.Cells.ForEach(ce =>
+         {
             ce.CellStyle = cellstyle;
          });
 
@@ -484,13 +520,14 @@ namespace Res.Controllers
          row2.CreateCell(5).SetCellValue("教学行为(25)");
          row2.CreateCell(6).SetCellValue("教学效果(25)");
          row2.CreateCell(7).SetCellValue("创新与实用(25)");
-         row2.Cells.ForEach(ce => {
+         row2.Cells.ForEach(ce =>
+         {
             ce.CellStyle = cellstyle;
          });
 
          sheet1.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 1, 0, 0));  //	序号
          sheet1.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 1, 1, 1));  //	作品名称
-         sheet1.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 1, 2, 2));  
+         sheet1.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 1, 2, 2));
          sheet1.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 1, 3, 3));
          sheet1.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 0, 4, 7));
          sheet1.AddMergedRegion(new NPOI.SS.Util.CellRangeAddress(0, 1, 8, 8));
@@ -499,7 +536,7 @@ namespace Res.Controllers
          #endregion
 
          var i = 0;
-         foreach (var item in models)  
+         foreach (var item in models)
          {
             i++;
             NPOI.SS.UserModel.IRow rowtemp = sheet1.CreateRow(i + 1);

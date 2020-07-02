@@ -46,7 +46,7 @@
 				  connectionString="Data Source=192.168.10.3;Initial Catalog=shserc;User ID=sa;Password=sa"
 				  providerName="System.Data.SqlClient" />
 	-->
-		
+
 		<tables>
 
 			<!-- Defined 'ResPickList' DB table and auto generite db access codes.
@@ -102,7 +102,7 @@
 					<add name="Phone" type="string" dataLength="11" display="手机号码"/>
 					<add name="Company" type="string" dataLength="200"   display="单位全称"/>
 					<add name="Position" type="string" dataLength="50"   display="职称/职务"/>
-					
+
 					<!-- Content -->
 					<add name="RealName" type="string" dataLength="255" required="false" display="实名"/>
 					<add name="PhotoPath" type="string" dataLength="255" display="头像"/>
@@ -231,7 +231,7 @@
 					<add name="AreaId" type="long" display="所属地区"/>
 					<add name="ActiveId" type="long" display="所属项目"/>
 					<add name="ThemeId" type="long" display="所属主题"/>
-					
+
 					<!-- Author -->
 					<add name="Author" type="string" dataLength="50" required="true" display="论文作者"/>
 					<add name="AuthorCompany" type="string" dataLength="200" required="true"  display="作者单位"/>
@@ -264,7 +264,7 @@
 
 				</columns>
 			</table>
-			
+
 
 			<table name="CroResourceMedal" comment="作品奖章">
 				<columns>
@@ -301,7 +301,7 @@
 					<add name="Score" type="int"  display="最大分值"></add>
 					<add name="Status" columnName="Status" type="int"></add>
 					<add name="ActiveId" columnName="ActiveId" type="long" display="所属活动"/>
-				
+
 				</columns>
 			</table>
 
@@ -318,7 +318,8 @@
 					<add name="ProvinceId" columnName="ProvinceId" type="long" display="省份"/>
 					<add name="AreaId" columnName="AreaId" type="long" display="地区"/>
 					<add name="CompanyId" columnName="CompanyId" type="long" display="单位"/>
-					
+					<add name="GroupType" type="long" display="评审组类型" required="false"/>
+
 				</columns>
 			</table>
 
@@ -345,7 +346,7 @@
 			</table>
 
 
-			<table name="EvalResult" comment="专家-考核结果">
+			<table name="EvalResult" comment="专家-评审结果">
 				<columns>
 
 					<add name="ResultId" columnName="ID" type="long" identityType="Provider" primaryKey="true"  display="评价结果ID"/>
@@ -355,7 +356,8 @@
 					<add name="AccessDate" type="DateTime" display="评审时间"/>
 					<add name="Score" type="double" display="得分"/>
 					<add name ="Comment" type="string" dataLength="4000" required="false" display="专家评语"/>
-
+					<add name="EvalType" type="long" display="评审类型" required="false"/>
+					
 				</columns>
 			</table>
 

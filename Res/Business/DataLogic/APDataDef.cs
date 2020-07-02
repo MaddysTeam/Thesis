@@ -257,6 +257,10 @@ namespace Res.Business
    public partial class EvalResult : EvalResultBase
    {
       public List<EvalResultItem> Items { get; set; }
+
+      public bool IsFirstEval => this.EvalType == EvalGroupHelper.FirstTrial;//初审
+
+      public bool IsFinalEval => this.EvalType == EvalGroupHelper.LastTrial; //终审
    }
 
    #endregion

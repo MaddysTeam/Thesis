@@ -319,7 +319,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 专家-考核结果 TableDef
+        /// 专家-评审结果 TableDef
         /// </summary>
         public static EvalResultTableDef EvalResult {
             get {
@@ -571,7 +571,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 专家-考核结果 Dal
+        /// 专家-评审结果 Dal
         /// </summary>
         public virtual APDalDef.EvalResultDal EvalResultDal {
             get {
@@ -3909,6 +3909,8 @@ namespace Res.Business {
             
             private Int64APColumnDef _companyId;
             
+            private Int64APColumnDef _groupType;
+            
             public EvalGroupTableDef(string tableName) : 
                     base(tableName) {
             }
@@ -4036,6 +4038,19 @@ namespace Res.Business {
             }
             
             /// <summary>
+            /// GroupType ColumnDef
+            /// </summary>
+            public virtual Int64APColumnDef GroupType {
+                get {
+                    if (Object.ReferenceEquals(_groupType, null)) {
+                        _groupType = new Int64APColumnDef(this, "GroupType", false);
+                        _groupType.Display = "评审组类型";
+                    }
+                    return _groupType;
+                }
+            }
+            
+            /// <summary>
             /// Default Index
             /// </summary>
             public virtual APSqlOrderPhrase DefaultOrder {
@@ -4064,6 +4079,7 @@ namespace Res.Business {
                 data.ProvinceId = ProvinceId.GetValue<long>(reader, throwIfValidColumnName);
                 data.AreaId = AreaId.GetValue<long>(reader, throwIfValidColumnName);
                 data.CompanyId = CompanyId.GetValue<long>(reader, throwIfValidColumnName);
+                data.GroupType = GroupType.GetValue<long>(reader, throwIfValidColumnName);
             }
             
             /// <summary>
@@ -4398,6 +4414,8 @@ namespace Res.Business {
             
             private StringAPColumnDef _comment;
             
+            private Int64APColumnDef _evalType;
+            
             public EvalResultTableDef(string tableName) : 
                     base(tableName) {
             }
@@ -4498,6 +4516,19 @@ namespace Res.Business {
             }
             
             /// <summary>
+            /// EvalType ColumnDef
+            /// </summary>
+            public virtual Int64APColumnDef EvalType {
+                get {
+                    if (Object.ReferenceEquals(_evalType, null)) {
+                        _evalType = new Int64APColumnDef(this, "EvalType", false);
+                        _evalType.Display = "评审类型";
+                    }
+                    return _evalType;
+                }
+            }
+            
+            /// <summary>
             /// Default Index
             /// </summary>
             public virtual APSqlOrderPhrase DefaultOrder {
@@ -4524,6 +4555,7 @@ namespace Res.Business {
                 data.AccessDate = AccessDate.GetValue<System.DateTime>(reader, throwIfValidColumnName);
                 data.Score = Score.GetValue<double>(reader, throwIfValidColumnName);
                 data.Comment = Comment.GetValue<string>(reader, throwIfValidColumnName);
+                data.EvalType = EvalType.GetValue<long>(reader, throwIfValidColumnName);
             }
             
             /// <summary>
@@ -6802,7 +6834,7 @@ namespace Res.Business {
                 if ((data.GroupId == 0)) {
                     data.GroupId = ((long)(GetNewId(APDBDef.EvalGroup.GroupId)));
                 }
-                var query = APQuery.insert(APDBDef.EvalGroup).values(APDBDef.EvalGroup.GroupId.SetValue(data.GroupId), APDBDef.EvalGroup.GroupName.SetValue(data.GroupName), APDBDef.EvalGroup.LevelPKID.SetValue(data.LevelPKID), APDBDef.EvalGroup.StartDate.SetValue(data.StartDate), APDBDef.EvalGroup.EndDate.SetValue(data.EndDate), APDBDef.EvalGroup.ActiveId.SetValue(data.ActiveId), APDBDef.EvalGroup.ProvinceId.SetValue(data.ProvinceId), APDBDef.EvalGroup.AreaId.SetValue(data.AreaId), APDBDef.EvalGroup.CompanyId.SetValue(data.CompanyId));
+                var query = APQuery.insert(APDBDef.EvalGroup).values(APDBDef.EvalGroup.GroupId.SetValue(data.GroupId), APDBDef.EvalGroup.GroupName.SetValue(data.GroupName), APDBDef.EvalGroup.LevelPKID.SetValue(data.LevelPKID), APDBDef.EvalGroup.StartDate.SetValue(data.StartDate), APDBDef.EvalGroup.EndDate.SetValue(data.EndDate), APDBDef.EvalGroup.ActiveId.SetValue(data.ActiveId), APDBDef.EvalGroup.ProvinceId.SetValue(data.ProvinceId), APDBDef.EvalGroup.AreaId.SetValue(data.AreaId), APDBDef.EvalGroup.CompanyId.SetValue(data.CompanyId), APDBDef.EvalGroup.GroupType.SetValue(data.GroupType));
                 ExecuteNonQuery(query);
             }
             
@@ -6810,7 +6842,7 @@ namespace Res.Business {
             /// Update Data.
             /// </summary>
             public virtual void Update(EvalGroup data) {
-                var query = APQuery.update(APDBDef.EvalGroup).values(APDBDef.EvalGroup.GroupName.SetValue(data.GroupName), APDBDef.EvalGroup.LevelPKID.SetValue(data.LevelPKID), APDBDef.EvalGroup.StartDate.SetValue(data.StartDate), APDBDef.EvalGroup.EndDate.SetValue(data.EndDate), APDBDef.EvalGroup.ActiveId.SetValue(data.ActiveId), APDBDef.EvalGroup.ProvinceId.SetValue(data.ProvinceId), APDBDef.EvalGroup.AreaId.SetValue(data.AreaId), APDBDef.EvalGroup.CompanyId.SetValue(data.CompanyId)).where((APDBDef.EvalGroup.GroupId == data.GroupId));
+                var query = APQuery.update(APDBDef.EvalGroup).values(APDBDef.EvalGroup.GroupName.SetValue(data.GroupName), APDBDef.EvalGroup.LevelPKID.SetValue(data.LevelPKID), APDBDef.EvalGroup.StartDate.SetValue(data.StartDate), APDBDef.EvalGroup.EndDate.SetValue(data.EndDate), APDBDef.EvalGroup.ActiveId.SetValue(data.ActiveId), APDBDef.EvalGroup.ProvinceId.SetValue(data.ProvinceId), APDBDef.EvalGroup.AreaId.SetValue(data.AreaId), APDBDef.EvalGroup.CompanyId.SetValue(data.CompanyId), APDBDef.EvalGroup.GroupType.SetValue(data.GroupType)).where((APDBDef.EvalGroup.GroupId == data.GroupId));
                 ExecuteNonQuery(query);
             }
             
@@ -7192,7 +7224,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 专家-考核结果 DalBase
+        /// 专家-评审结果 DalBase
         /// </summary>
         public partial class EvalResultDalBase : APDal {
             
@@ -7210,7 +7242,7 @@ namespace Res.Business {
                 if ((data.ResultId == 0)) {
                     data.ResultId = ((long)(GetNewId(APDBDef.EvalResult.ResultId)));
                 }
-                var query = APQuery.insert(APDBDef.EvalResult).values(APDBDef.EvalResult.ResultId.SetValue(data.ResultId), APDBDef.EvalResult.ExpertId.SetValue(data.ExpertId), APDBDef.EvalResult.GroupId.SetValue(data.GroupId), APDBDef.EvalResult.ResourceId.SetValue(data.ResourceId), APDBDef.EvalResult.AccessDate.SetValue(data.AccessDate), APDBDef.EvalResult.Score.SetValue(data.Score), APDBDef.EvalResult.Comment.SetValue(data.Comment));
+                var query = APQuery.insert(APDBDef.EvalResult).values(APDBDef.EvalResult.ResultId.SetValue(data.ResultId), APDBDef.EvalResult.ExpertId.SetValue(data.ExpertId), APDBDef.EvalResult.GroupId.SetValue(data.GroupId), APDBDef.EvalResult.ResourceId.SetValue(data.ResourceId), APDBDef.EvalResult.AccessDate.SetValue(data.AccessDate), APDBDef.EvalResult.Score.SetValue(data.Score), APDBDef.EvalResult.Comment.SetValue(data.Comment), APDBDef.EvalResult.EvalType.SetValue(data.EvalType));
                 ExecuteNonQuery(query);
             }
             
@@ -7218,7 +7250,7 @@ namespace Res.Business {
             /// Update Data.
             /// </summary>
             public virtual void Update(EvalResult data) {
-                var query = APQuery.update(APDBDef.EvalResult).values(APDBDef.EvalResult.ExpertId.SetValue(data.ExpertId), APDBDef.EvalResult.GroupId.SetValue(data.GroupId), APDBDef.EvalResult.ResourceId.SetValue(data.ResourceId), APDBDef.EvalResult.AccessDate.SetValue(data.AccessDate), APDBDef.EvalResult.Score.SetValue(data.Score), APDBDef.EvalResult.Comment.SetValue(data.Comment)).where((APDBDef.EvalResult.ResultId == data.ResultId));
+                var query = APQuery.update(APDBDef.EvalResult).values(APDBDef.EvalResult.ExpertId.SetValue(data.ExpertId), APDBDef.EvalResult.GroupId.SetValue(data.GroupId), APDBDef.EvalResult.ResourceId.SetValue(data.ResourceId), APDBDef.EvalResult.AccessDate.SetValue(data.AccessDate), APDBDef.EvalResult.Score.SetValue(data.Score), APDBDef.EvalResult.Comment.SetValue(data.Comment), APDBDef.EvalResult.EvalType.SetValue(data.EvalType)).where((APDBDef.EvalResult.ResultId == data.ResultId));
                 ExecuteNonQuery(query);
             }
             
@@ -7315,7 +7347,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 专家-考核结果 Dal
+        /// 专家-评审结果 Dal
         /// </summary>
         public partial class EvalResultDal : EvalResultDalBase {
             
@@ -10139,7 +10171,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 专家-考核结果 BplBase
+        /// 专家-评审结果 BplBase
         /// </summary>
         public partial class EvalResultBplBase {
             
@@ -10282,7 +10314,7 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// 专家-考核结果 Dal
+        /// 专家-评审结果 Dal
         /// </summary>
         public partial class EvalResultBpl : EvalResultBplBase {
         }
@@ -16898,6 +16930,11 @@ namespace Res.Business {
         private long _companyId;
         
         /// <summary>
+        /// GroupType
+        /// </summary>
+        private long _groupType;
+        
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public EvalGroupBase() {
@@ -16906,7 +16943,7 @@ namespace Res.Business {
         /// <summary>
         /// Constructor with all field values.
         /// </summary>
-        public EvalGroupBase(long groupId, string groupName, long levelPKID, System.DateTime startDate, System.DateTime endDate, long activeId, long provinceId, long areaId, long companyId) {
+        public EvalGroupBase(long groupId, string groupName, long levelPKID, System.DateTime startDate, System.DateTime endDate, long activeId, long provinceId, long areaId, long companyId, long groupType) {
             _groupId = groupId;
             _groupName = groupName;
             _levelPKID = levelPKID;
@@ -16916,6 +16953,7 @@ namespace Res.Business {
             _provinceId = provinceId;
             _areaId = areaId;
             _companyId = companyId;
+            _groupType = groupType;
         }
         
         /// <summary>
@@ -17118,6 +17156,28 @@ namespace Res.Business {
         }
         
         /// <summary>
+        /// GroupType
+        /// </summary>
+        [Display(Name="评审组类型")]
+        public virtual long GroupType {
+            get {
+                return _groupType;
+            }
+            set {
+                _groupType = value;
+            }
+        }
+        
+        /// <summary>
+        /// GroupType APColumnDef
+        /// </summary>
+        public static Int64APColumnDef GroupTypeDef {
+            get {
+                return APDBDef.EvalGroup.GroupType;
+            }
+        }
+        
+        /// <summary>
         /// EvalGroupTableDef APTableDef
         /// </summary>
         public static APDBDef.EvalGroupTableDef TableDef {
@@ -17148,6 +17208,7 @@ namespace Res.Business {
             ProvinceId = data.ProvinceId;
             AreaId = data.AreaId;
             CompanyId = data.CompanyId;
+            GroupType = data.GroupType;
         }
         
         /// <summary>
@@ -17179,6 +17240,9 @@ namespace Res.Business {
                 return false;
             }
             if ((CompanyId != data.CompanyId)) {
+                return false;
+            }
+            if ((GroupType != data.GroupType)) {
                 return false;
             }
             return true;
@@ -17277,8 +17341,8 @@ namespace Res.Business {
         /// <summary>
         /// Constructor with all field values.
         /// </summary>
-        public EvalGroup(long groupId, string groupName, long levelPKID, System.DateTime startDate, System.DateTime endDate, long activeId, long provinceId, long areaId, long companyId) : 
-                base(groupId, groupName, levelPKID, startDate, endDate, activeId, provinceId, areaId, companyId) {
+        public EvalGroup(long groupId, string groupName, long levelPKID, System.DateTime startDate, System.DateTime endDate, long activeId, long provinceId, long areaId, long companyId, long groupType) : 
+                base(groupId, groupName, levelPKID, startDate, endDate, activeId, provinceId, areaId, companyId, groupType) {
         }
     }
     
@@ -17768,7 +17832,7 @@ namespace Res.Business {
     }
     
     /// <summary>
-    /// 专家-考核结果 Base
+    /// 专家-评审结果 Base
     /// </summary>
     [Serializable()]
     public abstract partial class EvalResultBase {
@@ -17809,6 +17873,11 @@ namespace Res.Business {
         private string _comment = string.Empty;
         
         /// <summary>
+        /// EvalType
+        /// </summary>
+        private long _evalType;
+        
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public EvalResultBase() {
@@ -17817,7 +17886,7 @@ namespace Res.Business {
         /// <summary>
         /// Constructor with all field values.
         /// </summary>
-        public EvalResultBase(long resultId, long expertId, long groupId, long resourceId, System.DateTime accessDate, double score, string comment) {
+        public EvalResultBase(long resultId, long expertId, long groupId, long resourceId, System.DateTime accessDate, double score, string comment, long evalType) {
             _resultId = resultId;
             _expertId = expertId;
             _groupId = groupId;
@@ -17825,6 +17894,7 @@ namespace Res.Business {
             _accessDate = accessDate;
             _score = score;
             _comment = comment;
+            _evalType = evalType;
         }
         
         /// <summary>
@@ -17983,6 +18053,28 @@ namespace Res.Business {
         }
         
         /// <summary>
+        /// EvalType
+        /// </summary>
+        [Display(Name="评审类型")]
+        public virtual long EvalType {
+            get {
+                return _evalType;
+            }
+            set {
+                _evalType = value;
+            }
+        }
+        
+        /// <summary>
+        /// EvalType APColumnDef
+        /// </summary>
+        public static Int64APColumnDef EvalTypeDef {
+            get {
+                return APDBDef.EvalResult.EvalType;
+            }
+        }
+        
+        /// <summary>
         /// EvalResultTableDef APTableDef
         /// </summary>
         public static APDBDef.EvalResultTableDef TableDef {
@@ -18011,6 +18103,7 @@ namespace Res.Business {
             AccessDate = data.AccessDate;
             Score = data.Score;
             Comment = data.Comment;
+            EvalType = data.EvalType;
         }
         
         /// <summary>
@@ -18036,6 +18129,9 @@ namespace Res.Business {
                 return false;
             }
             if ((Comment != data.Comment)) {
+                return false;
+            }
+            if ((EvalType != data.EvalType)) {
                 return false;
             }
             return true;
@@ -18120,7 +18216,7 @@ namespace Res.Business {
     }
     
     /// <summary>
-    /// 专家-考核结果
+    /// 专家-评审结果
     /// </summary>
     [Serializable()]
     public partial class EvalResult : EvalResultBase {
@@ -18134,8 +18230,8 @@ namespace Res.Business {
         /// <summary>
         /// Constructor with all field values.
         /// </summary>
-        public EvalResult(long resultId, long expertId, long groupId, long resourceId, System.DateTime accessDate, double score, string comment) : 
-                base(resultId, expertId, groupId, resourceId, accessDate, score, comment) {
+        public EvalResult(long resultId, long expertId, long groupId, long resourceId, System.DateTime accessDate, double score, string comment, long evalType) : 
+                base(resultId, expertId, groupId, resourceId, accessDate, score, comment, evalType) {
         }
     }
     

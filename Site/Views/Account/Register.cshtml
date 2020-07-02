@@ -65,7 +65,7 @@
 			</div>
 
 			<div class="form-group">
-				<label for="Position" class="control-label col-sm-2">职称/职务</label>
+				<label for="Position" class="control-label col-sm-2"><i class="text-danger">* &nbsp;</i>职称/职务</label>
 				<div class="col-sm-9">
 					@Html.TextBoxFor(m => m.Position, new { @class = "form-control", placeholder = "职称/职位" })
 					@Html.ValidationMessageFor(m => m.Position, null, new { @class = "text-danger" })

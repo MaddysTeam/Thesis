@@ -1,0 +1,242 @@
+﻿@model CroResource
+@{
+	ViewBag.Title = "论文初审";
+
+	var indications = ViewBag.Indications as List<Indication>;
+	var resultId = Request["id"] == null ? 0 : Convert.ToInt32(Request["id"]);
+	var groupId = Request["groupId"] == null ? 0 : Convert.ToInt32(Request["groupId"]);
+
+	var comment = (string)ViewBag.Comment;
+}
+<style>
+	#pdf {
+		height: 750px;
+	}
+</style>
+<div class="col-md-10 content-wrapper">
+	<div class="row">
+		<div class="col-lg-4 ">
+			<ul class="breadcrumb">
+				<li>
+					<i class="fa fa-home"></i>
+					<a href="@Url.Action("Index", "Home")">首页</a>
+				</li>
+				<li><a href="@Url.Action("Search", "Crosource")">作品</a></li>
+				<li class="active">@ViewBag.Title</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- main -->
+	<div class="content">
+		<div class="main-header">
+			<h2>@ViewBag.Title</h2>
+			<em>本页面查看选中作品的详细信息</em>
+		</div>
+
+		<div class="main-content">
+			<!-- Details -->
+			<div class="details">
+				<!-- details header -->
+				<div class="details-header">
+					<div class="row">
+						<div class="col-lg-4 col-print-4">
+							<h3><strong>@Model.Title</strong></h3>
+						</div>
+
+					</div>
+				</div>
+				<!-- end details header -->
+				<!-- details summary -->
+				<div class="details-summary">
+					<div class="row">
+						<!-- left side, main content -->
+						<div class="col-lg-7">
+							<div class="row">
+
+								<div class="pdf" id="pdf">
+									<iframe></iframe>
+								</div>
+
+							</div> <!-- row -->
+						</div>
+						<!-- end left side, main content -->
+
+						<div class="panel evalArea col-lg-5" style="height:800px;">
+							<div class="panel">
+								<div class="panel-body">
+									@if ((bool)ViewBag.isSlef && (bool)ViewBag.isFirstTrailDone)
+									{
+										<a class="btn btn-block btn-info btn-eval" href="#">取消通过</a>
+									}
+									else if ((bool)ViewBag.isSlef && !(bool)ViewBag.isFirstTrailDone)
+									{
+										<a class="btn btn-block btn-info btn-eval" href="#">初审通过</a>
+									}
+								</div>
+							</div>
+						</div>
+
+						<!-- right side, main content -->
+
+						<div class="col-lg-9 info">
+							<div class="row">
+
+								<!-- widget -->
+								<div class="widget col-md-4">
+									<div class="widget-header">
+										<h3><i class="fa fa-paperclip"></i> 作品信息</h3>
+									</div>
+
+									<div class="widget-content">
+										<ul class="list-group">
+
+											<li class="list-group-item">作品名称：@Model.Title</li>
+
+											@if (!string.IsNullOrEmpty(Model.Province))
+											{
+												<li class="list-group-item">省份：@Model.Province</li>
+}
+											@if (!string.IsNullOrEmpty(Model.Province))
+											{
+												<li class="list-group-item">市区：@Model.Area</li>
+}
+
+											<li class="list-group-item">创建时间：@Model.CreatedTime.ToString("yyyy-MM-dd")</li>
+
+											<li class="list-group-item">
+												<div class="switchs">
+													@Html.CheckBox("State", Model.StatePKID == CroResourceHelper.StateAllow, new { @class = "switch", data_label_text = "审核合格", data_size = "small" })
+												</div>
+											</li>
+
+
+										</ul>
+									</div>
+								</div>
+								<!-- end widget -->
+								<!-- widget -->
+								<div class="widget col-md-4">
+									<div class="widget-header">
+										<h3><i class="fa fa-paperclip"></i> 当前论文信息</h3>
+									</div>
+
+									<div class="widget-content">
+										<ul class="list-group">
+											<li class="list-group-item">
+												<span>论文名称：@Model.Title</span>
+											</li>
+
+											@if (Model.AttachmentId != 0)
+											{
+												<li class="list-group-item">
+													<span>论文文件： <a href="@Model.AttachmentPath" target="_blank" data-id="@Model.AttachmentId" class="btn-info btn-sm btn-download">下 载</a></span>
+												</li>
+}
+
+										</ul>
+									</div>
+								</div>
+								<!-- end widget -->
+								<!-- widget -->
+								<div class="widget col-md-4">
+									<div class="widget-header">
+										<h3><i class="fa fa-paperclip"></i> 作者信息</h3>
+									</div>
+
+									<div class="widget-content">
+										<ul class="list-group">
+											<li class="list-group-item">作者：@Model.Author</li>
+											@if (@Model.AuthorCompany != "")
+											{
+												<li class="list-group-item">单位：@Model.AuthorCompany</li>
+}
+										</ul>
+									</div>
+								</div>
+								<!-- end widget -->
+
+							</div>
+						</div>
+
+						<!-- end right side, main content -->
+
+					</div>
+				</div>
+				<!-- end details summary -->
+
+			</div>
+			<!-- Details -->
+
+		</div>
+		<!-- /main-content -->
+	</div>
+	<!-- /main -->
+</div>
+
+
+@section Css{
+	<style>
+		.info .widget {
+			height: 400px;
+			overflow-y: auto;
+		}
+
+		.evalArea {
+			height: 500px;
+			overflow-y: auto;
+		}
+	</style>
+}
+@section Plugins{
+	<script src="~/assets/js/pdf.js"></script>
+}
+@section Scripts {
+	<script src="~/assets/plugins/ckplayer/ckplayer/ckplayer.js"></script>
+	<script src="~/assets/plugins/jwplayer/jwplayer.js"></script>
+	<script type="text/javascript">
+
+		$(function () {
+
+			var pdfPath = '@Model.AttachmentPath' + '.pdf';
+			PDFObject.embed(pdfPath, "#pdf");
+
+			//$("#comment").keyup(function () {
+			//	$(".img_ta_num").html("评语还可以填写"+(150 - $(this).val().length)+"个字")
+			//})
+
+
+			$('.btn-eval').on('click', function () {
+				var o = {
+					ResultId: '@resultId',
+					GroupId: '@groupId',
+					ResourceId: '@Model.CrosourceId',
+					Comment: $('#comment').val(),
+					Items: []
+				};
+
+				$.post('@Url.Action("ExecuteFirstTrial", "Eval")', { model: o }, function (data, status) {
+					if (data.error == "none") {
+						location.href = "/Eval/Search";
+						alertify.success(data.msg);
+					}
+					else {
+						alertify.error(data.msg);
+					}
+				});
+			});
+
+			@*$('.btn-download').on('click',function(){
+				var $this=$(this);
+				var fileId=$(this).data('id');
+				if(fileId>0){
+					$.post('/Crosource/Download',{id:'@Model.CrosourceId',  courseId:'@course.CourseId', fileId:fileId},function(response){});
+				}
+				else{
+					alert('暂无文件可下载');
+				}
+			});*@
+
+		});
+	</script>
+}

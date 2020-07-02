@@ -87,14 +87,15 @@
 			formatters: {
 				'commands': function (column, row) {
 					var id = row.id;
+					var url = row.isFirstTrail == 'True' ? '@Url.Action("Details", "Eval")' : '@Url.Action("FirstTrailDetails", "Eval")';
 					if (row.isEval) {
 						return '<div class="btn-group btn-group-xs pull-right" data-row-id="' + row.id + '">' +
-									'<a class="btn btn-warning btn-eval" target="blank" href="@Url.Action("Details","Eval")?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">继续评审</a>' +
+									'<a class="btn btn-warning btn-eval" target="blank" href="' + url + '?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">继续评审</a>' +
 								'</div>';
 					}
 					else {
 						return '<div class="btn-group btn-group-xs pull-right" data-row-id="' + row.id + '">' +
-									'<a class="btn btn-success btn-eval" target="blank" href="@Url.Action("Details","Eval")?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">评审</a>' +
+									'<a class="btn btn-success btn-eval" target="blank" href="' + url + '?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">评审</a>' +
 									'</div>';
 					}
 

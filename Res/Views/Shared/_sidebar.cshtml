@@ -64,10 +64,27 @@
 			@if (ResSettings.SettingsInSession.User.UserTypePKID == ResUserHelper.ProvinceAdmin)
 			{
 				<li>
+					<a href="@Url.Action("Search", "User")">
+						<i class="fa fa-user fa-fw"></i>
+						<span class="text">用户管理</span>
+					</a>
+				</li>
+				<li>
 					<a href="@Url.Action("Search", "Crosource")">
 						<i class="fa fa-image fa-fw"></i>
 						<span class="text">论文管理</span>
 					</a>
+				</li>
+				<li>
+					<a href="javascript:void(0)" class="js-sub-menu-toggle">
+						<i class="fa fa-twitter fa-fw"></i>
+						<span class="text">初审管理</span>
+					</a>
+					<ul class="sub-menu">
+						<li><a href="@Url.Action("Search", "EvalManage")">初审组管理</a></li>
+						<li><a href="@Url.Action("EvalResultList", "EvalManage")">初审结果查询</a></li>
+						
+					</ul>
 				</li>
 			}
 

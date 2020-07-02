@@ -148,7 +148,7 @@ namespace Res.Business
 		[Display(Name = "手机号码")]
 		public string Phone { get; set; }
 
-      //[Required(ErrorMessage = "必须填写手机号码")]
+      [Required(ErrorMessage = "必须填写职称或职务")]
       [MaxLength(50, ErrorMessage = "职称/职位内容过长")]
       [Display(Name = "职称/职位")]
       public string Position { get; set; }

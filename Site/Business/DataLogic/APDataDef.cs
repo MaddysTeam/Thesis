@@ -182,11 +182,27 @@ namespace Res.Business
 			}
 		}
 
+      [Required(ErrorMessage = "必须填写职称或职务")]
+      [MaxLength(50, ErrorMessage = "职称/职位内容过长")]
+      [Display(Name = "职称/职位")]
+      public override string Position
+      {
+         get
+         {
+            return base.Position;
+         }
+
+         set
+         {
+            base.Position = value;
+         }
+      }
 
 
-		#endregion
 
-		public override string ToString()
+      #endregion
+
+      public override string ToString()
 		{
 			return this.Email + this.Password + this.UserId;
 		}
@@ -263,8 +279,8 @@ namespace Res.Business
 
 		public string Theme { get { return CroResourceHelper.Theme.GetName(ThemeId); } }
 
-		[Display(Name = "资源名称")]
-		[Required]
+		[Display(Name = "论文名称")]
+		[Required(ErrorMessage ="必须上传论文文件！")]
 		public string AttachmentName { get; set; }
 
 		[Display(Name = "资源路径")]
@@ -329,10 +345,11 @@ namespace Res.Business
 			}
 		}
 
-		#endregion
+  
+      #endregion
 
 
-	}
+   }
 
 
 	#endregion

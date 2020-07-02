@@ -127,23 +127,19 @@ namespace Res.Controllers
       {
          var user = ResSettings.SettingsInSession.User;
          model.LevelPKID = EvalGroupHelper.UnionLevel;
+         model.GroupType = EvalGroupHelper.LastTrial; // 超管设置的是专家终审
 
          if (user.ProvinceId > 0)
          {
             model.ProvinceId = user.ProvinceId;
             model.LevelPKID = EvalGroupHelper.ProvinceLevel;
+            model.GroupType = EvalGroupHelper.FirstTrial; // 省市级专家的初审
          }
 
          if (user.AreaId > 0)
          {
             model.LevelPKID = EvalGroupHelper.CityLevel;
             model.AreaId = user.AreaId;
-         }
-
-         if (user.CompanyId > 0)
-         {
-            model.LevelPKID = EvalGroupHelper.CityLevel;
-            model.CompanyId = user.CompanyId;
          }
 
          if (model.GroupId == 0)
@@ -211,8 +207,8 @@ namespace Res.Controllers
 
          //TODO: 角色数据范围过滤
 
-         //if (user.ProvinceId > 0)
-         //   query.where_and(u.ProvinceId == user.ProvinceId);
+         if (user.ProvinceId > 0)
+            query.where_and(u.ProvinceId == user.ProvinceId);
          //if (user.AreaId > 0 && user.ProvinceId != ResCompanyHelper.Shanghai) //如果非上海，其他市区id都是areaId
          //   query.where_and(u.AreaId == user.AreaId);
 
@@ -278,6 +274,9 @@ namespace Res.Controllers
          ThrowNotAjax();
 
          var user = ResSettings.SettingsInSession.User;
+
+         if (provinceId == 0)
+            provinceId = user.ProvinceId;
 
          var r = APDBDef.CroResource;
          var egr = APDBDef.EvalGroupResource;
