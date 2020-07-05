@@ -27,13 +27,19 @@
 		<div class="main-content">
 
 			<div class="buttons">
-				<a href="@Url.Action("Edit", "Crosource")" id="addUser" class="btn btn-danger btn-md">新增论文</a>&nbsp;
+				
+				
 				@if (user.UserTypePKID == ResUserHelper.Admin)
 				{
-					<a href="#" id="approve" class="btn btn-info btn-approve">审核</a>
+					<a href="@Url.Action("Edit", "Crosource")" id="addUser" class="btn btn-danger btn-md">新增论文</a>
+					@*<a href="#" id="approve" class="btn btn-info btn-approve">审核</a>*@
 					<a href="#" id="winLevel" class="btn btn-success btn-winLevel">设置奖项</a>
 				}
-				
+				else if(user.UserTypePKID ==ResUserHelper.ProvinceAdmin)
+				{
+					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
+				}
+
 			</div>
 			<!-- widget -->
 			<div class="widget">
@@ -57,8 +63,14 @@
 							@Html.DropDownList("Area", (ViewBag.Areas as List<ResCompany>).Select(x => new SelectListItem { Text = x.CompanyName, Value = x.CompanyId.ToString() }), "选择地区", new { @class = "form-control area" })
 						</div>
 						@*<div class="col-sm-2" style="margin-top:10px;">
-							@Html.DropDownList("State", CroResourceHelper.State.GetSelectList(), "状态", new { @class = "form-control search-field" })
-						</div>*@
+								@Html.DropDownList("State", CroResourceHelper.State.GetSelectList(), "状态", new { @class = "form-control search-field" })
+							</div>*@
+
+						<div class="col-sm-2">
+							@Html.DropDownList("Delivery", CroResourceHelper.DictDeliveryStatus
+							 .Select(x => new SelectListItem { Value = x.Key.ToString(), Text = x.Value })
+							 .ToList(), "报送状态", new { @class = "form-control area" })
+						</div>
 						<div class="col-sm-2">
 							@Html.TextBox("MinScore", null, new { @class = "form-control score", @placeholder = "大于得分" })
 						</div>
@@ -80,11 +92,12 @@
 									<th data-column-id="Province" class="cmdwidth">省份</th>
 									<th data-column-id="Area" class="cmdwidth">地区</th>
 									<th data-column-id="School" class="cmdwidth">单位</th>
+									<th data-column-id="DeliveryStatus" class="cmdwidth">报送状态</th>
 									<th data-column-id="CreatedTime">上传日期</th>
-									<th data-column-id="WinLevel">获奖等级</th>
-									<th data-column-id="Score" class="cmdwidth">论文得分</th>
-									<th data-column-id="State" class="cmdwidth">状态</th>
-									<th data-column-id="cmd_command" data-formatter="cmd_command" data-sortable="false" class="titlewidth"  >操作</th>
+									@*<th data-column-id="WinLevel">获奖等级</th>*@
+									@*<th data-column-id="Score" class="cmdwidth">论文得分</th>*@
+									@*<th data-column-id="State" class="cmdwidth">状态</th>*@
+									<th data-column-id="cmd_command" data-formatter="cmd_command" data-sortable="false" class="titlewidth">操作</th>
 								</tr>
 							</thead>
 						</table>
@@ -120,12 +133,15 @@
 				minScore:$('#MinScore').val()==''? 0:$('#MinScore').val(),
 				maxScore:$('#MaxScore').val()==''? 0:$('#MaxScore').val(),
 				stateId:$('#State').val()==''? 0:$('#State').val(),
+				deliveryStatus:$('#Delivery').val()=='' ? 0 :$('#Delivery').val(),
 			};
 		}
 
 		function getGridOptions() {
 			var userType = '@user.UserTypePKID';
 			var url='@Url.Action("Edit", "Crosource")';
+			var isAdmin = userType == '@ResUserHelper.Admin';
+
 			return $.extend(true, {}, gridOptions, {
 
 				url: "/Crosource/Search",
@@ -136,16 +152,18 @@
 					"cmd_command":function(column,row){
 						var str ="";
 						//if (isAdmin || isProvinceAdmin || isCityAdmin) {
-							str+= "<a class='btn btn-xs' href='/Crosource/Details/" + row.id+"'><fa class='fa fa-eye'></fa></a>&nbsp;";
-							str+= "<a class='btn btn-xs' href='/Crosource/Edit/" + row.id+"' title='修改'><fa class='fa fa-pencil'></fa></a>&nbsp;";
+						str+= "<a class='btn btn-xs' href='/Crosource/Details/" + row.id+"'><fa class='fa fa-eye'></fa></a>&nbsp;";
+						str+= "<a class='btn btn-xs' href='/Crosource/Edit/" + row.id+"' title='修改'><fa class='fa fa-pencil'></fa></a>&nbsp;";
 						//}
 						//if (isAdmin) {
-							str+= "<button type='button' class='btn btn-xs " + (row["StatePKID"] == 10352 ? "isallow" : "") + " cmd_approve' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='审核合格/不合格'><span class='fa fa-gavel'></span></button>&nbsp;";
+						//	str+= "<button type='button' class='btn btn-xs " + (row["StatePKID"] == 10352 ? "isallow" : "") + " cmd_approve' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='审核合格/不合格'><span class='fa fa-gavel'></span></button>&nbsp;";
 						//}
-						//if (isAdmin || isProvinceAdmin || isCityAdmin) {
-							str+= "<button type='button' class='btn btn-xs " + (row["WinLevelPKID"] > 0 ? "iselite" : "") + " cmd_elite' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='设置奖项'><fa>奖</fa></button>&nbsp;";
+						//if (isAdmin) {
+						str+= "<button type='button' class='btn btn-xs " + (row["WinLevelPKID"] > 0 ? "iselite" : "") + " cmd_elite' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='设置奖项'><fa>奖</fa></button>&nbsp;";
 						//}
-					
+						str+= "<button type='button' class='btn btn-xs " + (row["DeliveryStatus"] > 1 ? "isdelivery" : "") + " cmd_delivery' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='设置报送'><fa>报送</fa></button>&nbsp;";
+
+
 						return str;
 					},
 
@@ -200,6 +218,7 @@
 
 						grid.find("tbody tr:has(button.iselite)").addClass("flagelite");
 						grid.find("tbody tr:has(button.isallow)").addClass("flagallow");
+						//grid.find("tbody tr:has(button.isdelivery)").addClass("flagelite");
 
 						grid
 							.find(".cmd_approve").on("click", function (e) {
@@ -313,7 +332,7 @@
 				});
 			});
 
-			
+
 
 			$('#search').click(function(){
 				$("#bootgrid").bootgrid('reload');

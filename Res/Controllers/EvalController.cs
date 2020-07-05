@@ -37,6 +37,9 @@ namespace Res.Controllers
 
       public ActionResult Search()
       {
+         var expect = ResSettings.SettingsInSession.User;
+         ViewBag.isFirstTrail = expect.ProvinceId > 0;
+
          return View();
       }
 
@@ -163,17 +166,16 @@ namespace Res.Controllers
          var expert = expertId == null ? ResSettings.SettingsInSession.User : APBplDef.ResUserBpl.PrimaryGet(expertId.Value);
          if (expert == null) throw new ArgumentException("expert can not be null");
 
-       
+
          var a = APDBDef.Active;
          var er = APDBDef.EvalResult;
 
          string comment = string.Empty, expId = string.Empty;
 
          var model = APBplDef.CroResourceBpl.GetResource(db, resId);
+         model.IsFirstTrailDone = APBplDef.EvalResultBpl.ConditionQueryCount(er.ResourceId == resId & er.EvalType == EvalGroupHelper.FirstTrial) > 0;
 
-         ViewBag.isFirstTrailDone = APBplDef.EvalResultBpl.ConditionQueryCount(er.ResourceId == resId & er.EvalType == EvalGroupHelper.FirstTrial) > 0;
-
-         ViewBag.isSlef = (string.IsNullOrEmpty(expId) ? 0 : Convert.ToInt32(expId)) == ResSettings.SettingsInSession.UserId || (id == 0 && expert.UserTypePKID == ResUserHelper.Export);
+         ViewBag.isSlef = expert.Id == ResSettings.SettingsInSession.UserId || (id == 0 && expert.UserTypePKID == ResUserHelper.Export);
 
          return View(model);
       }
@@ -395,7 +397,24 @@ namespace Res.Controllers
       [HttpPost]
       public ActionResult ExecuteFirstTrial(EvalResult model)
       {
-         return View();
+         var exists = APBplDef.EvalResultBpl.ConditionQueryCount(er.ResourceId==model.ResourceId & er.EvalType == EvalGroupHelper.FirstTrial) > 0;
+         if (!exists)
+         {
+            model.AccessDate = DateTime.Now;
+            model.ExpertId = ResSettings.SettingsInSession.UserId;
+            model.EvalType = EvalGroupHelper.FirstTrial; // 表示初审
+            APBplDef.EvalResultBpl.Insert(model);
+         }
+
+         return Request.IsAjaxRequest() ? (ActionResult)Json(new { error = "none", msg = "操作成功" }) : IsNotAjax();
+      }
+
+      [HttpPost]
+      public ActionResult DeleteFirstTrial(EvalResult model)
+      {
+         APBplDef.EvalResultBpl.PrimaryDelete(model.ResultId);
+
+         return  Request.IsAjaxRequest() ? (ActionResult)Json(new { error = "none", msg = "操作成功" }) : IsNotAjax();
       }
 
 

@@ -167,6 +167,8 @@ namespace Res.Business
 
       public string Theme { get { return CroResourceHelper.Theme.GetName(ThemeId); } }
 
+      public bool IsFirstTrailDone { get; set; }
+
       [Display(Name = "资源名称")]
       [Required]
       public string AttachmentName { get; set; }

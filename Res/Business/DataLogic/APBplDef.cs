@@ -450,7 +450,7 @@ namespace Res.Business
 
             var query = APQuery
                 .select(t.CrosourceId, t.Title, t.CreatedTime, t.StatePKID,
-                        t.ProvinceId, t.AreaId, t.WinLevelPKID, t.Score,
+                        t.ProvinceId, t.AreaId, t.WinLevelPKID, t.Score,t.DeliveryStatus,
                         u.RealName.As("Author"))
                 .from(t, u.JoinInner(t.Creator == u.UserId))
                 .where(where);

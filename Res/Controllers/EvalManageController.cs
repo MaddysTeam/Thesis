@@ -454,7 +454,7 @@ namespace Res.Controllers
             }
          }
 
-         if(removeIds.Count>0)
+         if (removeIds.Count > 0)
             APBplDef.EvalGroupResourceBpl.ConditionDelete(egr.GroupResourceId.In(removeIds.ToArray()));
 
          return Json(new
@@ -729,15 +729,20 @@ namespace Res.Controllers
          var cr = APDBDef.CroResource;
          var er = APDBDef.EvalResult;
 
-         var query = APQuery.select(er.ResultId, er.ExpertId, er.GroupId, er.AccessDate, er.Score, er.Comment,
-                                    cr.CrosourceId, cr.Title, cr.Score.As("AverageScore"), u.UserName, u.UserId,
-                                    g.GroupName, g.GroupId, a.ActiveName, a.ActiveId)
-                          .from(er,
-                                cr.JoinInner(cr.CrosourceId == er.ResourceId),
-                                u.JoinInner(u.UserId == er.ExpertId & er.ExpertId == expertId),
-                                g.JoinInner(er.GroupId == g.GroupId),
-                                a.JoinInner(a.ActiveId == cr.ActiveId)
-                                );
+         //var isAdmin = user.UserTypePKID == ResUserHelper.Admin || user.UserTypePKID == ResUserHelper.ProvinceAdmin;
+         //var isExpert = user.UserTypePKID == ResUserHelper.Export;
+
+         APSqlSelectCommand query = APQuery.select(er.ResultId, er.ExpertId, er.GroupId, er.AccessDate, er.Score, er.Comment,
+                                 cr.CrosourceId, cr.Title, cr.Score.As("AverageScore"), u.UserName, u.UserId,
+                                 g.GroupName, g.GroupId, a.ActiveName, a.ActiveId)
+                       .from(er,
+                             cr.JoinInner(cr.CrosourceId == er.ResourceId),
+                             u.JoinInner(u.UserId == er.ExpertId & er.ExpertId == expertId),
+                             g.JoinInner(er.GroupId == g.GroupId),
+                             a.JoinInner(a.ActiveId == cr.ActiveId)
+                             );
+
+
          if (activeId > 0)
             query = query.where_and(cr.ActiveId == activeId);
          if (groupid > 0)
@@ -789,6 +794,101 @@ namespace Res.Controllers
                active = a.ActiveName.GetValue(r),
                activeId = a.ActiveId.GetValue(r),
                comment = er.Comment.GetValue(r),
+            };
+         }).ToList();
+
+         return Json(new
+         {
+            rows = result,
+            current,
+            rowCount,
+            total
+         });
+      }
+
+
+      public ActionResult FirstTrailEvalResultList(long? expertId, long? groupId)
+      {
+         return View();
+      }
+
+      [HttpPost]
+      public ActionResult FirstTrailEvalResultList(long activeId, long groupid, long expertId, int current, int rowCount, string searchPhrase)
+      {
+         var user = ResSettings.SettingsInSession.User;
+
+         var a = APDBDef.Active;
+         var g = APDBDef.EvalGroup;
+         var u = APDBDef.ResUser;
+         var cr = APDBDef.CroResource;
+         var er = APDBDef.EvalResult;
+         var der = APDBDef.DeliveryRecord;
+
+         var isAdmin = user.UserTypePKID == ResUserHelper.Admin || user.UserTypePKID == ResUserHelper.ProvinceAdmin;
+         var isExpert = user.UserTypePKID == ResUserHelper.Export;
+
+         APSqlSelectCommand query = null;
+
+
+         query = APQuery.select(er.ResultId, er.ExpertId, er.GroupId, er.AccessDate, er.Score, er.Comment,
+                                      cr.CrosourceId, cr.Title, cr.Score.As("AverageScore"), u.UserName, u.UserId,
+                                      g.GroupName, g.GroupId, a.ActiveName, a.ActiveId, der.RecordId)
+                            .from(er,
+                                  cr.JoinInner(cr.CrosourceId == er.ResourceId),
+                                  u.JoinInner(u.UserId == er.ExpertId),
+                                  g.JoinInner(er.GroupId == g.GroupId),
+                                  a.JoinInner(a.ActiveId == cr.ActiveId),
+                                  der.JoinLeft(der.ResourceId == cr.CrosourceId)
+                                  );
+
+
+         if (activeId > 0)
+            query = query.where_and(cr.ActiveId == activeId);
+         if (groupid > 0)
+            query = query.where_and(er.GroupId == groupid);
+         if (user.ProvinceId > 0)
+            query.where_and(cr.ProvinceId == user.ProvinceId);
+         if (user.AreaId > 0)
+            query.where_and(cr.AreaId == user.AreaId);
+
+
+         //过滤条件
+         //模糊搜索
+
+         if (!string.IsNullOrEmpty(searchPhrase))
+         {
+            //query=query.
+         }
+
+         query.primary(er.ResultId)
+            .skip(rowCount * (current - 1))
+            .take(rowCount);
+
+
+         //获得查询的总数量
+
+         var total = db.ExecuteSizeOfSelect(query);
+
+         //查询结果集
+
+         var result = query.query(db, r =>
+         {
+            return new
+            {
+               id = er.ResultId.GetValue(r),
+               sourceId = cr.CrosourceId.GetValue(r),
+               title = cr.Title.GetValue(r),
+               date = er.AccessDate.GetValue(r),
+               expert = u.UserName.GetValue(r),
+               expertId = u.UserId.GetValue(r),
+               averageScore = cr.Score.GetValue(r, "AverageScore"),
+               score = er.Score.GetValue(r),
+               group = g.GroupName.GetValue(r),
+               groupId = g.GroupId.GetValue(r),
+               active = a.ActiveName.GetValue(r),
+               activeId = a.ActiveId.GetValue(r),
+               comment = er.Comment.GetValue(r),
+               isDelivery = der.RecordId.GetValue(r) > 0
             };
          }).ToList();
 

@@ -2,11 +2,8 @@
 @{
 	ViewBag.Title = "论文初审";
 
-	var indications = ViewBag.Indications as List<Indication>;
 	var resultId = Request["id"] == null ? 0 : Convert.ToInt32(Request["id"]);
 	var groupId = Request["groupId"] == null ? 0 : Convert.ToInt32(Request["groupId"]);
-
-	var comment = (string)ViewBag.Comment;
 }
 <style>
 	#pdf {
@@ -65,13 +62,13 @@
 						<div class="panel evalArea col-lg-5" style="height:800px;">
 							<div class="panel">
 								<div class="panel-body">
-									@if ((bool)ViewBag.isSlef && (bool)ViewBag.isFirstTrailDone)
+									@if ((bool)ViewBag.isSlef && Model.IsFirstTrailDone)
 									{
-										<a class="btn btn-block btn-info btn-eval" href="#">取消通过</a>
+										<a class="btn btn-block btn-danger btn-eval" data-url="@Url.Action("DeleteFirstTrial", "Eval")" href="#">初审不通过</a>
 									}
-									else if ((bool)ViewBag.isSlef && !(bool)ViewBag.isFirstTrailDone)
+									else if ((bool)ViewBag.isSlef && !Model.IsFirstTrailDone)
 									{
-										<a class="btn btn-block btn-info btn-eval" href="#">初审通过</a>
+										<a class="btn btn-block btn-info btn-eval" data-url="@Url.Action("ExecuteFirstTrial", "Eval")"  href="#">初审通过</a>
 									}
 								</div>
 							</div>
@@ -79,85 +76,7 @@
 
 						<!-- right side, main content -->
 
-						<div class="col-lg-9 info">
-							<div class="row">
-
-								<!-- widget -->
-								<div class="widget col-md-4">
-									<div class="widget-header">
-										<h3><i class="fa fa-paperclip"></i> 作品信息</h3>
-									</div>
-
-									<div class="widget-content">
-										<ul class="list-group">
-
-											<li class="list-group-item">作品名称：@Model.Title</li>
-
-											@if (!string.IsNullOrEmpty(Model.Province))
-											{
-												<li class="list-group-item">省份：@Model.Province</li>
-}
-											@if (!string.IsNullOrEmpty(Model.Province))
-											{
-												<li class="list-group-item">市区：@Model.Area</li>
-}
-
-											<li class="list-group-item">创建时间：@Model.CreatedTime.ToString("yyyy-MM-dd")</li>
-
-											<li class="list-group-item">
-												<div class="switchs">
-													@Html.CheckBox("State", Model.StatePKID == CroResourceHelper.StateAllow, new { @class = "switch", data_label_text = "审核合格", data_size = "small" })
-												</div>
-											</li>
-
-
-										</ul>
-									</div>
-								</div>
-								<!-- end widget -->
-								<!-- widget -->
-								<div class="widget col-md-4">
-									<div class="widget-header">
-										<h3><i class="fa fa-paperclip"></i> 当前论文信息</h3>
-									</div>
-
-									<div class="widget-content">
-										<ul class="list-group">
-											<li class="list-group-item">
-												<span>论文名称：@Model.Title</span>
-											</li>
-
-											@if (Model.AttachmentId != 0)
-											{
-												<li class="list-group-item">
-													<span>论文文件： <a href="@Model.AttachmentPath" target="_blank" data-id="@Model.AttachmentId" class="btn-info btn-sm btn-download">下 载</a></span>
-												</li>
-}
-
-										</ul>
-									</div>
-								</div>
-								<!-- end widget -->
-								<!-- widget -->
-								<div class="widget col-md-4">
-									<div class="widget-header">
-										<h3><i class="fa fa-paperclip"></i> 作者信息</h3>
-									</div>
-
-									<div class="widget-content">
-										<ul class="list-group">
-											<li class="list-group-item">作者：@Model.Author</li>
-											@if (@Model.AuthorCompany != "")
-											{
-												<li class="list-group-item">单位：@Model.AuthorCompany</li>
-}
-										</ul>
-									</div>
-								</div>
-								<!-- end widget -->
-
-							</div>
-						</div>
+						@Html.Partial("_details")
 
 						<!-- end right side, main content -->
 
@@ -215,7 +134,8 @@
 					Items: []
 				};
 
-				$.post('@Url.Action("ExecuteFirstTrial", "Eval")', { model: o }, function (data, status) {
+				var url = $(this).data('url');
+				$.post(url, { model: o }, function (data, status) {
 					if (data.error == "none") {
 						location.href = "/Eval/Search";
 						alertify.success(data.msg);
@@ -225,17 +145,6 @@
 					}
 				});
 			});
-
-			@*$('.btn-download').on('click',function(){
-				var $this=$(this);
-				var fileId=$(this).data('id');
-				if(fileId>0){
-					$.post('/Crosource/Download',{id:'@Model.CrosourceId',  courseId:'@course.CourseId', fileId:fileId},function(response){});
-				}
-				else{
-					alert('暂无文件可下载');
-				}
-			});*@
 
 		});
 	</script>

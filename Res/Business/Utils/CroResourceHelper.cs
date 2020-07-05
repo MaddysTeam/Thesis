@@ -29,9 +29,14 @@ namespace Res.Business
       static CroResourceHelper()
       {
          ResourceType = new PickListAPRptColumn(APDBDef.CroResource.ResourceTypePKID, ThisApp.PLKey_ResourceType);
-         State = new PickListAPRptColumn(APDBDef.CroResource.StatePKID, ThisApp.PLKey_ResourceState);     
+         State = new PickListAPRptColumn(APDBDef.CroResource.StatePKID, ThisApp.PLKey_ResourceState);   
          WinLevel = new PickListAPRptColumn(APDBDef.CroResource.WinLevelPKID, ThisApp.PLKey_WinLevel);
          Theme = new PickListAPRptColumn(APDBDef.CroResource.WinLevelPKID, ThisApp.PLKey_ThemeType);
+
+         DictDeliveryStatus = new Dictionary<long, string> {
+            {1,"未报送" }, {2,"已报送" }
+         };
+
 
          DictWinLevel = new Dictionary<long, string> {
             { WinLevelSpecial, WinLevel.GetName(WinLevelSpecial)},
@@ -84,12 +89,20 @@ namespace Res.Business
       public static long WinLevel2 = 206;
       public static long WinLevel3 = 207;
 
+      //报送类型
+      public static long CityLevelDelivery = 10457;
+      public static long ProviceLevelDelivery = 10456;
+      public static long IsDelivery = 2;
+      public static long NotDelivery = 1;
 
       // 奖项级别字典
       public static Dictionary<long, string> DictWinLevel;
 
       // 状态字典
       public static Dictionary<long, string> DictApprove;
+
+      //报送状态
+      public static Dictionary<long, string> DictDeliveryStatus;
    }
 
 }

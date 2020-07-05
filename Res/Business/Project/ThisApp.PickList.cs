@@ -44,6 +44,11 @@
 		/// </summary>
 		public static readonly string PLKey_ThemeType = "PLKey_ThemeType";
 
+      /// <summary>
+      /// 论文- 报送状态
+      /// </summary>
+      public static readonly string PLKey_DeliveryStatus = "PLKey_DeliveryStatus";
+
    }
 
 }

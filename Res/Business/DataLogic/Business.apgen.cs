@@ -46,6 +46,8 @@ namespace Res.Business {
         
         private static CroResourceMedalTableDef _croResourceMedal;
         
+        private static DeliveryRecordTableDef _deliveryRecord;
+        
         private static FilesTableDef _files;
         
         private static IndicationTableDef _indication;
@@ -89,6 +91,8 @@ namespace Res.Business {
         private APDalDef.CroResourceDal _croResourceDal;
         
         private APDalDef.CroResourceMedalDal _croResourceMedalDal;
+        
+        private APDalDef.DeliveryRecordDal _deliveryRecordDal;
         
         private APDalDef.FilesDal _filesDal;
         
@@ -255,6 +259,18 @@ namespace Res.Business {
                     _croResourceMedal = new CroResourceMedalTableDef("CroResourceMedal");
                 }
                 return _croResourceMedal;
+            }
+        }
+        
+        /// <summary>
+        /// 论文报送 TableDef
+        /// </summary>
+        public static DeliveryRecordTableDef DeliveryRecord {
+            get {
+                if ((_deliveryRecord == null)) {
+                    _deliveryRecord = new DeliveryRecordTableDef("DeliveryRecord");
+                }
+                return _deliveryRecord;
             }
         }
         
@@ -511,6 +527,18 @@ namespace Res.Business {
         }
         
         /// <summary>
+        /// 论文报送 Dal
+        /// </summary>
+        public virtual APDalDef.DeliveryRecordDal DeliveryRecordDal {
+            get {
+                if ((_deliveryRecordDal == null)) {
+                    _deliveryRecordDal = new APDalDef.DeliveryRecordDal(this);
+                }
+                return _deliveryRecordDal;
+            }
+        }
+        
+        /// <summary>
         ///  Dal
         /// </summary>
         public virtual APDalDef.FilesDal FilesDal {
@@ -633,6 +661,7 @@ namespace Res.Business {
                 db.CroBulletinDal.InitData(db);
                 db.CroResourceDal.InitData(db);
                 db.CroResourceMedalDal.InitData(db);
+                db.DeliveryRecordDal.InitData(db);
                 db.FilesDal.InitData(db);
                 db.IndicationDal.InitData(db);
                 db.EvalGroupDal.InitData(db);
@@ -2855,6 +2884,8 @@ namespace Res.Business {
             
             private Int64APColumnDef _themeId;
             
+            private Int64APColumnDef _deliveryStatus;
+            
             private StringAPColumnDef _author;
             
             private StringAPColumnDef _authorCompany;
@@ -2986,6 +3017,19 @@ namespace Res.Business {
                         _themeId.Display = "所属主题";
                     }
                     return _themeId;
+                }
+            }
+            
+            /// <summary>
+            /// DeliveryStatus ColumnDef
+            /// </summary>
+            public virtual Int64APColumnDef DeliveryStatus {
+                get {
+                    if (Object.ReferenceEquals(_deliveryStatus, null)) {
+                        _deliveryStatus = new Int64APColumnDef(this, "DeliveryStatus", false);
+                        _deliveryStatus.Display = "推送状态";
+                    }
+                    return _deliveryStatus;
                 }
             }
             
@@ -3239,6 +3283,7 @@ namespace Res.Business {
                 data.AreaId = AreaId.GetValue<long>(reader, throwIfValidColumnName);
                 data.ActiveId = ActiveId.GetValue<long>(reader, throwIfValidColumnName);
                 data.ThemeId = ThemeId.GetValue<long>(reader, throwIfValidColumnName);
+                data.DeliveryStatus = DeliveryStatus.GetValue<long>(reader, throwIfValidColumnName);
                 data.Author = Author.GetValue<string>(reader, throwIfValidColumnName);
                 data.AuthorCompany = AuthorCompany.GetValue<string>(reader, throwIfValidColumnName);
                 data.AuthorAddress = AuthorAddress.GetValue<string>(reader, throwIfValidColumnName);
@@ -3461,6 +3506,171 @@ namespace Res.Business {
             /// </summary>
             public virtual List<CroResourceMedal> TolerantMapList(IDataReader reader) {
                 List<CroResourceMedal> list = new List<CroResourceMedal>();
+                try {
+                    for (; reader.Read(); ) {
+                        list.Add(TolerantMap(reader));
+                    }
+                }
+                finally {
+                    reader.Close();
+                }
+                return list;
+            }
+        }
+        
+        [Serializable()]
+        public partial class DeliveryRecordTableDef : APTableDef {
+            
+            private Int64APColumnDef _recordId;
+            
+            private Int64APColumnDef _resourceId;
+            
+            private Int64APColumnDef _deliveryTypePKID;
+            
+            private Int64APColumnDef _recorder;
+            
+            private DateTimeAPColumnDef _addTime;
+            
+            public DeliveryRecordTableDef(string tableName) : 
+                    base(tableName) {
+            }
+            
+            protected DeliveryRecordTableDef(string tableName, string alias) : 
+                    base(tableName, alias) {
+            }
+            
+            /// <summary>
+            /// RecordId ColumnDef
+            /// </summary>
+            public virtual Int64APColumnDef RecordId {
+                get {
+                    if (Object.ReferenceEquals(_recordId, null)) {
+                        _recordId = new Int64APColumnDef(this, "RecordId", false);
+                        _recordId.Display = "报送ID";
+                    }
+                    return _recordId;
+                }
+            }
+            
+            /// <summary>
+            /// ResourceId ColumnDef
+            /// </summary>
+            public virtual Int64APColumnDef ResourceId {
+                get {
+                    if (Object.ReferenceEquals(_resourceId, null)) {
+                        _resourceId = new Int64APColumnDef(this, "ResourceId", false);
+                        _resourceId.Display = "微课程作品";
+                        _resourceId.Required = true;
+                    }
+                    return _resourceId;
+                }
+            }
+            
+            /// <summary>
+            /// DeliveryTypePKID ColumnDef
+            /// </summary>
+            public virtual Int64APColumnDef DeliveryTypePKID {
+                get {
+                    if (Object.ReferenceEquals(_deliveryTypePKID, null)) {
+                        _deliveryTypePKID = new Int64APColumnDef(this, "DeliveryTypePKID", false);
+                        _deliveryTypePKID.Display = "报送类型";
+                    }
+                    return _deliveryTypePKID;
+                }
+            }
+            
+            /// <summary>
+            /// Recorder ColumnDef
+            /// </summary>
+            public virtual Int64APColumnDef Recorder {
+                get {
+                    if (Object.ReferenceEquals(_recorder, null)) {
+                        _recorder = new Int64APColumnDef(this, "Recorder", false);
+                        _recorder.Display = "报送者ID";
+                    }
+                    return _recorder;
+                }
+            }
+            
+            /// <summary>
+            /// AddTime ColumnDef
+            /// </summary>
+            public virtual DateTimeAPColumnDef AddTime {
+                get {
+                    if (Object.ReferenceEquals(_addTime, null)) {
+                        _addTime = new DateTimeAPColumnDef(this, "AddTime", false);
+                        _addTime.Display = "报送时间";
+                    }
+                    return _addTime;
+                }
+            }
+            
+            /// <summary>
+            /// Default Index
+            /// </summary>
+            public virtual APSqlOrderPhrase DefaultOrder {
+                get {
+                    return null;
+                }
+            }
+            
+            /// <summary>
+            /// Create a alias table
+            /// </summary>
+            public virtual DeliveryRecordTableDef As(string name) {
+                return new DeliveryRecordTableDef("DeliveryRecord", name);
+            }
+            
+            /// <summary>
+            /// Fill the data.
+            /// </summary>
+            public virtual void Fullup(IDataReader reader, DeliveryRecord data, bool throwIfValidColumnName) {
+                data.RecordId = RecordId.GetValue<long>(reader, throwIfValidColumnName);
+                data.ResourceId = ResourceId.GetValue<long>(reader, throwIfValidColumnName);
+                data.DeliveryTypePKID = DeliveryTypePKID.GetValue<long>(reader, throwIfValidColumnName, 0);
+                data.Recorder = Recorder.GetValue<long>(reader, throwIfValidColumnName);
+                data.AddTime = AddTime.GetValue<System.DateTime>(reader, throwIfValidColumnName);
+            }
+            
+            /// <summary>
+            /// Fill the data.
+            /// </summary>
+            public virtual DeliveryRecord Map(IDataReader reader) {
+                DeliveryRecord data = new DeliveryRecord();
+                Fullup(reader, data, true);
+                return data;
+            }
+            
+            /// <summary>
+            /// Fill the data.
+            /// </summary>
+            public virtual DeliveryRecord TolerantMap(IDataReader reader) {
+                DeliveryRecord data = new DeliveryRecord();
+                Fullup(reader, data, false);
+                return data;
+            }
+            
+            /// <summary>
+            /// Fill the data.
+            /// </summary>
+            public virtual List<DeliveryRecord> MapList(IDataReader reader) {
+                List<DeliveryRecord> list = new List<DeliveryRecord>();
+                try {
+                    for (; reader.Read(); ) {
+                        list.Add(Map(reader));
+                    }
+                }
+                finally {
+                    reader.Close();
+                }
+                return list;
+            }
+            
+            /// <summary>
+            /// Fill the data.
+            /// </summary>
+            public virtual List<DeliveryRecord> TolerantMapList(IDataReader reader) {
+                List<DeliveryRecord> list = new List<DeliveryRecord>();
                 try {
                     for (; reader.Read(); ) {
                         list.Add(TolerantMap(reader));
@@ -6290,7 +6500,7 @@ namespace Res.Business {
                 if ((data.CrosourceId == 0)) {
                     data.CrosourceId = ((long)(GetNewId(APDBDef.CroResource.CrosourceId)));
                 }
-                var query = APQuery.insert(APDBDef.CroResource).values(APDBDef.CroResource.CrosourceId.SetValue(data.CrosourceId), APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.ThemeId.SetValue(data.ThemeId), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId));
+                var query = APQuery.insert(APDBDef.CroResource).values(APDBDef.CroResource.CrosourceId.SetValue(data.CrosourceId), APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.ThemeId.SetValue(data.ThemeId), APDBDef.CroResource.DeliveryStatus.SetValue(data.DeliveryStatus), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId));
                 ExecuteNonQuery(query);
             }
             
@@ -6298,7 +6508,7 @@ namespace Res.Business {
             /// Update Data.
             /// </summary>
             public virtual void Update(CroResource data) {
-                var query = APQuery.update(APDBDef.CroResource).values(APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.ThemeId.SetValue(data.ThemeId), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId)).where((APDBDef.CroResource.CrosourceId == data.CrosourceId));
+                var query = APQuery.update(APDBDef.CroResource).values(APDBDef.CroResource.Title.SetValue(data.Title), APDBDef.CroResource.Description.SetValue(data.Description), APDBDef.CroResource.ProvinceId.SetValue(data.ProvinceId), APDBDef.CroResource.AreaId.SetValue(data.AreaId), APDBDef.CroResource.ActiveId.SetValue(data.ActiveId), APDBDef.CroResource.ThemeId.SetValue(data.ThemeId), APDBDef.CroResource.DeliveryStatus.SetValue(data.DeliveryStatus), APDBDef.CroResource.Author.SetValue(data.Author), APDBDef.CroResource.AuthorCompany.SetValue(data.AuthorCompany), APDBDef.CroResource.AuthorAddress.SetValue(data.AuthorAddress), APDBDef.CroResource.AuthorEmail.SetValue(data.AuthorEmail), APDBDef.CroResource.AuthorPhone.SetValue(data.AuthorPhone), APDBDef.CroResource.ResourceTypePKID.SetValue(data.ResourceTypePKID), APDBDef.CroResource.StatePKID.SetValue(data.StatePKID), APDBDef.CroResource.WinLevelPKID.SetValue(data.WinLevelPKID), APDBDef.CroResource.Auditor.SetValue(data.Auditor), APDBDef.CroResource.AuditedTime.SetValue(data.AuditedTime), APDBDef.CroResource.AuditOpinion.SetValue(data.AuditOpinion), APDBDef.CroResource.Creator.SetValue(data.Creator), APDBDef.CroResource.CreatedTime.SetValue(data.CreatedTime), APDBDef.CroResource.LastModifier.SetValue(data.LastModifier), APDBDef.CroResource.LastModifiedTime.SetValue(data.LastModifiedTime), APDBDef.CroResource.Score.SetValue(data.Score), APDBDef.CroResource.AttachmentId.SetValue(data.AttachmentId)).where((APDBDef.CroResource.CrosourceId == data.CrosourceId));
                 ExecuteNonQuery(query);
             }
             
@@ -6539,6 +6749,142 @@ namespace Res.Business {
             }
             
             public CroResourceMedalDal(APDatabase db) : 
+                    base(db) {
+            }
+        }
+        
+        /// <summary>
+        /// 论文报送 DalBase
+        /// </summary>
+        public partial class DeliveryRecordDalBase : APDal {
+            
+            public DeliveryRecordDalBase() {
+            }
+            
+            public DeliveryRecordDalBase(APDatabase db) : 
+                    base(db) {
+            }
+            
+            /// <summary>
+            /// Insert Data.
+            /// </summary>
+            public virtual void Insert(DeliveryRecord data) {
+                if ((data.RecordId == 0)) {
+                    data.RecordId = ((long)(GetNewId(APDBDef.DeliveryRecord.RecordId)));
+                }
+                var query = APQuery.insert(APDBDef.DeliveryRecord).values(APDBDef.DeliveryRecord.RecordId.SetValue(data.RecordId), APDBDef.DeliveryRecord.ResourceId.SetValue(data.ResourceId), APDBDef.DeliveryRecord.DeliveryTypePKID.SetValue(data.DeliveryTypePKID), APDBDef.DeliveryRecord.Recorder.SetValue(data.Recorder), APDBDef.DeliveryRecord.AddTime.SetValue(data.AddTime));
+                ExecuteNonQuery(query);
+            }
+            
+            /// <summary>
+            /// Update Data.
+            /// </summary>
+            public virtual void Update(DeliveryRecord data) {
+                var query = APQuery.update(APDBDef.DeliveryRecord).values(APDBDef.DeliveryRecord.ResourceId.SetValue(data.ResourceId), APDBDef.DeliveryRecord.DeliveryTypePKID.SetValue(data.DeliveryTypePKID), APDBDef.DeliveryRecord.Recorder.SetValue(data.Recorder), APDBDef.DeliveryRecord.AddTime.SetValue(data.AddTime)).where((APDBDef.DeliveryRecord.RecordId == data.RecordId));
+                ExecuteNonQuery(query);
+            }
+            
+            /// <summary>
+            /// Update Data.
+            /// </summary>
+            public virtual void UpdatePartial(long recordId, Object metadata) {
+                var query = APQuery.update(APDBDef.DeliveryRecord).values(APSqlSetPhraseSelector.Select(APDBDef.DeliveryRecord, metadata)).where((APDBDef.DeliveryRecord.RecordId == recordId));
+                ExecuteNonQuery(query);
+            }
+            
+            /// <summary>
+            /// Delete data by primary key.
+            /// </summary>
+            public virtual void PrimaryDelete(long recordId) {
+                var query = APQuery.delete(APDBDef.DeliveryRecord).where((APDBDef.DeliveryRecord.RecordId == recordId));
+                ExecuteNonQuery(query);
+            }
+            
+            /// <summary>
+            /// Delete data by condition.
+            /// </summary>
+            public virtual void ConditionDelete(APSqlWherePhrase condition) {
+                var query = APQuery.delete(APDBDef.DeliveryRecord).where(condition);
+                ExecuteNonQuery(query);
+            }
+            
+            /// <summary>
+            /// Query count by condition.
+            /// </summary>
+            public virtual int ConditionQueryCount(APSqlWherePhrase condition) {
+                var query = APQuery.select(APDBDef.DeliveryRecord.Asterisk.Count()).from(APDBDef.DeliveryRecord).where(condition);
+                return ExecuteCount(query);
+            }
+            
+            /// <summary>
+            /// Get data by PK.
+            /// </summary>
+            public virtual DeliveryRecord PrimaryGet(long recordId) {
+                var query = APQuery.select(APDBDef.DeliveryRecord.Asterisk).from(APDBDef.DeliveryRecord).where((APDBDef.DeliveryRecord.RecordId == recordId));
+                IDataReader reader = ExecuteReader(query);
+                try {
+                    if (reader.Read()) {
+                        return APDBDef.DeliveryRecord.Map(reader);
+                    }
+                    return null;
+                }
+                finally {
+                    reader.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Query by condition.
+            /// </summary>
+            public virtual List<DeliveryRecord> ConditionQuery(APSqlWherePhrase condition, APSqlOrderPhrase orderBy, System.Nullable<int> take, System.Nullable<int> skip) {
+                var query = APQuery.select(APDBDef.DeliveryRecord.Asterisk).from(APDBDef.DeliveryRecord);
+                if ((condition != null)) {
+                    query.where(condition);
+                }
+                if ((orderBy != null)) {
+                    query.order_by(orderBy);
+                }
+                if ((take != null)) {
+                    query.take(take);
+                }
+                if ((skip != null)) {
+                    query.skip(skip);
+                }
+                query.primary(APDBDef.DeliveryRecord.RecordId);
+                IDataReader reader = ExecuteReader(query);
+                return APDBDef.DeliveryRecord.MapList(reader);
+            }
+            
+            /// <summary>
+            /// Get the initial data of the table.
+            /// </summary>
+            public virtual List<DeliveryRecord> GetInitData() {
+                return new List<DeliveryRecord>();
+            }
+            
+            /// <summary>
+            /// Initialize data.
+            /// </summary>
+            public virtual void InitData(APDBDef db) {
+                List<DeliveryRecord> list = GetInitData();
+                for (int i = 0; (i < list.Count); i = (i + 1)) {
+                    DeliveryRecord data = list[i];
+                    if ((PrimaryGet(data.RecordId) == null)) {
+                        Insert(data);
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 论文报送 Dal
+        /// </summary>
+        public partial class DeliveryRecordDal : DeliveryRecordDalBase {
+            
+            public DeliveryRecordDal() {
+            }
+            
+            public DeliveryRecordDal(APDatabase db) : 
                     base(db) {
             }
         }
@@ -9423,6 +9769,155 @@ namespace Res.Business {
         /// 作品奖章 Dal
         /// </summary>
         public partial class CroResourceMedalBpl : CroResourceMedalBplBase {
+        }
+        
+        /// <summary>
+        /// 论文报送 BplBase
+        /// </summary>
+        public partial class DeliveryRecordBplBase {
+            
+            /// <summary>
+            /// Insert Data.
+            /// </summary>
+            public static void Insert(DeliveryRecord data) {
+                APDBDef db = new APDBDef();
+                try {
+                    db.DeliveryRecordDal.Insert(data);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Update Data.
+            /// </summary>
+            public static void Update(DeliveryRecord data) {
+                APDBDef db = new APDBDef();
+                try {
+                    db.DeliveryRecordDal.Update(data);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Update Data.
+            /// </summary>
+            public static void UpdatePartial(long recordId, Object metadata) {
+                APDBDef db = new APDBDef();
+                try {
+                    db.DeliveryRecordDal.UpdatePartial(recordId, metadata);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Delete data by primary key.
+            /// </summary>
+            public static void PrimaryDelete(long recordId) {
+                APDBDef db = new APDBDef();
+                try {
+                    db.DeliveryRecordDal.PrimaryDelete(recordId);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Delete data by condition.
+            /// </summary>
+            public static void ConditionDelete(APSqlWherePhrase condition) {
+                APDBDef db = new APDBDef();
+                try {
+                    db.DeliveryRecordDal.ConditionDelete(condition);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Query count by condition.
+            /// </summary>
+            public static int ConditionQueryCount(APSqlWherePhrase condition) {
+                APDBDef db = new APDBDef();
+                try {
+                    return db.DeliveryRecordDal.ConditionQueryCount(condition);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Get data by PK.
+            /// </summary>
+            public static DeliveryRecord PrimaryGet(long recordId) {
+                APDBDef db = new APDBDef();
+                try {
+                    return db.DeliveryRecordDal.PrimaryGet(recordId);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Query by condition.
+            /// </summary>
+            public static List<DeliveryRecord> ConditionQuery(APSqlWherePhrase condition, APSqlOrderPhrase orderBy, System.Nullable<int> take, System.Nullable<int> skip) {
+                APDBDef db = new APDBDef();
+                try {
+                    return db.DeliveryRecordDal.ConditionQuery(condition, orderBy, take, skip);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Query by condition.
+            /// </summary>
+            public static List<DeliveryRecord> ConditionQuery(APSqlWherePhrase condition, APSqlOrderPhrase orderBy, System.Nullable<int> take) {
+                APDBDef db = new APDBDef();
+                try {
+                    return db.DeliveryRecordDal.ConditionQuery(condition, orderBy, take, null);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Query by condition.
+            /// </summary>
+            public static List<DeliveryRecord> ConditionQuery(APSqlWherePhrase condition, APSqlOrderPhrase orderBy) {
+                APDBDef db = new APDBDef();
+                try {
+                    return db.DeliveryRecordDal.ConditionQuery(condition, orderBy, null, null);
+                }
+                finally {
+                    db.Close();
+                }
+            }
+            
+            /// <summary>
+            /// Get all data.
+            /// </summary>
+            public static List<DeliveryRecord> GetAll() {
+                return ConditionQuery(null, null);
+            }
+        }
+        
+        /// <summary>
+        /// 论文报送 Dal
+        /// </summary>
+        public partial class DeliveryRecordBpl : DeliveryRecordBplBase {
         }
         
         /// <summary>
@@ -14864,6 +15359,11 @@ namespace Res.Business {
         private long _themeId;
         
         /// <summary>
+        /// DeliveryStatus
+        /// </summary>
+        private long _deliveryStatus;
+        
+        /// <summary>
         /// Author
         /// </summary>
         private string _author = string.Empty;
@@ -14965,6 +15465,7 @@ namespace Res.Business {
                     long areaId, 
                     long activeId, 
                     long themeId, 
+                    long deliveryStatus, 
                     string author, 
                     string authorCompany, 
                     string authorAddress, 
@@ -14989,6 +15490,7 @@ namespace Res.Business {
             _areaId = areaId;
             _activeId = activeId;
             _themeId = themeId;
+            _deliveryStatus = deliveryStatus;
             _author = author;
             _authorCompany = authorCompany;
             _authorAddress = authorAddress;
@@ -15162,6 +15664,28 @@ namespace Res.Business {
         public static Int64APColumnDef ThemeIdDef {
             get {
                 return APDBDef.CroResource.ThemeId;
+            }
+        }
+        
+        /// <summary>
+        /// DeliveryStatus
+        /// </summary>
+        [Display(Name="推送状态")]
+        public virtual long DeliveryStatus {
+            get {
+                return _deliveryStatus;
+            }
+            set {
+                _deliveryStatus = value;
+            }
+        }
+        
+        /// <summary>
+        /// DeliveryStatus APColumnDef
+        /// </summary>
+        public static Int64APColumnDef DeliveryStatusDef {
+            get {
+                return APDBDef.CroResource.DeliveryStatus;
             }
         }
         
@@ -15572,6 +16096,7 @@ namespace Res.Business {
             AreaId = data.AreaId;
             ActiveId = data.ActiveId;
             ThemeId = data.ThemeId;
+            DeliveryStatus = data.DeliveryStatus;
             Author = data.Author;
             AuthorCompany = data.AuthorCompany;
             AuthorAddress = data.AuthorAddress;
@@ -15614,6 +16139,9 @@ namespace Res.Business {
                 return false;
             }
             if ((ThemeId != data.ThemeId)) {
+                return false;
+            }
+            if ((DeliveryStatus != data.DeliveryStatus)) {
                 return false;
             }
             if ((Author != data.Author)) {
@@ -15771,6 +16299,7 @@ namespace Res.Business {
                     long areaId, 
                     long activeId, 
                     long themeId, 
+                    long deliveryStatus, 
                     string author, 
                     string authorCompany, 
                     string authorAddress, 
@@ -15788,7 +16317,7 @@ namespace Res.Business {
                     System.DateTime lastModifiedTime, 
                     double score, 
                     long attachmentId) : 
-                base(crosourceId, title, description, provinceId, areaId, activeId, themeId, author, authorCompany, authorAddress, authorEmail, authorPhone, resourceTypePKID, statePKID, winLevelPKID, auditor, auditedTime, auditOpinion, creator, createdTime, lastModifier, lastModifiedTime, score, attachmentId) {
+                base(crosourceId, title, description, provinceId, areaId, activeId, themeId, deliveryStatus, author, authorCompany, authorAddress, authorEmail, authorPhone, resourceTypePKID, statePKID, winLevelPKID, auditor, auditedTime, auditOpinion, creator, createdTime, lastModifier, lastModifiedTime, score, attachmentId) {
         }
     }
     
@@ -16091,6 +16620,314 @@ namespace Res.Business {
         /// </summary>
         public CroResourceMedal(long resourceMedalId, long crosourceId, long fileId, long activeId, System.DateTime createDate) : 
                 base(resourceMedalId, crosourceId, fileId, activeId, createDate) {
+        }
+    }
+    
+    /// <summary>
+    /// 论文报送 Base
+    /// </summary>
+    [Serializable()]
+    public abstract partial class DeliveryRecordBase {
+        
+        /// <summary>
+        /// RecordId
+        /// </summary>
+        private long _recordId;
+        
+        /// <summary>
+        /// ResourceId
+        /// </summary>
+        private long _resourceId;
+        
+        /// <summary>
+        /// PickList - APEdu.net key is PLKey_DeliveryType
+        /// </summary>
+        private long _deliveryTypePKID = 0;
+        
+        /// <summary>
+        /// Recorder
+        /// </summary>
+        private long _recorder;
+        
+        /// <summary>
+        /// AddTime
+        /// </summary>
+        private System.DateTime _addTime;
+        
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public DeliveryRecordBase() {
+        }
+        
+        /// <summary>
+        /// Constructor with all field values.
+        /// </summary>
+        public DeliveryRecordBase(long recordId, long resourceId, long deliveryTypePKID, long recorder, System.DateTime addTime) {
+            _recordId = recordId;
+            _resourceId = resourceId;
+            _deliveryTypePKID = deliveryTypePKID;
+            _recorder = recorder;
+            _addTime = addTime;
+        }
+        
+        /// <summary>
+        /// RecordId
+        /// </summary>
+        [Display(Name="报送ID")]
+        public virtual long RecordId {
+            get {
+                return _recordId;
+            }
+            set {
+                _recordId = value;
+            }
+        }
+        
+        /// <summary>
+        /// RecordId APColumnDef
+        /// </summary>
+        public static Int64APColumnDef RecordIdDef {
+            get {
+                return APDBDef.DeliveryRecord.RecordId;
+            }
+        }
+        
+        /// <summary>
+        /// ResourceId
+        /// </summary>
+        [Display(Name="微课程作品")]
+        [Required()]
+        public virtual long ResourceId {
+            get {
+                return _resourceId;
+            }
+            set {
+                _resourceId = value;
+            }
+        }
+        
+        /// <summary>
+        /// ResourceId APColumnDef
+        /// </summary>
+        public static Int64APColumnDef ResourceIdDef {
+            get {
+                return APDBDef.DeliveryRecord.ResourceId;
+            }
+        }
+        
+        /// <summary>
+        /// PickList - APEdu.net key is PLKey_DeliveryType
+        /// </summary>
+        [Display(Name="报送类型")]
+        public virtual long DeliveryTypePKID {
+            get {
+                return _deliveryTypePKID;
+            }
+            set {
+                _deliveryTypePKID = value;
+            }
+        }
+        
+        /// <summary>
+        /// PickList - APEdu.net key is PLKey_DeliveryType APColumnDef
+        /// </summary>
+        public static Int64APColumnDef DeliveryTypePKIDDef {
+            get {
+                return APDBDef.DeliveryRecord.DeliveryTypePKID;
+            }
+        }
+        
+        /// <summary>
+        /// Recorder
+        /// </summary>
+        [Display(Name="报送者ID")]
+        public virtual long Recorder {
+            get {
+                return _recorder;
+            }
+            set {
+                _recorder = value;
+            }
+        }
+        
+        /// <summary>
+        /// Recorder APColumnDef
+        /// </summary>
+        public static Int64APColumnDef RecorderDef {
+            get {
+                return APDBDef.DeliveryRecord.Recorder;
+            }
+        }
+        
+        /// <summary>
+        /// AddTime
+        /// </summary>
+        [Display(Name="报送时间")]
+        public virtual System.DateTime AddTime {
+            get {
+                return _addTime;
+            }
+            set {
+                _addTime = value;
+            }
+        }
+        
+        /// <summary>
+        /// AddTime APColumnDef
+        /// </summary>
+        public static DateTimeAPColumnDef AddTimeDef {
+            get {
+                return APDBDef.DeliveryRecord.AddTime;
+            }
+        }
+        
+        /// <summary>
+        /// DeliveryRecordTableDef APTableDef
+        /// </summary>
+        public static APDBDef.DeliveryRecordTableDef TableDef {
+            get {
+                return APDBDef.DeliveryRecord;
+            }
+        }
+        
+        /// <summary>
+        /// DeliveryRecordTableDef APSqlAsteriskExpr
+        /// </summary>
+        public static APSqlAsteriskExpr Asterisk {
+            get {
+                return APDBDef.DeliveryRecord.Asterisk;
+            }
+        }
+        
+        /// <summary>
+        /// Assignment.
+        /// </summary>
+        public virtual void Assignment(DeliveryRecord data) {
+            RecordId = data.RecordId;
+            ResourceId = data.ResourceId;
+            DeliveryTypePKID = data.DeliveryTypePKID;
+            Recorder = data.Recorder;
+            AddTime = data.AddTime;
+        }
+        
+        /// <summary>
+        /// Compare equals.
+        /// </summary>
+        public virtual bool CompareEquals(DeliveryRecord data) {
+            if ((RecordId != data.RecordId)) {
+                return false;
+            }
+            if ((ResourceId != data.ResourceId)) {
+                return false;
+            }
+            if ((DeliveryTypePKID != data.DeliveryTypePKID)) {
+                return false;
+            }
+            if ((Recorder != data.Recorder)) {
+                return false;
+            }
+            if ((AddTime != data.AddTime)) {
+                return false;
+            }
+            return true;
+        }
+        
+        /// <summary>
+        /// Insert Data.
+        /// </summary>
+        public virtual void Insert() {
+            APBplDef.DeliveryRecordBpl.Insert(((DeliveryRecord)(this)));
+        }
+        
+        /// <summary>
+        /// Update Data.
+        /// </summary>
+        public virtual void Update() {
+            APBplDef.DeliveryRecordBpl.Update(((DeliveryRecord)(this)));
+        }
+        
+        /// <summary>
+        /// Update Data.
+        /// </summary>
+        public static void UpdatePartial(long recordId, Object metadata) {
+            APBplDef.DeliveryRecordBpl.UpdatePartial(recordId, metadata);
+        }
+        
+        /// <summary>
+        /// Delete data by primary key.
+        /// </summary>
+        public static void PrimaryDelete(long recordId) {
+            APBplDef.DeliveryRecordBpl.PrimaryDelete(recordId);
+        }
+        
+        /// <summary>
+        /// Delete data by condition.
+        /// </summary>
+        public static void ConditionDelete(APSqlWherePhrase condition) {
+            APBplDef.DeliveryRecordBpl.ConditionDelete(condition);
+        }
+        
+        /// <summary>
+        /// Query count by condition.
+        /// </summary>
+        public static int ConditionQueryCount(APSqlWherePhrase condition) {
+            return APBplDef.DeliveryRecordBpl.ConditionQueryCount(condition);
+        }
+        
+        /// <summary>
+        /// Get data by PK.
+        /// </summary>
+        public static DeliveryRecord PrimaryGet(long recordId) {
+            return APBplDef.DeliveryRecordBpl.PrimaryGet(recordId);
+        }
+        
+        /// <summary>
+        /// Query by condition.
+        /// </summary>
+        public static List<DeliveryRecord> ConditionQuery(APSqlWherePhrase condition, APSqlOrderPhrase orderBy, int take, int skip) {
+            return APBplDef.DeliveryRecordBpl.ConditionQuery(condition, orderBy, take, skip);
+        }
+        
+        /// <summary>
+        /// Query by condition.
+        /// </summary>
+        public static List<DeliveryRecord> ConditionQuery(APSqlWherePhrase condition, APSqlOrderPhrase orderBy, int take) {
+            return APBplDef.DeliveryRecordBpl.ConditionQuery(condition, orderBy, take);
+        }
+        
+        /// <summary>
+        /// Query by condition.
+        /// </summary>
+        public static List<DeliveryRecord> ConditionQuery(APSqlWherePhrase condition, APSqlOrderPhrase orderBy) {
+            return APBplDef.DeliveryRecordBpl.ConditionQuery(condition, orderBy);
+        }
+        
+        /// <summary>
+        /// Get all data.
+        /// </summary>
+        public static List<DeliveryRecord> GetAll() {
+            return APBplDef.DeliveryRecordBpl.GetAll();
+        }
+    }
+    
+    /// <summary>
+    /// 论文报送
+    /// </summary>
+    [Serializable()]
+    public partial class DeliveryRecord : DeliveryRecordBase {
+        
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public DeliveryRecord() {
+        }
+        
+        /// <summary>
+        /// Constructor with all field values.
+        /// </summary>
+        public DeliveryRecord(long recordId, long resourceId, long deliveryTypePKID, long recorder, System.DateTime addTime) : 
+                base(recordId, resourceId, deliveryTypePKID, recorder, addTime) {
         }
     }
     

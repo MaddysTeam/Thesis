@@ -1,5 +1,7 @@
 ﻿@{
 	ViewBag.Title = "评审论文作品";
+
+	var isFirstTrail = Convert.ToBoolean(ViewBag.isFirstTrail);
 }
 <div class="col-md-10 content-wrapper">
 	<div class="row">
@@ -46,7 +48,10 @@
 									<th data-column-id="groupName">所属评审组</th>
 									<th data-column-id="company">学校</th>
 									<th data-column-id="author">作者</th>
+									@if (!isFirstTrail)
+									{
 									<th data-column-id="score">得分</th>
+									}
 									<th data-column-id="commands" data-formatter="commands" data-sortable="false" data-header-Css-Class="width400">操作</th>
 								</tr>
 							</thead>
@@ -87,15 +92,18 @@
 			formatters: {
 				'commands': function (column, row) {
 					var id = row.id;
-					var url = row.isFirstTrail == 'True' ? '@Url.Action("Details", "Eval")' : '@Url.Action("FirstTrailDetails", "Eval")';
+					console.log(row.isFirstTrail);
+					var isFirstTrail = row.isFirstTrail;
+					var url = isFirstTrail ? '@Url.Action("FirstTrailDetails", "Eval")' : '@Url.Action("Details", "Eval")';
+					var linkTitle = isFirstTrail ? '初审' : '评审';
 					if (row.isEval) {
 						return '<div class="btn-group btn-group-xs pull-right" data-row-id="' + row.id + '">' +
-									'<a class="btn btn-warning btn-eval" target="blank" href="' + url + '?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">继续评审</a>' +
+									'<a class="btn btn-warning btn-eval" target="blank" href="' + url + '?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">继续' + linkTitle + '</a>' +
 								'</div>';
 					}
 					else {
 						return '<div class="btn-group btn-group-xs pull-right" data-row-id="' + row.id + '">' +
-									'<a class="btn btn-success btn-eval" target="blank" href="' + url + '?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">评审</a>' +
+									'<a class="btn btn-success btn-eval" target="blank" href="' + url + '?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">' + linkTitle + '</a>' +
 									'</div>';
 					}
 
