@@ -152,6 +152,21 @@ namespace Res.Business
 			get { CheckCurrent(); return _user; }
 		}
 
+		public bool IsAdmin
+		{
+			get { CheckCurrent(); return _user.UserTypePKID == ResUserHelper.Admin; }
+		}
+
+		public bool IsProvinceAdmin
+		{
+			get { CheckCurrent(); return _user.UserTypePKID == ResUserHelper.ProvinceAdmin; }
+		}
+
+		public bool IsCityAdmin
+		{
+			get { CheckCurrent(); return _user.UserTypePKID == ResUserHelper.CityAdmin; }
+		}
+
 		public List<ResCompany> Companies
 		{
 			get

@@ -449,9 +449,9 @@ namespace Res.Business
             var u = APDBDef.ResUser;
 
             var query = APQuery
-                .select(t.CrosourceId, t.Title, t.CreatedTime, t.StatePKID,
+                .select(t.CrosourceId, t.Title, t.CreatedTime, t.StatePKID,t.ThemeId,
                         t.ProvinceId, t.AreaId, t.WinLevelPKID, t.Score,t.DeliveryStatus,
-                        u.RealName.As("Author"))
+                        t.Author)
                 .from(t, u.JoinInner(t.Creator == u.UserId))
                 .where(where);
                 //.order_by(t.CrosourceId.Desc)

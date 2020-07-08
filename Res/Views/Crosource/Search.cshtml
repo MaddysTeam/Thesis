@@ -2,6 +2,9 @@
 	ViewBag.Title = "查询论文";
 
 	var user = ResSettings.SettingsInSession.User;
+	var isAdmin = ResSettings.SettingsInSession.IsAdmin;
+	var isProvinceAdmin = ResSettings.SettingsInSession.IsProvinceAdmin;
+	var isCityAdmin = ResSettings.SettingsInSession.IsCityAdmin;
 }
 <div class="col-md-10 content-wrapper">
 	<div class="row">
@@ -27,15 +30,15 @@
 		<div class="main-content">
 
 			<div class="buttons">
-				
-				
-				@if (user.UserTypePKID == ResUserHelper.Admin)
+
+
+				@if (isAdmin)
 				{
 					<a href="@Url.Action("Edit", "Crosource")" id="addUser" class="btn btn-danger btn-md">新增论文</a>
 					@*<a href="#" id="approve" class="btn btn-info btn-approve">审核</a>*@
 					<a href="#" id="winLevel" class="btn btn-success btn-winLevel">设置奖项</a>
 				}
-				else if(user.UserTypePKID ==ResUserHelper.ProvinceAdmin)
+				else if (isProvinceAdmin || isCityAdmin)
 				{
 					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
 				}
@@ -53,7 +56,7 @@
 				<div class="widget-content">
 
 					<div class="row">
-						<div class="col-sm-2">
+						<div class="col-sm-2 hidden">
 							@Html.DropDownList("Active", (ViewBag.Actives as List<Active>).Select(x => new SelectListItem { Text = x.ActiveName, Value = x.ActiveId.ToString() }), "选择项目", new { @class = "search-field form-control" })
 						</div>
 						<div class="col-sm-2">
@@ -65,18 +68,22 @@
 						@*<div class="col-sm-2" style="margin-top:10px;">
 								@Html.DropDownList("State", CroResourceHelper.State.GetSelectList(), "状态", new { @class = "form-control search-field" })
 							</div>*@
-
 						<div class="col-sm-2">
 							@Html.DropDownList("Delivery", CroResourceHelper.DictDeliveryStatus
 							 .Select(x => new SelectListItem { Value = x.Key.ToString(), Text = x.Value })
 							 .ToList(), "报送状态", new { @class = "form-control area" })
 						</div>
 						<div class="col-sm-2">
-							@Html.TextBox("MinScore", null, new { @class = "form-control score", @placeholder = "大于得分" })
+							@Html.DropDownList("Theme", CroResourceHelper.DictThemes
+						   .Select(x => new SelectListItem { Text = x.Value, Value = x.Key.ToString() }),
+						   "选择主题", new { @class = "form-control theme" })
 						</div>
-						<div class="col-sm-2">
-							@Html.TextBox("MaxScore", null, new { @class = "form-control score", @placeholder = "小于得分" })
-						</div>
+						<div class="col-sm-2 hidden">
+								@Html.TextBox("MinScore", null, new { @class = "form-control score", @placeholder = "大于得分" })
+							</div>
+							<div class="col-sm-2 hidden">
+								@Html.TextBox("MaxScore", null, new { @class = "form-control score", @placeholder = "小于得分" })
+							</div>
 						<div class="col-sm-2 btn-group">
 							<button id="search" class="btn btn-info btn-search"><i class="fa fa-search"></i>查询</button>
 						</div>
@@ -87,12 +94,12 @@
 						<table id="bootgrid" class="table table-striped table-hover">
 							<thead>
 								<tr>
-									<th data-column-id="Title" data-formatter="LookupResource">论文名称</th>
-									<th data-column-id="Author" cmdwidth>上传作者</th>
+									<th data-column-id="Title" data-formatter="LookupResource" >论文名称</th>
+									<th data-column-id="Theme">论文主题</th>
+									<th data-column-id="Author" cmdwidth>作者</th>
 									<th data-column-id="Province" class="cmdwidth">省份</th>
 									<th data-column-id="Area" class="cmdwidth">地区</th>
-									<th data-column-id="School" class="cmdwidth">单位</th>
-									<th data-column-id="DeliveryStatus" class="cmdwidth">报送状态</th>
+									<th data-column-id="DeliveryStatusName" >报送状态</th>
 									<th data-column-id="CreatedTime">上传日期</th>
 									@*<th data-column-id="WinLevel">获奖等级</th>*@
 									@*<th data-column-id="Score" class="cmdwidth">论文得分</th>*@
@@ -128,11 +135,12 @@
 		function getGlobalRequest() {
 			return {
 				activeId: $('#Active').val()=='' ? 0:$('#Active').val(),
+				themeId:  $('#Theme').val()=='' ? 0:$('#Theme').val(),
 				provinceId: $('#Province').val()=='' ? 0:$('#Province').val(),
 				areaId: $('#Area').val()=='' ? 0:$('#Area').val(),
 				minScore:$('#MinScore').val()==''? 0:$('#MinScore').val(),
 				maxScore:$('#MaxScore').val()==''? 0:$('#MaxScore').val(),
-				stateId:$('#State').val()==''? 0:$('#State').val(),
+				//stateId:$('#State').val()==''? 0:$('#State').val(),
 				deliveryStatus:$('#Delivery').val()=='' ? 0 :$('#Delivery').val(),
 			};
 		}
@@ -140,7 +148,7 @@
 		function getGridOptions() {
 			var userType = '@user.UserTypePKID';
 			var url='@Url.Action("Edit", "Crosource")';
-			var isAdmin = userType == '@ResUserHelper.Admin';
+			var isAdmin = '@isAdmin'=='True';
 
 			return $.extend(true, {}, gridOptions, {
 
@@ -158,9 +166,9 @@
 						//if (isAdmin) {
 						//	str+= "<button type='button' class='btn btn-xs " + (row["StatePKID"] == 10352 ? "isallow" : "") + " cmd_approve' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='审核合格/不合格'><span class='fa fa-gavel'></span></button>&nbsp;";
 						//}
-						//if (isAdmin) {
-						str+= "<button type='button' class='btn btn-xs " + (row["WinLevelPKID"] > 0 ? "iselite" : "") + " cmd_elite' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='设置奖项'><fa>奖</fa></button>&nbsp;";
-						//}
+						if (isAdmin) {
+							str+= "<button type='button' class='btn btn-xs " + (row["WinLevelPKID"] > 0 ? "iselite" : "") + " cmd_elite' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='设置奖项'><fa>奖</fa></button>&nbsp;";
+						}
 						str+= "<button type='button' class='btn btn-xs " + (row["DeliveryStatus"] > 1 ? "isdelivery" : "") + " cmd_delivery' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='设置报送'><fa>报送</fa></button>&nbsp;";
 
 
@@ -181,7 +189,7 @@
 				defaultSearch: decodeURI(window.location.search.substr(3)),
 
 				labels: {
-					search: "作品名称，内容，作者名称或作者单位"
+					search: "论文名称，作者姓名"
 				},
 
 			});
@@ -227,7 +235,7 @@
 									 tr = $(this).parent().parent(),
 									 value = tr.hasClass("flagallow"),
 									 brother = $(this).parent().prev();
-								message = value ? "审核该作品为 - 不合格" : "审核该作品为 - 合格";
+								message = value ? "审核该论文为 - 不合格" : "审核该论文为 - 合格";
 								alertify.prompt("审核意见", function (e, str) {
 									if (e) {
 										$.post("/Crosource/Approve", { id: id, value: !value, opinion: str }, function (data, status) {
@@ -241,7 +249,7 @@
 								}, message);
 							}).end()
 
-							// 设置作品奖项级别
+							// 设置论文奖项级别
 							.find(".cmd_elite").on("click", function (e) {
 								var id = $(this).data("row-id");
 								$.get("@Url.Action("WinLevel", "Crosource")", { id: id }, function (response) {
@@ -250,7 +258,7 @@
 								});
 							}).end()
 
-							// 删除作品
+							// 删除论文
 							.find(".cmd_delete").on("click", function (e) {
 								var id = $(this).data("row-id"), title = $(this).data("row-title");
 								var msg = "确认要删除论文【" + title + "】 吗？";
@@ -261,24 +269,6 @@
 											else { alertify.error(data.msg); }
 										});
 									}
-								});
-							}).end()
-
-							// 公开设置
-							.find(".cmd_public").on("click", function () {
-								var id = $(this).data("row-id");
-								$.post("/Crosource/PublicSetting", { id: id }, function (data, status) {
-									if (data.cmd == "Updated") { alertify.success(data.msg); grid.bootgrid("reload"); }
-									else { alertify.error(data.msg); }
-								});
-							}).end()
-
-							// 下载设置
-							.find(".cmd_download").on("click", function () {
-								var id = $(this).data("row-id");
-								$.post("/Crosource/DownloadSetting", { id: id }, function (data, status) {
-									if (data.cmd == "Updated") { alertify.success(data.msg); grid.bootgrid("reload"); }
-									else { alertify.error(data.msg); }
 								});
 							}).end()
 
@@ -309,7 +299,7 @@
 			// 批量审核
 			$('#approve').on('click',function(){
 				if(ids.length<=0){
-					alert('必须选择作品');
+					alert('必须选择论文');
 					return false;
 				}
 
@@ -322,13 +312,25 @@
 			// 批量设置奖项
 			$('#winLevel').on('click',function(){
 				if(ids.length<=0){
-					alert('必须选择作品');
+					alert('必须选择论文');
 					return false;
 				}
 
 				$.get("@Url.Action("MultiWinLevel", "Crosource")",{ids:ids.join(',')}, function (response) {
 					$("#inner-edit-form")
 						.html(response).modal("show");
+				});
+			});
+
+			// 批量设置报送
+			$('#delivery').on('click',function(){
+				if(ids.length<=0){
+					alert('必须选择论文');
+					return false;
+				}
+
+				$.post("@Url.Action("MultiDelivery", "Crosource")",{ids:ids.join(',')}, function (response) {
+					$("#bootgrid").bootgrid('reload');
 				});
 			});
 

@@ -45,24 +45,28 @@
 				<li>
 					<a href="javascript:void(0)" class="js-sub-menu-toggle">
 						<i class="fa fa-twitter fa-fw"></i>
+						<span class="text">初审管理</span>
+					</a>
+					<ul class="sub-menu">
+						<li><a href="@Url.Action("FirstTrailGroupList", "EvalManage")">初审组管理</a></li>
+						<li><a href="@Url.Action("FirstTrailEvalResultList", "EvalManage")">初审通过列表</a></li>
+					</ul>
+				</li>
+				<li>
+					<a href="javascript:void(0)" class="js-sub-menu-toggle">
+						<i class="fa fa-check fa-fw"></i>
 						<span class="text">评审管理</span>
 					</a>
 					<ul class="sub-menu">
-						@*<li>
-							<a href="@Url.Action("Search", "EvalPeriod")">评审周期管理</a>
-						</li>*@
+						@*<li><a href="@Url.Action("Search", "EvalPeriod")">评审周期管理</a></li>*@
 						<li><a href="@Url.Action("Search", "EvalManage")">评审组管理</a></li>
 						<li><a href="@Url.Action("IndicationList", "EvalManage")">指标管理</a></li>
-						@if (ResSettings.SettingsInSession.User.UserTypePKID == ResUserHelper.Export)
-						{
-							<li><a href="@Url.Action("EvalResultList", "EvalManage")">评审结果查询</a></li>
-						}
-						<li><a href="@Url.Action("FirstTrailEvalResultList", "EvalManage")">初审结果查询</a></li>
+						<li><a href="@Url.Action("EvalResultList", "EvalManage")">评审结果查询</a></li>
 					</ul>
 				</li>
 			}
 
-			@if (ResSettings.SettingsInSession.User.UserTypePKID == ResUserHelper.ProvinceAdmin)
+			@if (ResSettings.SettingsInSession.User.UserTypePKID == ResUserHelper.ProvinceAdmin || ResSettings.SettingsInSession.User.UserTypePKID == ResUserHelper.CityAdmin)
 			{
 				<li>
 					<a href="@Url.Action("Search", "User")">
@@ -82,9 +86,8 @@
 						<span class="text">初审管理</span>
 					</a>
 					<ul class="sub-menu">
-						<li><a href="@Url.Action("Search", "EvalManage")">初审组管理</a></li>
-						<li><a href="@Url.Action("FirstTrailEvalResultList", "EvalManage")">初审结果查询</a></li>
-						
+						<li><a href="@Url.Action("FirstTrailGroupList", "EvalManage")">初审组管理</a></li>
+						<li><a href="@Url.Action("FirstTrailEvalResultList", "EvalManage")">初审通过列表</a></li>					
 					</ul>
 				</li>
 			}

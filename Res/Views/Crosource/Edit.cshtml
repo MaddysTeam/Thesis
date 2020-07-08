@@ -52,6 +52,7 @@
 						@Html.HiddenFor(m => m.Creator)
 						@Html.HiddenFor(m => m.CreatedTime)
 						@Html.HiddenFor(m => m.LastModifier)
+						@Html.HiddenFor(m => m.DeliveryStatus)
 						<fieldset class="col-sm-11  fieldContainer">
 
 							<div class="form-group ">
@@ -67,6 +68,13 @@
 								<div class="col-sm-9">
 									@Html.TextBoxFor(m => m.Title, new { @class = "form-control", maxlength = "255", placeholder = "论文标题" })
 									@Html.ValidationMessageFor(m => m.Title)
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-sm-3"> <span class="request text-danger">*</span> 论文主题</label>
+								<div class="col-sm-9">
+									@Html.DropDownListFor(m => m.ThemeId, (CroResourceHelper.Theme.GetItems() as List<ResPickListItem>).Select(x => new SelectListItem { Text = x.Name, Value = x.PickListItemId.ToString() }), "选择主题", new { @class = "form-control" })
+									@Html.ValidationMessageFor(m => m.ThemeId, null, new { @class = "text-danger" })
 								</div>
 							</div>
 

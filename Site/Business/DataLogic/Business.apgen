@@ -230,6 +230,7 @@
 					<add name="AreaId" type="long" display="所属地区"/>
 					<add name="ActiveId" type="long" display="所属项目"/>
 					<add name="ThemeId" type="long" display="所属主题"/>
+					<add name="DeliveryStatus" type="long" display="推送状态"/>
 
 					<!-- Author -->
 					<add name="Author" type="string" dataLength="50" required="true" display="论文作者"/>
