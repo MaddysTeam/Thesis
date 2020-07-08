@@ -214,7 +214,8 @@ namespace Res.Controllers
 				IDCard = model.IdCard,
 				Phone = model.Phone,
 				Question = model.Question,
-				Answer = model.Answer
+				Answer = model.Answer,
+            Position=model.Position
 			};
 			var result = await UserManager.CreateAsync(user, model.Password);
 			if (result.Succeeded)

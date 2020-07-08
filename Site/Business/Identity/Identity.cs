@@ -150,6 +150,7 @@ namespace Res.Business
 
       [Required(ErrorMessage = "必须填写职称或职务")]
       [MaxLength(50, ErrorMessage = "职称/职位内容过长")]
+      [RegularExpression(@"[\u4E00-\u9FA5A-Za-z0-9_]+", ErrorMessage = "职称/职位不能包含特殊符号！")]
       [Display(Name = "职称/职位")]
       public string Position { get; set; }
 
