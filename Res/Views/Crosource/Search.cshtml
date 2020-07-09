@@ -5,6 +5,8 @@
 	var isAdmin = ResSettings.SettingsInSession.IsAdmin;
 	var isProvinceAdmin = ResSettings.SettingsInSession.IsProvinceAdmin;
 	var isCityAdmin = ResSettings.SettingsInSession.IsCityAdmin;
+	var maxDeliveryCount = ResDeliveryHelper.GetMaxAllowCount();
+	var currentDeliveryCount = ResDeliveryHelper.GetDeliveryCount(user.ProvinceId, user.AreaId);
 }
 <div class="col-md-10 content-wrapper">
 	<div class="row">
@@ -36,11 +38,14 @@
 				{
 					<a href="@Url.Action("Edit", "Crosource")" id="addUser" class="btn btn-danger btn-md">新增论文</a>
 					@*<a href="#" id="approve" class="btn btn-info btn-approve">审核</a>*@
-					<a href="#" id="winLevel" class="btn btn-success btn-winLevel">设置奖项</a>
+					<a href="#" id="winLevel" class="btn btn-info btn-winLevel">设置奖项</a>
+					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
+					<strong id="deliverySituation">报送情况：@(currentDeliveryCount + "篇")</strong>
 				}
 				else if (isProvinceAdmin || isCityAdmin)
 				{
 					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
+					<strong id="deliverySituation">报送情况：@(currentDeliveryCount + "篇")/@(maxDeliveryCount+"篇")</strong>
 				}
 
 			</div>
@@ -75,15 +80,15 @@
 						</div>
 						<div class="col-sm-2">
 							@Html.DropDownList("Theme", CroResourceHelper.DictThemes
-						   .Select(x => new SelectListItem { Text = x.Value, Value = x.Key.ToString() }),
-						   "选择主题", new { @class = "form-control theme" })
+							.Select(x => new SelectListItem { Text = x.Value, Value = x.Key.ToString() }),
+							"选择主题", new { @class = "form-control theme" })
 						</div>
 						<div class="col-sm-2 hidden">
-								@Html.TextBox("MinScore", null, new { @class = "form-control score", @placeholder = "大于得分" })
-							</div>
-							<div class="col-sm-2 hidden">
-								@Html.TextBox("MaxScore", null, new { @class = "form-control score", @placeholder = "小于得分" })
-							</div>
+							@Html.TextBox("MinScore", null, new { @class = "form-control score", @placeholder = "大于得分" })
+						</div>
+						<div class="col-sm-2 hidden">
+							@Html.TextBox("MaxScore", null, new { @class = "form-control score", @placeholder = "小于得分" })
+						</div>
 						<div class="col-sm-2 btn-group">
 							<button id="search" class="btn btn-info btn-search"><i class="fa fa-search"></i>查询</button>
 						</div>
@@ -94,12 +99,12 @@
 						<table id="bootgrid" class="table table-striped table-hover">
 							<thead>
 								<tr>
-									<th data-column-id="Title" data-formatter="LookupResource" >论文名称</th>
+									<th data-column-id="Title" data-formatter="LookupResource">论文名称</th>
 									<th data-column-id="Theme">论文主题</th>
 									<th data-column-id="Author" cmdwidth>作者</th>
 									<th data-column-id="Province" class="cmdwidth">省份</th>
 									<th data-column-id="Area" class="cmdwidth">地区</th>
-									<th data-column-id="DeliveryStatusName" >报送状态</th>
+									<th data-column-id="DeliveryStatusName">报送状态</th>
 									<th data-column-id="CreatedTime">上传日期</th>
 									@*<th data-column-id="WinLevel">获奖等级</th>*@
 									@*<th data-column-id="Score" class="cmdwidth">论文得分</th>*@
@@ -330,7 +335,13 @@
 				}
 
 				$.post("@Url.Action("MultiDelivery", "Crosource")",{ids:ids.join(',')}, function (response) {
-					$("#bootgrid").bootgrid('reload');
+					if(response.cmd=="error"){
+						alert(response.msg);
+					}
+					else{
+						$("#bootgrid").bootgrid('reload');
+						$('#deliverySituation').html('报送情况：'+response.data.courrentCount+'篇/'+response.data.maxCount+'篇')
+					}
 				});
 			});
 

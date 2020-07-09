@@ -505,60 +505,55 @@ namespace Res.Controllers
 
 
 
-		//
-		// 批量报送和取消报送
-		// POST:		/Crosource/MultiDelivery
-		// POST:		/Crosource/MultiCancelDelivery
-		//
+      //
+      // 批量报送和取消报送
+      // POST:		/Crosource/MultiDelivery
+      // POST:		/Crosource/MultiCancelDelivery
+      //
 
-		[HttpPost]
-		public ActionResult MultiDelivery(string ids)
-		{
-			long deliveryType = 0;
-			var user = ResSettings.SettingsInSession.User;
-			var dr = APDBDef.DeliveryRecord;
-			var idArray = ConvertByString(ids);
+      [HttpPost]
+      public ActionResult MultiDelivery(string ids)
+      {
+         long deliveryType = 0;
+         var user = ResSettings.SettingsInSession.User;
+         var dr = APDBDef.DeliveryRecord;
+         var idArray = ConvertByString(ids);
 
-			var maxCount = 0;
-			if (ResSettings.SettingsInSession.IsAdmin)
-				maxCount = int.MaxValue;
-			if ((ResSettings.SettingsInSession.IsProvinceAdmin || ResSettings.SettingsInSession.IsCityAdmin) && user.ProvinceId == ResCompanyHelper.Shanghai) //是上海市区级管理员，每个区允许80篇
-				maxCount = ResSettings.SettingsInSession.IsCityAdmin ? ThisApp.DeliveryCountForShanghaiArea : 16 * ThisApp.DeliveryCountForShanghaiArea; 
-			else if ((ResSettings.SettingsInSession.IsProvinceAdmin) && user.ProvinceId != ResCompanyHelper.Shanghai) //是省管理员，每个省允许100篇
-				maxCount = ThisApp.DeliveryCountForPerOtherProvince;
+         var maxCount = ResDeliveryHelper.GetMaxAllowCount();
+         var result = ResDeliveryHelper.IsExccedMaxCount(user.ProvinceId, user.AreaId, maxCount, db);
+         if (result)
+            return Json(new { cmd = "error", msg = "已经超出最大报送数量" });
 
-			var result = ResDeliveryHelper.IsExccedMaxCount(user.ProvinceId, user.AreaId, maxCount, db);
-			if (result)
-				return Json(new { cmd = "error", msg = "已经超出最大报送数量" });
-
-			if (user.UserTypePKID == ResUserHelper.ProvinceAdmin)
-				deliveryType = CroResourceHelper.ProviceLevelDelivery;
-			if (user.UserTypePKID == ResUserHelper.CityAdmin)
-				deliveryType = CroResourceHelper.CityLevelDelivery;
+         if (user.UserTypePKID == ResUserHelper.ProvinceAdmin)
+            deliveryType = CroResourceHelper.ProviceLevelDelivery;
+         if (user.UserTypePKID == ResUserHelper.CityAdmin)
+            deliveryType = CroResourceHelper.CityLevelDelivery;
 
 
-			db.BeginTrans();
+         db.BeginTrans();
 
-			try
-			{
-				db.DeliveryRecordDal.ConditionDelete(dr.ResourceId.In(idArray));
+         try
+         {
+            db.DeliveryRecordDal.ConditionDelete(dr.ResourceId.In(idArray));
 
-				foreach (var id in idArray)
-				{
-					db.DeliveryRecordDal.Insert(new DeliveryRecord { DeliveryTypePKID = deliveryType, Recorder = user.Id, ResourceId = id, AddTime = DateTime.Now });
-					db.CroResourceDal.UpdatePartial(id, new { DeliveryStatus = CroResourceHelper.IsDelivery });
-				}
+            foreach (var id in idArray)
+            {
+               db.DeliveryRecordDal.Insert(new DeliveryRecord { DeliveryTypePKID = deliveryType, Recorder = user.Id, ResourceId = id, AddTime = DateTime.Now });
+               db.CroResourceDal.UpdatePartial(id, new { DeliveryStatus = CroResourceHelper.IsDelivery });
+            }
 
-				db.Commit();
-			}
-			catch
-			{
-				db.Rollback();
+            db.Commit();
+         }
+         catch
+         {
+            db.Rollback();
 
-				return Json(new { cmd = "error", msg = "批量报送失败" });
-			}
+            return Json(new { cmd = "error", msg = "批量报送失败" });
+         }
 
-			return Json(new { cmd = "Processed", msg = "批量报送完成" });
+         var courrentCount = ResDeliveryHelper.GetDeliveryCount(user.ProvinceId, user.AreaId,db);
+
+         return Json(new { cmd = "Processed", msg = "批量报送完成", data =new {maxCount, courrentCount }  });
 		}
 
 		[HttpPost]

@@ -81,13 +81,9 @@ namespace Res.Controllers
 
       public ActionResult Edit(long? id)
       {
-         //删除单位的缓存信息
-         ResSettings.SettingsInSession.RemoveCache(typeof(List<ResCompany>));
-
          var user = ResSettings.SettingsInSession.User;
          var provinces = ResSettings.SettingsInSession.AllProvince();
          var areas = ResSettings.SettingsInSession.AllAreas();
-         var schools = ResSettings.SettingsInSession.AllSchools();
 
          var allRoles = ResUserHelper.UserType.GetItems();
          var roles = new List<ResPickListItem>();
@@ -96,26 +92,19 @@ namespace Res.Controllers
          if (user.ProvinceId > 0)
          {
             roles.Clear();
-            roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.CityAdmin));
-            roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.SchoolAdmin));
+            if (user.ProvinceId == ResCompanyHelper.Shanghai)
+               roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.CityAdmin));
+            
             roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.Export));
-            roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.RegistedUser));
+            //roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.RegistedUser));
             provinces = provinces.Where(x => x.CompanyId == user.ProvinceId).ToList();
          }
          if (user.AreaId > 0)
          {
             roles.Clear();
-            roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.SchoolAdmin));
             roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.Export));
-            roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.RegistedUser));
+           // roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.RegistedUser));
             areas = areas.Where(x => x.CompanyId == user.AreaId).ToList();
-         }
-         if (user.CompanyId > 0)
-         {
-            roles.Clear();
-            roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.Export));
-            roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.RegistedUser));
-            schools = schools.Where(x => x.CompanyId == user.CompanyId).ToList();
          }
 
          if (user.UserTypePKID == ResUserHelper.Admin)
@@ -124,12 +113,9 @@ namespace Res.Controllers
 
          ViewBag.Provinces = provinces;
          ViewBag.Areas = areas;
-         ViewBag.Companies = schools;
          ViewBag.Roles = roles;
-
-         //ViewBag.ProvincesDic = CrosourceController.GetStrengthDict(ResSettings.SettingsInSession.AllProvince());
+         ViewBag.ProvincesDic = CrosourceController.GetStrengthDict(ResSettings.SettingsInSession.AllProvince());
          ViewBag.AreasDic = CrosourceController.GetStrengthDict(areas);
-         ViewBag.SchoolsDic = CrosourceController.GetStrengthDict(schools);
 
          if (id == null)
          {

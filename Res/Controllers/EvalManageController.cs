@@ -1024,7 +1024,7 @@ namespace Res.Controllers
 								   Expert = u.RealName.GetValue(r),
 								   GorupId = g.GroupId.GetValue(r),
 								   GroupName = g.GroupName.GetValue(r),
-								   Percent = ((double)er.ResultId.GetValue(r, "evalCount") / (groupResourceCount == 0 ? 1 : groupResourceCount)) * 100
+								   Percent = Math.Round(((double)er.ResultId.GetValue(r, "evalCount") / (groupResourceCount == 0 ? 1 : groupResourceCount)) * 100,1)
 							   }).ToList();
 
 

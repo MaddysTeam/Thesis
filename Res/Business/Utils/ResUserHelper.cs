@@ -23,7 +23,7 @@ namespace Res.Business
             { UserType.GetName(Export), Export },
             { UserType.GetName(ProvinceAdmin),ProvinceAdmin },
             { UserType.GetName(CityAdmin),CityAdmin },
-            { UserType.GetName(SchoolAdmin),SchoolAdmin },
+            //{ UserType.GetName(SchoolAdmin),SchoolAdmin },
          };
       }
 
