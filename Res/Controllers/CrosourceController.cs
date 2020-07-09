@@ -46,7 +46,7 @@ namespace Res.Controllers
 		[HttpPost]
 		public ActionResult Search(long activeId, long themeId,
 								  long provinceId, long areaId, long deliveryStatus,
-							// long stateId,
+							 // long stateId,
 							 long maxScore, long minScore,
 							 int current, int rowCount, string searchPhrase, FormCollection fc)
 		{
@@ -514,21 +514,50 @@ namespace Res.Controllers
 		[HttpPost]
 		public ActionResult MultiDelivery(string ids)
 		{
-			var user = ResSettings.SettingsInSession.User;
-
 			long deliveryType = 0;
+			var user = ResSettings.SettingsInSession.User;
 			var dr = APDBDef.DeliveryRecord;
+			var idArray = ConvertByString(ids);
+
+			var maxCount = 0;
+			if (ResSettings.SettingsInSession.IsAdmin)
+				maxCount = int.MaxValue;
+			if ((ResSettings.SettingsInSession.IsProvinceAdmin || ResSettings.SettingsInSession.IsCityAdmin) && user.ProvinceId == ResCompanyHelper.Shanghai) //是上海市区级管理员，每个区允许80篇
+				maxCount = ResSettings.SettingsInSession.IsCityAdmin ? ThisApp.DeliveryCountForShanghaiArea : 16 * ThisApp.DeliveryCountForShanghaiArea; 
+			else if ((ResSettings.SettingsInSession.IsProvinceAdmin) && user.ProvinceId != ResCompanyHelper.Shanghai) //是省管理员，每个省允许100篇
+				maxCount = ThisApp.DeliveryCountForPerOtherProvince;
+
+			var result = ResDeliveryHelper.IsExccedMaxCount(user.ProvinceId, user.AreaId, maxCount, db);
+			if (result)
+				return Json(new { cmd = "error", msg = "已经超出最大报送数量" });
+
 			if (user.UserTypePKID == ResUserHelper.ProvinceAdmin)
 				deliveryType = CroResourceHelper.ProviceLevelDelivery;
+			if (user.UserTypePKID == ResUserHelper.CityAdmin)
+				deliveryType = CroResourceHelper.CityLevelDelivery;
 
-			var idArray = ConvertByString(ids);
-			APBplDef.DeliveryRecordBpl.ConditionDelete(dr.ResourceId.In(idArray));
 
-			foreach (var id in idArray)
+			db.BeginTrans();
+
+			try
 			{
-				APBplDef.DeliveryRecordBpl.Insert(new DeliveryRecord { DeliveryTypePKID = deliveryType, Recorder = user.Id, ResourceId = id, AddTime = DateTime.Now });
-				APBplDef.CroResourceBpl.UpdatePartial(id, new { DeliveryStatus = CroResourceHelper.IsDelivery });
+				db.DeliveryRecordDal.ConditionDelete(dr.ResourceId.In(idArray));
+
+				foreach (var id in idArray)
+				{
+					db.DeliveryRecordDal.Insert(new DeliveryRecord { DeliveryTypePKID = deliveryType, Recorder = user.Id, ResourceId = id, AddTime = DateTime.Now });
+					db.CroResourceDal.UpdatePartial(id, new { DeliveryStatus = CroResourceHelper.IsDelivery });
+				}
+
+				db.Commit();
 			}
+			catch
+			{
+				db.Rollback();
+
+				return Json(new { cmd = "error", msg = "批量报送失败" });
+			}
+
 			return Json(new { cmd = "Processed", msg = "批量报送完成" });
 		}
 

@@ -212,6 +212,7 @@
     <Compile Include="Business\Utils\GridOrder.cs" />
     <Compile Include="Business\Utils\IDCardCheck.cs" />
     <Compile Include="Business\Utils\MetalTools\MentalConverter.cs" />
+    <Compile Include="Business\Utils\ResDeliveryHelper.cs" />
     <Compile Include="Business\Utils\ResCommentTypeHelper.cs" />
     <Compile Include="Business\Utils\ResCompanyHelper.cs" />
     <Compile Include="Business\Utils\ResModelBinder.cs" />

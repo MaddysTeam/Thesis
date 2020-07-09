@@ -32,7 +32,7 @@ namespace Res.Business
       }
 
 
-      public static long Shanghai = 1161;
+      public static long Shanghai = 310000;
 
    }
 

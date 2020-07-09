@@ -88,7 +88,6 @@ namespace Res.Controllers
 
          ViewBag.ProvincesDic = CrosourceController.GetStrengthDict(areas);
          ViewBag.AreasDic = CrosourceController.GetStrengthDict(areas);
-         
       }
 
 
