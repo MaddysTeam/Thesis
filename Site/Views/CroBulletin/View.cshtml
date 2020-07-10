@@ -10,10 +10,10 @@
 <div class=" fl w80">
 	<div class="d_news_show">
 		<h1>@Model.Title</h1>
-		<span class="news_source">来源:@Model.Creator  发布日期:@Model.CreatedTime </span>
+		@*<span class="news_source">来源:@Model.Creator  发布日期:@Model.CreatedTime </span>*@
 		
 		<p>
-		@Html.Raw(@Model.Content)	
+		@Html.Raw(Model.Content)	
 		</p>
 	</div>
 </div>

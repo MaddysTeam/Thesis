@@ -11,9 +11,9 @@
 			</div>
 			<div class="d_news_show">
 				<h1>@Model.Title</h1>
-				<span>来源:@Model.Creator  发布日期:@Model.CreatedTime </span>
+				@*<span>来源:@Model.Creator  发布日期:@Model.CreatedTime </span>*@
 				<p>
-					@Model.Content
+					@Html.Raw(Model.Content)	
 				</p>
 
 			</div>
