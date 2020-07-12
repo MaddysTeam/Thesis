@@ -40,12 +40,12 @@
 					@*<a href="#" id="approve" class="btn btn-info btn-approve">审核</a>*@
 					<a href="#" id="winLevel" class="btn btn-info btn-winLevel">设置奖项</a>
 					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
-					<strong id="deliverySituation">报送情况：@(currentDeliveryCount + "篇")</strong>
+					<strong id="deliverySituation">报送情况：已报送@(currentDeliveryCount + "篇")</strong>
 				}
 				else if (isProvinceAdmin || isCityAdmin)
 				{
 					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
-					<strong id="deliverySituation">报送情况：@(currentDeliveryCount + "篇")/@(maxDeliveryCount+"篇")</strong>
+					<strong id="deliverySituation">报送情况：@(currentDeliveryCount + "篇")/@(maxDeliveryCount + "篇")</strong>
 				}
 
 			</div>
@@ -146,7 +146,7 @@
 				minScore:$('#MinScore').val()==''? 0:$('#MinScore').val(),
 				maxScore:$('#MaxScore').val()==''? 0:$('#MaxScore').val(),
 				//stateId:$('#State').val()==''? 0:$('#State').val(),
-				deliveryStatus:$('#Delivery').val()=='' ? 0 :$('#Delivery').val(),
+				deliveryStatus:$('#Delivery').val()=='' ? -1 :$('#Delivery').val(),
 			};
 		}
 
@@ -154,6 +154,7 @@
 			var userType = '@user.UserTypePKID';
 			var url='@Url.Action("Edit", "Crosource")';
 			var isAdmin = '@isAdmin'=='True';
+			var notDelivary='@CroResourceHelper.NotDelivery';
 
 			return $.extend(true, {}, gridOptions, {
 
@@ -174,8 +175,11 @@
 						if (isAdmin) {
 							str+= "<button type='button' class='btn btn-xs " + (row["WinLevelPKID"] > 0 ? "iselite" : "") + " cmd_elite' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='设置奖项'><fa>奖</fa></button>&nbsp;";
 						}
-						str+= "<button type='button' class='btn btn-xs " + (row["DeliveryStatus"] > 1 ? "isdelivery" : "") + " cmd_delivery' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='设置报送'><fa>报送</fa></button>&nbsp;";
-
+						console.log(row["DeliveryStatus"]);
+						if(row["DeliveryStatus"]==notDelivary)
+							str+= "<button type='button' class=' btn btn-xs btn_delivery btn-info' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='设置报送'><fa>设置报送</fa></button>&nbsp;";
+						else
+							str+= "<button type='button' class=' btn btn-xs btn-warning btn_cancelDelivery' data-row-id='" + row.id + "' data-row-title='" + row.Title + "' title='取消报送'><fa>取消报送</fa></button>&nbsp;";
 
 						return str;
 					},
@@ -231,7 +235,7 @@
 
 						grid.find("tbody tr:has(button.iselite)").addClass("flagelite");
 						grid.find("tbody tr:has(button.isallow)").addClass("flagallow");
-						//grid.find("tbody tr:has(button.isdelivery)").addClass("flagelite");
+						//grid.find("tbody tr:has(button.isdelivery)").addClass("flagallow");
 
 						grid
 							.find(".cmd_approve").on("click", function (e) {
@@ -297,6 +301,33 @@
 										ids.push(id);
 									});
 								}
+							}).end()
+						
+						    //报送
+							.find('.btn_delivery').on('click',function(){
+								var id = $(this).data("row-id");
+								$.post('@Url.Action("MultiDelivery", "Crosource")', { ids: id}, function (response, status) {
+									if(response.cmd=="error"){
+										alert(response.msg);
+									}
+									else{
+										$("#bootgrid").bootgrid('reload');
+										$('#deliverySituation').html('报送情况：'+response.data.courrentCount+'篇/'+response.data.maxCount+'篇')
+									}
+								});
+							}).end()
+						   //取消报送
+						  	.find('.btn_cancelDelivery').on('click',function(){
+						  		var id = $(this).data("row-id");
+						  		$.post('@Url.Action("MultiCancelDelivery", "Crosource")', { ids: id}, function (response, status) {
+						  			if(response.cmd=="error"){
+						  				alert(response.msg);
+						  			}
+						  			else{
+						  				$("#bootgrid").bootgrid('reload');
+						  				$('#deliverySituation').html('报送情况：'+response.data.courrentCount+'篇/'+response.data.maxCount+'篇')
+						  			}
+						  		});
 							});
 
 					});

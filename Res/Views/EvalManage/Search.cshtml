@@ -96,7 +96,7 @@
 				formatters: {
 					'commands': function (column, row) {
 						var id = row.id;
-						return '<div class="btn-group btn-group-xs pull-right" data-active-id="'+row.activeId+'" data-row-id="' + row.id + '">' +
+						return '<div class="btn-group btn-group-xs pull-right" data-active-id="' + row.activeId + '" data-row-id="' + row.id + '">' +
 												 '<button class="btn btn-success btn-edit">编辑</button>' +
 												 '<button class="btn btn-warning btn-pro">评审进度</button>' +
 												 '<button class="btn btn-info btn-exp">分配专家</button>' +
@@ -152,7 +152,7 @@
 						grid.find('.btn-res').on('click', function () {
 							var id = $(this).parent().data("row-id");
 							var activeId = $(this).parent().data("activeId");
-							$.get('@Url.Action("ResList", "EvalManage")?id=' + id + '&activeId=' + activeId, function (response) {
+							$.get('@Url.Action("ResList", "EvalManage")?id=' + id + '&activeId=' + activeId + '&deliveryStatus=@CroResourceHelper.IsDelivery', function (response) {
 								$("#inner-edit-form")
 										.html(response).modal("show");
 							});
@@ -168,7 +168,7 @@
 				});
 			});
 
-			$('#Active').on('change',function () {
+			$('#Active').on('change', function () {
 
 				$("#bootgrid").bootgrid('reload')
 

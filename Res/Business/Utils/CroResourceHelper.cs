@@ -33,7 +33,7 @@ namespace Res.Business
 			WinLevel = new PickListAPRptColumn(APDBDef.CroResource.WinLevelPKID, ThisApp.PLKey_WinLevel);
 			Theme = new PickListAPRptColumn(APDBDef.CroResource.ThemeId, ThisApp.PLKey_ThemeType);
 			DictDeliveryStatus = new Dictionary<long, string> {
-			{1,"未报送" }, {2,"已报送" }
+			{0,"未报送" }, {1,"已报送" }
 		 };
 
 
@@ -97,11 +97,12 @@ namespace Res.Business
 		// 报送类型
 		public static long CityLevelDelivery = 10457;
 		public static long ProviceLevelDelivery = 10456;
-		public static long IsDelivery = 2;
-		public static long NotDelivery = 1;
+		public static long IsDelivery = 1;
+		public static long NotDelivery = 0;
+      public static long AllDelivery = -1;
 
-		// 论文主题
-		public static long ThemeID1 = 10468;
+      // 论文主题
+      public static long ThemeID1 = 10468;
 		public static long ThemeID2 = 10469;
 		public static long ThemeID3 = 10470;
 		public static long ThemeID4 = 10471;

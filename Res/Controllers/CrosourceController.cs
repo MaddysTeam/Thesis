@@ -101,7 +101,7 @@ namespace Res.Controllers
 				where &= t.ActiveId == activeId;
 
 			// 按照报送状态过滤
-			if (deliveryStatus > 0)
+			if (deliveryStatus > -1)
 				where &= t.DeliveryStatus == deliveryStatus;
 			//if (stateId > 0)
 			//	where &= t.StatePKID == stateId;
@@ -130,7 +130,8 @@ namespace Res.Controllers
 								  cro.WinLevel,
 								  cro.WinLevelPKID,
 								  cro.DeliveryStatusName,
-								  cro.Theme
+                          cro.DeliveryStatus,
+                          cro.Theme
 							  },
 					   current = current,
 					   rowCount = rowCount,
@@ -569,8 +570,10 @@ namespace Res.Controllers
 				APBplDef.CroResourceBpl.UpdatePartial(id, new { DeliveryStatus = CroResourceHelper.NotDelivery });
 			}
 
+         var maxCount = ResDeliveryHelper.GetMaxAllowCount();
+         var courrentCount = ResDeliveryHelper.GetDeliveryCount(user.ProvinceId, user.AreaId, db);
 
-			return Json(new { cmd = "Processed", msg = "取消报送完成" });
+         return Json(new { cmd = "Processed", msg = "取消报送完成", data = new { maxCount, courrentCount } });
 		}
 
 

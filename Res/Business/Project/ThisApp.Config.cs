@@ -12,7 +12,7 @@ namespace Res.Business
 		// 应用 ID
 		public const long AppId = 1;
 
-		// 系统开发商 ID				= 1
+		// 系统开发商 ID				
 		public const long AppUser_Designer_Id = 1;
 
 		// Session 中缺省的缓存项时间（分钟）

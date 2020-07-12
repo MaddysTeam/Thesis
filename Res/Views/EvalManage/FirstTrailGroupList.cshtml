@@ -1,5 +1,6 @@
 ﻿@{
 	ViewBag.Title = "初审组管理";
+	var isAdmin = ResSettings.SettingsInSession.IsCityAdmin || ResSettings.SettingsInSession.IsProvinceAdmin;
 }
 <div class="col-md-10 content-wrapper">
 	<div class="row">
@@ -24,7 +25,10 @@
 
 		<div class="main-content">
 			<div class="buttons">
+				@if (isAdmin)
+				{
 				<a href="javascript:void(0)" id="addGroup" class="btn btn-danger btn-add">新增分组</a>
+				}
 			</div>
 			<!-- widget -->
 			<div class="widget">
@@ -151,7 +155,7 @@
 						grid.find('.btn-res').on('click', function () {
 							var id = $(this).parent().data("row-id");
 							var activeId = $(this).parent().data("activeId");
-							$.get('@Url.Action("ResList", "EvalManage")?id=' + id + '&activeId=' + activeId, function (response) {
+								$.get('@Url.Action("ResList", "EvalManage")?id=' + id + '&activeId=' + activeId + '&deliveryStatus=@CroResourceHelper.AllDelivery', function (response) {
 								$("#inner-edit-form")
 										.html(response).modal("show");
 							});

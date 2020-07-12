@@ -37,9 +37,9 @@
 		}
 
 		/// <summary>
-		/// get allowd max resource delivery count for province and area admin
+		/// get allowd max resource delivery count for province and area
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>max count</returns>
 		public static int GetMaxAllowCount()
 		{
 			var session = ResSettings.SettingsInSession;
@@ -50,7 +50,7 @@
 			var user = session.User;
 
 			if (session.IsAdmin)
-				maxCount = int.MaxValue;
+				maxCount = 23 * ThisApp.DeliveryCountForPerOtherProvince + 16 * ThisApp.DeliveryCountForShanghaiArea;
 			if ((session.IsProvinceAdmin || session.IsCityAdmin) && user.ProvinceId == ResCompanyHelper.Shanghai) //是上海市区级管理员，每个区允许80篇
 				maxCount = ResSettings.SettingsInSession.IsCityAdmin ? ThisApp.DeliveryCountForShanghaiArea : 16 * ThisApp.DeliveryCountForShanghaiArea;
 			else if (session.IsProvinceAdmin && user.ProvinceId != ResCompanyHelper.Shanghai) //是省管理员，每个省允许100篇

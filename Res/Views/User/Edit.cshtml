@@ -76,13 +76,6 @@
 								@Html.ValidationMessageFor(m => m.RealName)
 							</div>
 						</div>
-						@*<div class="form-group">
-							@Html.LabelFor(m => m.IDCard, new { @class = "control-label col-sm-3" })
-							<div class="col-sm-9">
-								@Html.TextBoxFor(m => m.IDCard, new { @class = "form-control", maxlength = "80", placeholder = "身份证" })
-								@Html.ValidationMessageFor(m => m.IDCard)
-							</div>
-						</div>*@
 
 						<div class="form-group">
 							<div class="col-sm-9 col-lg-offset-3">
@@ -138,7 +131,7 @@
 			var userType=$('#UserTypePKID').val();
 			if (userType == '@ResUserHelper.ProvinceAdmin' && isEmpty($('#ProvinceId').val())){ alert('省管理员必须选择省份'); return false;}
 			if (userType == '@ResUserHelper.CityAdmin' && (isEmpty($('#ProvinceId').val()) || isEmpty($('#AreaId').val()))){ alert('市管理员必须选择省份和地区'); return false;}
-			if (userType == ('@ResUserHelper.SchoolAdmin' || userType == '@ResUserHelper.RegistedUser') && (isEmpty($('#ProvinceId').val()) || isEmpty($('#AreaId').val())|| isEmpty($('#CompanyId').val()))){ alert('必须选择省份，地区和单位'); return false;}
+			if (userType == '@ResUserHelper.RegistedUser' && (isEmpty($('#ProvinceId').val()) || isEmpty($('#AreaId').val())|| isEmpty($('#CompanyId').val()))){ alert('必须选择省份，地区和单位'); return false;}
 
 
 			var $form = $(this);
@@ -168,7 +161,6 @@
 
 		var o=$('#UserTypePKID').on('change', function () {
 			$('#company,#province,#area').addClass('hidden').val("0");
-
 			$("#province option:first").prop('selected','selected');
 			$("#area option:gt(0),#company option:gt(0)").remove();
 

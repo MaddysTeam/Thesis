@@ -1,19 +1,12 @@
-﻿using System;
-using System.Globalization;
+﻿using Microsoft.AspNet.Identity.Owin;
+using Res.Business;
+using Symber.Web.Data;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using Symber.Web.Data;
-using Res.Business;
-using Res.Business.Utils;
-using System.Collections.Generic;
-using System.IO;
-using Util.NPOI;
 
 namespace Res.Controllers
 {
@@ -94,16 +87,14 @@ namespace Res.Controllers
             roles.Clear();
             if (user.ProvinceId == ResCompanyHelper.Shanghai)
                roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.CityAdmin));
-            
+
             roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.Export));
-            //roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.RegistedUser));
             provinces = provinces.Where(x => x.CompanyId == user.ProvinceId).ToList();
          }
          if (user.AreaId > 0)
          {
             roles.Clear();
             roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.Export));
-           // roles.Add(allRoles.Find(x => x.PickListItemId == ResUserHelper.RegistedUser));
             areas = areas.Where(x => x.CompanyId == user.AreaId).ToList();
          }
 
@@ -142,7 +133,33 @@ namespace Res.Controllers
                return Json(new
                {
                   error = "Username",
-                  msg = "登录名称已经被使用"
+                  msg = "用户名已经被使用！"
+               });
+            }
+
+            if(ResSettings.SettingsInSession.IsProvinceAdmin && model.IsExpert && model.ProvinceId <= 0)
+            {
+               return Json(new
+               {
+                  error = "Username",
+                  msg = "专家必须选择省市！"
+               });
+            }
+
+            if (ResSettings.SettingsInSession.IsCityAdmin && model.IsExpert && (model.ProvinceId <= 0 || model.AreaId <= 0))
+            {
+               return Json(new
+               {
+                  error = "Username",
+                  msg = "专家必须选择省市和地区！"
+               });
+            }
+            if (model.IsRigisterUser && (model.ProvinceId <= 0 || model.AreaId <= 0))
+            {
+               return Json(new
+               {
+                  error = "Username",
+                  msg = "注册用户必须选择省市和地区！"
                });
             }
 
@@ -239,7 +256,7 @@ namespace Res.Controllers
 
          if (provinceId > 0)
             where &= t.ProvinceId == provinceId;
-         if(areaId>0)
+         if (areaId > 0)
             where &= t.AreaId == areaId;
 
 
