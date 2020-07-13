@@ -14,17 +14,15 @@
 				return 0;
 
 			var r = APDBDef.CroResource;
-			Symber.Web.Data.APSqlWherePhrase where = null;
+			Symber.Web.Data.APSqlWherePhrase where = r.DeliveryStatus == CroResourceHelper.IsDelivery;
+
+			if(session.IsProvinceAdmin)
+				where &= r.ProvinceId == provinceId;
+
+			if(session.IsCityAdmin)
+				where &= r.AreaId == areaId;
+
 			db = db ?? new APDBDef();
-
-			if (session.IsAdmin)
-				where = (r.DeliveryStatus == CroResourceHelper.IsDelivery);
-
-			else if (provinceId > 0)
-				where = r.ProvinceId == provinceId;
-
-			else if (areaId > 0)
-				where = where & r.AreaId == areaId;
 
 			return db.CroResourceDal.ConditionQueryCount(where);
 		}
