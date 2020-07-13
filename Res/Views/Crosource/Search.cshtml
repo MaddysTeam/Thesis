@@ -89,6 +89,10 @@
 						<div class="col-sm-2 hidden">
 							@Html.TextBox("MaxScore", null, new { @class = "form-control score", @placeholder = "小于得分" })
 						</div>
+
+						<div class="col-sm-2">
+							@Html.CheckBox("IsPass", false, new { style = "width:20px;height:20px" }) 通过初审
+						</div>
 						<div class="col-sm-2 btn-group">
 							<button id="search" class="btn btn-info btn-search"><i class="fa fa-search"></i>查询</button>
 						</div>
@@ -137,6 +141,7 @@
 @section Scripts {
 	<script type="text/javascript">
 
+
 		function getGlobalRequest() {
 			return {
 				activeId: $('#Active').val()=='' ? 0:$('#Active').val(),
@@ -147,6 +152,7 @@
 				maxScore:$('#MaxScore').val()==''? 0:$('#MaxScore').val(),
 				//stateId:$('#State').val()==''? 0:$('#State').val(),
 				deliveryStatus:$('#Delivery').val()=='' ? -1 :$('#Delivery').val(),
+				isPass:$('#IsPass').is(':checked') ? 1 : 0
 			};
 		}
 
@@ -302,7 +308,7 @@
 									});
 								}
 							}).end()
-						
+
 						    //报送
 							.find('.btn_delivery').on('click',function(){
 								var id = $(this).data("row-id");
@@ -328,7 +334,7 @@
 						  				$('#deliverySituation').html('报送情况：'+response.data.courrentCount+'篇/'+response.data.maxCount+'篇')
 						  			}
 						  		});
-							});
+						  	});
 
 					});
 
@@ -375,6 +381,13 @@
 					}
 				});
 			});
+
+			// 是否初审通过
+			//$('#IsPass').on('click',function(){
+			//	var $this=$(this);
+			//	$this.val($this.is(':checked')?1:0);
+			//	alert($this.val());
+			//});
 
 
 

@@ -22,7 +22,14 @@ namespace Res.Business
       public static long ProvinceLevel = 5005;
       public static long UnionLevel = 5006;
 
-      public static long FirstTrial = 9999;
+      /// <summary>
+      /// 初审
+      /// </summary>
+      public static long FirstTrial = 9999; 
+
+      /// <summary>
+      ///  评审
+      /// </summary>
       public static long LastTrial = 9998;
 
    }
