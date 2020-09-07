@@ -86,7 +86,7 @@ namespace Res.Controllers
                groupId = eg.GroupId.GetValue(rd, "groupId"),
                score = er.Score.GetValue(rd),
                isEval = er.ResultId.GetValue(rd) > 0,
-               //evalType=eg.GroupType.GetValue(rd) // 初审 或 最终评审
+               //evalType=eg.GroupType.GetValue(rd), // 初审 或 最终评审
                isFirstTrail = eg.GroupType.GetValue(rd) == EvalGroupHelper.FirstTrial
             };
          }).ToList();
@@ -113,15 +113,14 @@ namespace Res.Controllers
 
          var i = APDBDef.Indication;
          var a = APDBDef.Active;
-         var er = APDBDef.EvalResult;
 
          var model = APBplDef.CroResourceBpl.GetResource(db, resId);
-
          var query = APQuery.select(i.IndicationId, i.Description, i.LevelPKID, i.Score, i.IndicationName,
                                     i.TypePKID, i.ActiveId, a.ActiveName, a.ActiveId,
                                     eri.ResultId, eri.Score.As("evalScore"),
                                     er.Comment, er.ExpertId)
             .from(i,
+                 eg.JoinInner(eg.GroupId==groupId & eg.GroupType==i.EvalType),
                  a.JoinInner(a.ActiveId == i.ActiveId),
                  eri.JoinLeft(eri.IndicationId == i.IndicationId & eri.ResultId == id),
                  er.JoinLeft(er.ResultId == eri.ResultId & er.ResultId == id)
@@ -161,24 +160,24 @@ namespace Res.Controllers
 
 
 
-      public ActionResult FirstTrailDetails(long id, long resId, long groupId, long? expertId)
-      {
-         var expert = expertId == null ? ResSettings.SettingsInSession.User : APBplDef.ResUserBpl.PrimaryGet(expertId.Value);
-         if (expert == null) throw new ArgumentException("expert can not be null");
+      //public ActionResult FirstTrailDetails(long id, long resId, long groupId, long? expertId)
+      //{
+      //   var expert = expertId == null ? ResSettings.SettingsInSession.User : APBplDef.ResUserBpl.PrimaryGet(expertId.Value);
+      //   if (expert == null) throw new ArgumentException("expert can not be null");
 
 
-         var a = APDBDef.Active;
-         var er = APDBDef.EvalResult;
+      //   var a = APDBDef.Active;
+      //   var er = APDBDef.EvalResult;
 
-         string comment = string.Empty, expId = string.Empty;
+      //   string comment = string.Empty, expId = string.Empty;
 
-         var model = APBplDef.CroResourceBpl.GetResource(db, resId);
-         model.IsFirstTrailDone = APBplDef.EvalResultBpl.ConditionQueryCount(er.ResourceId == resId & er.EvalType == EvalGroupHelper.FirstTrial) > 0;
+      //   var model = APBplDef.CroResourceBpl.GetResource(db, resId);
+      //   model.IsFirstTrailDone = APBplDef.EvalResultBpl.ConditionQueryCount(er.ResourceId == resId & er.EvalType == EvalGroupHelper.FirstTrial) > 0;
 
-         ViewBag.isSlef = expert.Id == ResSettings.SettingsInSession.UserId || (id == 0 && expert.UserTypePKID == ResUserHelper.Export);
+      //   ViewBag.isSlef = expert.Id == ResSettings.SettingsInSession.UserId || (id == 0 && expert.UserTypePKID == ResUserHelper.Export);
 
-         return View(model);
-      }
+      //   return View(model);
+      //}
 
 
       //
@@ -394,28 +393,28 @@ namespace Res.Controllers
       // 评审 - 执行初审，各地区专家执行初审
       // POST:		/Eval/Execute
       //
-      [HttpPost]
-      public ActionResult ExecuteFirstTrial(EvalResult model)
-      {
-         var exists = APBplDef.EvalResultBpl.ConditionQueryCount(er.ResourceId==model.ResourceId & er.EvalType == EvalGroupHelper.FirstTrial) > 0;
-         if (!exists)
-         {
-            model.AccessDate = DateTime.Now;
-            model.ExpertId = ResSettings.SettingsInSession.UserId;
-            model.EvalType = EvalGroupHelper.FirstTrial; // 表示初审
-            APBplDef.EvalResultBpl.Insert(model);
-         }
+      // [HttpPost]
+      //public ActionResult ExecuteFirstTrial(EvalResult model)
+      //{
+      //   var exists = APBplDef.EvalResultBpl.ConditionQueryCount(er.ResourceId==model.ResourceId & er.EvalType == EvalGroupHelper.FirstTrial) > 0;
+      //   if (!exists)
+      //   {
+      //      model.AccessDate = DateTime.Now;
+      //      model.ExpertId = ResSettings.SettingsInSession.UserId;
+      //      model.EvalType = EvalGroupHelper.FirstTrial; // 表示初审
+      //      APBplDef.EvalResultBpl.Insert(model);
+      //   }
 
-         return Request.IsAjaxRequest() ? (ActionResult)Json(new { error = "none", msg = "操作成功" }) : IsNotAjax();
-      }
+      //   return Request.IsAjaxRequest() ? (ActionResult)Json(new { error = "none", msg = "操作成功" }) : IsNotAjax();
+      //}
 
-      [HttpPost]
-      public ActionResult DeleteFirstTrial(EvalResult model)
-      {
-         APBplDef.EvalResultBpl.PrimaryDelete(model.ResultId);
+      //[HttpPost]
+      //public ActionResult DeleteFirstTrial(EvalResult model)
+      //{
+      //   APBplDef.EvalResultBpl.PrimaryDelete(model.ResultId);
 
-         return  Request.IsAjaxRequest() ? (ActionResult)Json(new { error = "none", msg = "操作成功" }) : IsNotAjax();
-      }
+      //   return  Request.IsAjaxRequest() ? (ActionResult)Json(new { error = "none", msg = "操作成功" }) : IsNotAjax();
+      //}
 
 
       private HtmlRender _pdfRender;

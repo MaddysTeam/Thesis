@@ -3903,6 +3903,8 @@ namespace Res.Business {
             
             private Int64APColumnDef _activeId;
             
+            private Int64APColumnDef _evalType;
+            
             public IndicationTableDef(string tableName) : 
                     base(tableName) {
             }
@@ -4018,6 +4020,19 @@ namespace Res.Business {
             }
             
             /// <summary>
+            /// EvalType ColumnDef
+            /// </summary>
+            public virtual Int64APColumnDef EvalType {
+                get {
+                    if (Object.ReferenceEquals(_evalType, null)) {
+                        _evalType = new Int64APColumnDef(this, "EvalType", false);
+                        _evalType.Display = "考核类型";
+                    }
+                    return _evalType;
+                }
+            }
+            
+            /// <summary>
             /// Default Index
             /// </summary>
             public virtual APSqlOrderPhrase DefaultOrder {
@@ -4045,6 +4060,7 @@ namespace Res.Business {
                 data.Score = Score.GetValue<int>(reader, throwIfValidColumnName);
                 data.Status = Status.GetValue<int>(reader, throwIfValidColumnName);
                 data.ActiveId = ActiveId.GetValue<long>(reader, throwIfValidColumnName);
+                data.EvalType = EvalType.GetValue<long>(reader, throwIfValidColumnName);
             }
             
             /// <summary>
@@ -7044,7 +7060,7 @@ namespace Res.Business {
                 if ((data.IndicationId == 0)) {
                     data.IndicationId = ((long)(GetNewId(APDBDef.Indication.IndicationId)));
                 }
-                var query = APQuery.insert(APDBDef.Indication).values(APDBDef.Indication.IndicationId.SetValue(data.IndicationId), APDBDef.Indication.IndicationName.SetValue(data.IndicationName), APDBDef.Indication.Description.SetValue(data.Description), APDBDef.Indication.TypePKID.SetValue(data.TypePKID), APDBDef.Indication.LevelPKID.SetValue(data.LevelPKID), APDBDef.Indication.Score.SetValue(data.Score), APDBDef.Indication.Status.SetValue(data.Status), APDBDef.Indication.ActiveId.SetValue(data.ActiveId));
+                var query = APQuery.insert(APDBDef.Indication).values(APDBDef.Indication.IndicationId.SetValue(data.IndicationId), APDBDef.Indication.IndicationName.SetValue(data.IndicationName), APDBDef.Indication.Description.SetValue(data.Description), APDBDef.Indication.TypePKID.SetValue(data.TypePKID), APDBDef.Indication.LevelPKID.SetValue(data.LevelPKID), APDBDef.Indication.Score.SetValue(data.Score), APDBDef.Indication.Status.SetValue(data.Status), APDBDef.Indication.ActiveId.SetValue(data.ActiveId), APDBDef.Indication.EvalType.SetValue(data.EvalType));
                 ExecuteNonQuery(query);
             }
             
@@ -7052,7 +7068,7 @@ namespace Res.Business {
             /// Update Data.
             /// </summary>
             public virtual void Update(Indication data) {
-                var query = APQuery.update(APDBDef.Indication).values(APDBDef.Indication.IndicationName.SetValue(data.IndicationName), APDBDef.Indication.Description.SetValue(data.Description), APDBDef.Indication.TypePKID.SetValue(data.TypePKID), APDBDef.Indication.LevelPKID.SetValue(data.LevelPKID), APDBDef.Indication.Score.SetValue(data.Score), APDBDef.Indication.Status.SetValue(data.Status), APDBDef.Indication.ActiveId.SetValue(data.ActiveId)).where((APDBDef.Indication.IndicationId == data.IndicationId));
+                var query = APQuery.update(APDBDef.Indication).values(APDBDef.Indication.IndicationName.SetValue(data.IndicationName), APDBDef.Indication.Description.SetValue(data.Description), APDBDef.Indication.TypePKID.SetValue(data.TypePKID), APDBDef.Indication.LevelPKID.SetValue(data.LevelPKID), APDBDef.Indication.Score.SetValue(data.Score), APDBDef.Indication.Status.SetValue(data.Status), APDBDef.Indication.ActiveId.SetValue(data.ActiveId), APDBDef.Indication.EvalType.SetValue(data.EvalType)).where((APDBDef.Indication.IndicationId == data.IndicationId));
                 ExecuteNonQuery(query);
             }
             
@@ -17357,6 +17373,11 @@ namespace Res.Business {
         private long _activeId;
         
         /// <summary>
+        /// EvalType
+        /// </summary>
+        private long _evalType;
+        
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public IndicationBase() {
@@ -17365,7 +17386,7 @@ namespace Res.Business {
         /// <summary>
         /// Constructor with all field values.
         /// </summary>
-        public IndicationBase(long indicationId, string indicationName, string description, long typePKID, long levelPKID, int score, int status, long activeId) {
+        public IndicationBase(long indicationId, string indicationName, string description, long typePKID, long levelPKID, int score, int status, long activeId, long evalType) {
             _indicationId = indicationId;
             _indicationName = indicationName;
             _description = description;
@@ -17374,6 +17395,7 @@ namespace Res.Business {
             _score = score;
             _status = status;
             _activeId = activeId;
+            _evalType = evalType;
         }
         
         /// <summary>
@@ -17555,6 +17577,28 @@ namespace Res.Business {
         }
         
         /// <summary>
+        /// EvalType
+        /// </summary>
+        [Display(Name="考核类型")]
+        public virtual long EvalType {
+            get {
+                return _evalType;
+            }
+            set {
+                _evalType = value;
+            }
+        }
+        
+        /// <summary>
+        /// EvalType APColumnDef
+        /// </summary>
+        public static Int64APColumnDef EvalTypeDef {
+            get {
+                return APDBDef.Indication.EvalType;
+            }
+        }
+        
+        /// <summary>
         /// IndicationTableDef APTableDef
         /// </summary>
         public static APDBDef.IndicationTableDef TableDef {
@@ -17584,6 +17628,7 @@ namespace Res.Business {
             Score = data.Score;
             Status = data.Status;
             ActiveId = data.ActiveId;
+            EvalType = data.EvalType;
         }
         
         /// <summary>
@@ -17612,6 +17657,9 @@ namespace Res.Business {
                 return false;
             }
             if ((ActiveId != data.ActiveId)) {
+                return false;
+            }
+            if ((EvalType != data.EvalType)) {
                 return false;
             }
             return true;
@@ -17710,8 +17758,8 @@ namespace Res.Business {
         /// <summary>
         /// Constructor with all field values.
         /// </summary>
-        public Indication(long indicationId, string indicationName, string description, long typePKID, long levelPKID, int score, int status, long activeId) : 
-                base(indicationId, indicationName, description, typePKID, levelPKID, score, status, activeId) {
+        public Indication(long indicationId, string indicationName, string description, long typePKID, long levelPKID, int score, int status, long activeId, long evalType) : 
+                base(indicationId, indicationName, description, typePKID, levelPKID, score, status, activeId, evalType) {
         }
     }
     

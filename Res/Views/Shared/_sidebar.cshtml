@@ -40,8 +40,8 @@
 						<span class="text">论文管理</span>
 					</a>
 				</li>
-		
-		
+
+				<li><a href="@Url.Action("IndicationList", "EvalManage")"><i class="fa fa-wheelchair fa-fw"></i> <span class="text">指标管理</span></a></li>
 				<li>
 					<a href="javascript:void(0)" class="js-sub-menu-toggle">
 						<i class="fa fa-twitter fa-fw"></i>
@@ -49,7 +49,7 @@
 					</a>
 					<ul class="sub-menu">
 						<li><a href="@Url.Action("FirstTrailGroupList", "EvalManage")">初审组管理</a></li>
-						<li><a href="@Url.Action("FirstTrailEvalResultList", "EvalManage")">初审通过列表</a></li>
+						<li><a href="@Url.Action("FirstTrailEvalResultList", "EvalManage")">初审结果查询</a></li>
 					</ul>
 				</li>
 				<li>
@@ -60,7 +60,6 @@
 					<ul class="sub-menu">
 						@*<li><a href="@Url.Action("Search", "EvalPeriod")">评审周期管理</a></li>*@
 						<li><a href="@Url.Action("Search", "EvalManage")">评审组管理</a></li>
-						<li><a href="@Url.Action("IndicationList", "EvalManage")">指标管理</a></li>
 						<li><a href="@Url.Action("EvalResultList", "EvalManage")">评审结果查询</a></li>
 					</ul>
 				</li>

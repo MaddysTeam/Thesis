@@ -315,7 +315,8 @@
 					<add name="Score" type="int"  display="最大分值"></add>
 					<add name="Status" columnName="Status" type="int"></add>
 					<add name="ActiveId" columnName="ActiveId" type="long" display="所属活动"/>
-
+					<add name="EvalType" columnName="EvalType" type="long" display="考核类型"/>
+					
 				</columns>
 			</table>
 
