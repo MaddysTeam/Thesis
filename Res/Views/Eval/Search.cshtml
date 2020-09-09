@@ -94,7 +94,7 @@
 					var id = row.id;
 					console.log(row.isFirstTrail);
 					var isFirstTrail = row.isFirstTrail;
-					var url = '@Url.Action("Details", "Eval")';
+					var url = isFirstTrail ? '@Url.Action("FirstTrailDetails", "Eval")' : '@Url.Action("Details", "Eval")';
 					var linkTitle = isFirstTrail ? '初审' : '评审';
 					if (row.isEval) {
 						return '<div class="btn-group btn-group-xs pull-right" data-row-id="' + row.id + '">' +
