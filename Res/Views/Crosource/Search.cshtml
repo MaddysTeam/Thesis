@@ -44,6 +44,7 @@
 				}
 				else if (isProvinceAdmin || isCityAdmin)
 				{
+					<a href="@Url.Action("Edit", "Crosource")" id="addUser" class="btn btn-danger btn-md">新增论文</a>
 					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
 					<strong id="deliverySituation">报送情况：@(currentDeliveryCount + "篇")/@(maxDeliveryCount + "篇")</strong>
 				}

@@ -36,6 +36,9 @@ namespace Res.Business
 		// 其他各省市允许上传总数
 		public const int DeliveryCountForPerOtherProvince = 100;
 
+		// 允许最大专家数量
+		public const int AllowedAreaExpertCount = 5;
+
 	}
 
 }
