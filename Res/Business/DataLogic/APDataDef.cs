@@ -324,5 +324,15 @@ namespace Res.Business
 
 	#endregion
 
+	#region [ Active ]
 
+	public partial class Active : ActiveBase
+	{
+		public bool IsInUploadPeriod => DateTime.UtcNow >= this.UploadStartDate && DateTime.UtcNow <= this.UploadEndDate;
+		public bool IsInEvalPeriod => DateTime.UtcNow >= this.EvalStartDate && DateTime.UtcNow <= this.EvalEndDate;
+		public bool IsInFirstEvalPeriod => DateTime.UtcNow >= this.FirstEvalStartDate && DateTime.UtcNow <= this.FirstEvalEndDate;
+		public bool IsInDeliveryPeriod => DateTime.UtcNow >= this.DeliveryEvalStartDate && DateTime.UtcNow <= this.DeliveryEvalEndDate;
+	}
+
+	#endregion
 }

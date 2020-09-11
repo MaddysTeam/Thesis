@@ -30,7 +30,8 @@ namespace Res.Controllers
       {
          var a = APDBDef.Active;
          var query = APQuery
-             .select(a.ActiveId, a.ActiveName, a.Description, a.UploadStartDate, a.UploadEndDate, a.EvalStartDate, a.EvalEndDate)
+             .select(a.ActiveId, a.ActiveName, a.Description, a.UploadStartDate, a.UploadEndDate, a.EvalStartDate, 
+			 a.EvalEndDate,a.FirstEvalStartDate,a.FirstEvalEndDate,a.DeliveryEvalStartDate,a.DeliveryEvalEndDate)
              .from(a);
 
          if (!string.IsNullOrEmpty(searchPhrase))
@@ -49,13 +50,16 @@ namespace Res.Controllers
                      {
                         id = ac.ActiveId,
                         name = ac.ActiveName,
-                        // company = ac.Company,
                         description = ac.Description,
                         start = ac.UploadStartDate.ToString("yyyy-MM-dd"),
                         end = ac.UploadEndDate.ToString("yyyy-MM-dd"),
                         evalStart = ac.EvalStartDate.ToString("yyyy-MM-dd"),
                         evalEnd = ac.EvalEndDate.ToString("yyyy-MM-dd"),
-                     }).ToList();
+						firstEvalStart = ac.FirstEvalStartDate.ToString("yyyy-MM-dd"),
+						firstEvalEnd = ac.FirstEvalEndDate.ToString("yyyy-MM-dd"),
+						deliveryEvalStartDate = ac.DeliveryEvalStartDate.ToString("yyyy-MM-dd"),
+						deliveryEvalEndDate = ac.DeliveryEvalEndDate.ToString("yyyy-MM-dd"),
+					 }).ToList();
 
 
          return Json(new

@@ -198,6 +198,11 @@
 					<add name="UploadEndDate" columnName="UploadEndDate" type="DateTime"  display="上传结束时间" />
 					<add name="EvalStartDate" columnName="EvalStartDate" type="DateTime"  display="评审起始时间" />
 					<add name="EvalEndDate" columnName="EvalEndDate" type="DateTime"  display="评审结束时间" />
+					<add name="FirstEvalStartDate" columnName="FirstEvalStartDate" type="DateTime"  display="初审起始时间" />
+					<add name="FirstEvalEndDate" columnName="FirstEvalEndDate" type="DateTime"  display="初审结束时间" />
+					<add name="DeliveryEvalStartDate" columnName="DeliveryEvalStartDate" type="DateTime"  display="区级报送起始时间" />
+					<add name="DeliveryEvalEndDate" columnName="DeliveryEvalEndDate" type="DateTime"  display="区级报送结束时间" />
+
 					<add name="IsCurrent" columnName="IsCurrent" type="bool"  display="是否当前项目" />
 
 				</columns>

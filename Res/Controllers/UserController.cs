@@ -124,6 +124,7 @@ namespace Res.Controllers
 		{
 			var t = APDBDef.ResUser;
 
+			var user = ResSettings.SettingsInSession.User;
 			model.GenderPKID = ResUserHelper.GenderMale;
 
 			if (model.UserId == 0)
@@ -157,7 +158,7 @@ namespace Res.Controllers
 
 				if (ResSettings.SettingsInSession.IsCityAdmin 
 					&& model.IsExpert 
-					&& APBplDef.ResUserBpl.ConditionQueryCount(t.AreaId>0 & t.UserTypePKID== ResUserHelper.Export)>=ThisApp.AllowedAreaExpertCount)
+					&& APBplDef.ResUserBpl.ConditionQueryCount(t.AreaId== user.AreaId & t.UserTypePKID== ResUserHelper.Export)>=ThisApp.AllowedAreaExpertCount)
 				{
 					return Json(new
 					{

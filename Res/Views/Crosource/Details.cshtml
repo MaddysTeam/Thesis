@@ -96,7 +96,7 @@
 											<li class="list-group-item">审核意见：<span id="opinion" class="@(Model.StatePKID==10353?"text-danger":"text-info")">@Model.AuditOpinion</span></li>
 										}*@
 									
-											<li class="list-group-item">
+											<li class="list-group-item hidden">
 												<div class="switchs">
 													@Html.CheckBox("State", Model.StatePKID == CroResourceHelper.StateAllow, new { @class = "switch", data_label_text = "审核合格", data_size = "small" })
 												</div>

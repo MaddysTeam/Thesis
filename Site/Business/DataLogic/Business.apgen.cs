@@ -2371,6 +2371,14 @@ namespace Res.Business {
             
             private DateTimeAPColumnDef _evalEndDate;
             
+            private DateTimeAPColumnDef _firstEvalStartDate;
+            
+            private DateTimeAPColumnDef _firstEvalEndDate;
+            
+            private DateTimeAPColumnDef _deliveryEvalStartDate;
+            
+            private DateTimeAPColumnDef _deliveryEvalEndDate;
+            
             private BooleanAPColumnDef _isCurrent;
             
             public ActiveTableDef(string tableName) : 
@@ -2501,6 +2509,58 @@ namespace Res.Business {
             }
             
             /// <summary>
+            /// FirstEvalStartDate ColumnDef
+            /// </summary>
+            public virtual DateTimeAPColumnDef FirstEvalStartDate {
+                get {
+                    if (Object.ReferenceEquals(_firstEvalStartDate, null)) {
+                        _firstEvalStartDate = new DateTimeAPColumnDef(this, "FirstEvalStartDate", false);
+                        _firstEvalStartDate.Display = "初审起始时间";
+                    }
+                    return _firstEvalStartDate;
+                }
+            }
+            
+            /// <summary>
+            /// FirstEvalEndDate ColumnDef
+            /// </summary>
+            public virtual DateTimeAPColumnDef FirstEvalEndDate {
+                get {
+                    if (Object.ReferenceEquals(_firstEvalEndDate, null)) {
+                        _firstEvalEndDate = new DateTimeAPColumnDef(this, "FirstEvalEndDate", false);
+                        _firstEvalEndDate.Display = "初审结束时间";
+                    }
+                    return _firstEvalEndDate;
+                }
+            }
+            
+            /// <summary>
+            /// DeliveryEvalStartDate ColumnDef
+            /// </summary>
+            public virtual DateTimeAPColumnDef DeliveryEvalStartDate {
+                get {
+                    if (Object.ReferenceEquals(_deliveryEvalStartDate, null)) {
+                        _deliveryEvalStartDate = new DateTimeAPColumnDef(this, "DeliveryEvalStartDate", false);
+                        _deliveryEvalStartDate.Display = "区级报送起始时间";
+                    }
+                    return _deliveryEvalStartDate;
+                }
+            }
+            
+            /// <summary>
+            /// DeliveryEvalEndDate ColumnDef
+            /// </summary>
+            public virtual DateTimeAPColumnDef DeliveryEvalEndDate {
+                get {
+                    if (Object.ReferenceEquals(_deliveryEvalEndDate, null)) {
+                        _deliveryEvalEndDate = new DateTimeAPColumnDef(this, "DeliveryEvalEndDate", false);
+                        _deliveryEvalEndDate.Display = "区级报送结束时间";
+                    }
+                    return _deliveryEvalEndDate;
+                }
+            }
+            
+            /// <summary>
             /// IsCurrent ColumnDef
             /// </summary>
             public virtual BooleanAPColumnDef IsCurrent {
@@ -2542,6 +2602,10 @@ namespace Res.Business {
                 data.UploadEndDate = UploadEndDate.GetValue<System.DateTime>(reader, throwIfValidColumnName);
                 data.EvalStartDate = EvalStartDate.GetValue<System.DateTime>(reader, throwIfValidColumnName);
                 data.EvalEndDate = EvalEndDate.GetValue<System.DateTime>(reader, throwIfValidColumnName);
+                data.FirstEvalStartDate = FirstEvalStartDate.GetValue<System.DateTime>(reader, throwIfValidColumnName);
+                data.FirstEvalEndDate = FirstEvalEndDate.GetValue<System.DateTime>(reader, throwIfValidColumnName);
+                data.DeliveryEvalStartDate = DeliveryEvalStartDate.GetValue<System.DateTime>(reader, throwIfValidColumnName);
+                data.DeliveryEvalEndDate = DeliveryEvalEndDate.GetValue<System.DateTime>(reader, throwIfValidColumnName);
                 data.IsCurrent = IsCurrent.GetValue<bool>(reader, throwIfValidColumnName);
             }
             
@@ -5826,7 +5890,7 @@ namespace Res.Business {
                 if ((data.ActiveId == 0)) {
                     data.ActiveId = ((long)(GetNewId(APDBDef.Active.ActiveId)));
                 }
-                var query = APQuery.insert(APDBDef.Active).values(APDBDef.Active.ActiveId.SetValue(data.ActiveId), APDBDef.Active.ActiveName.SetValue(data.ActiveName), APDBDef.Active.Description.SetValue(data.Description), APDBDef.Active.StartDate.SetValue(data.StartDate), APDBDef.Active.EndDate.SetValue(data.EndDate), APDBDef.Active.UploadStartDate.SetValue(data.UploadStartDate), APDBDef.Active.UploadEndDate.SetValue(data.UploadEndDate), APDBDef.Active.EvalStartDate.SetValue(data.EvalStartDate), APDBDef.Active.EvalEndDate.SetValue(data.EvalEndDate), APDBDef.Active.IsCurrent.SetValue(data.IsCurrent));
+                var query = APQuery.insert(APDBDef.Active).values(APDBDef.Active.ActiveId.SetValue(data.ActiveId), APDBDef.Active.ActiveName.SetValue(data.ActiveName), APDBDef.Active.Description.SetValue(data.Description), APDBDef.Active.StartDate.SetValue(data.StartDate), APDBDef.Active.EndDate.SetValue(data.EndDate), APDBDef.Active.UploadStartDate.SetValue(data.UploadStartDate), APDBDef.Active.UploadEndDate.SetValue(data.UploadEndDate), APDBDef.Active.EvalStartDate.SetValue(data.EvalStartDate), APDBDef.Active.EvalEndDate.SetValue(data.EvalEndDate), APDBDef.Active.FirstEvalStartDate.SetValue(data.FirstEvalStartDate), APDBDef.Active.FirstEvalEndDate.SetValue(data.FirstEvalEndDate), APDBDef.Active.DeliveryEvalStartDate.SetValue(data.DeliveryEvalStartDate), APDBDef.Active.DeliveryEvalEndDate.SetValue(data.DeliveryEvalEndDate), APDBDef.Active.IsCurrent.SetValue(data.IsCurrent));
                 ExecuteNonQuery(query);
             }
             
@@ -5834,7 +5898,7 @@ namespace Res.Business {
             /// 更新数据。
             /// </summary>
             public virtual void Update(Active data) {
-                var query = APQuery.update(APDBDef.Active).values(APDBDef.Active.ActiveName.SetValue(data.ActiveName), APDBDef.Active.Description.SetValue(data.Description), APDBDef.Active.StartDate.SetValue(data.StartDate), APDBDef.Active.EndDate.SetValue(data.EndDate), APDBDef.Active.UploadStartDate.SetValue(data.UploadStartDate), APDBDef.Active.UploadEndDate.SetValue(data.UploadEndDate), APDBDef.Active.EvalStartDate.SetValue(data.EvalStartDate), APDBDef.Active.EvalEndDate.SetValue(data.EvalEndDate), APDBDef.Active.IsCurrent.SetValue(data.IsCurrent)).where((APDBDef.Active.ActiveId == data.ActiveId));
+                var query = APQuery.update(APDBDef.Active).values(APDBDef.Active.ActiveName.SetValue(data.ActiveName), APDBDef.Active.Description.SetValue(data.Description), APDBDef.Active.StartDate.SetValue(data.StartDate), APDBDef.Active.EndDate.SetValue(data.EndDate), APDBDef.Active.UploadStartDate.SetValue(data.UploadStartDate), APDBDef.Active.UploadEndDate.SetValue(data.UploadEndDate), APDBDef.Active.EvalStartDate.SetValue(data.EvalStartDate), APDBDef.Active.EvalEndDate.SetValue(data.EvalEndDate), APDBDef.Active.FirstEvalStartDate.SetValue(data.FirstEvalStartDate), APDBDef.Active.FirstEvalEndDate.SetValue(data.FirstEvalEndDate), APDBDef.Active.DeliveryEvalStartDate.SetValue(data.DeliveryEvalStartDate), APDBDef.Active.DeliveryEvalEndDate.SetValue(data.DeliveryEvalEndDate), APDBDef.Active.IsCurrent.SetValue(data.IsCurrent)).where((APDBDef.Active.ActiveId == data.ActiveId));
                 ExecuteNonQuery(query);
             }
             
@@ -13520,6 +13584,26 @@ namespace Res.Business {
         private System.DateTime _evalEndDate;
         
         /// <summary>
+        /// FirstEvalStartDate
+        /// </summary>
+        private System.DateTime _firstEvalStartDate;
+        
+        /// <summary>
+        /// FirstEvalEndDate
+        /// </summary>
+        private System.DateTime _firstEvalEndDate;
+        
+        /// <summary>
+        /// DeliveryEvalStartDate
+        /// </summary>
+        private System.DateTime _deliveryEvalStartDate;
+        
+        /// <summary>
+        /// DeliveryEvalEndDate
+        /// </summary>
+        private System.DateTime _deliveryEvalEndDate;
+        
+        /// <summary>
         /// IsCurrent
         /// </summary>
         private bool _isCurrent;
@@ -13533,7 +13617,7 @@ namespace Res.Business {
         /// <summary>
         /// 初始化所有字段的构造函数。
         /// </summary>
-        public ActiveBase(long activeId, string activeName, string description, System.DateTime startDate, System.DateTime endDate, System.DateTime uploadStartDate, System.DateTime uploadEndDate, System.DateTime evalStartDate, System.DateTime evalEndDate, bool isCurrent) {
+        public ActiveBase(long activeId, string activeName, string description, System.DateTime startDate, System.DateTime endDate, System.DateTime uploadStartDate, System.DateTime uploadEndDate, System.DateTime evalStartDate, System.DateTime evalEndDate, System.DateTime firstEvalStartDate, System.DateTime firstEvalEndDate, System.DateTime deliveryEvalStartDate, System.DateTime deliveryEvalEndDate, bool isCurrent) {
             _activeId = activeId;
             _activeName = activeName;
             _description = description;
@@ -13543,6 +13627,10 @@ namespace Res.Business {
             _uploadEndDate = uploadEndDate;
             _evalStartDate = evalStartDate;
             _evalEndDate = evalEndDate;
+            _firstEvalStartDate = firstEvalStartDate;
+            _firstEvalEndDate = firstEvalEndDate;
+            _deliveryEvalStartDate = deliveryEvalStartDate;
+            _deliveryEvalEndDate = deliveryEvalEndDate;
             _isCurrent = isCurrent;
         }
         
@@ -13749,6 +13837,94 @@ namespace Res.Business {
         }
         
         /// <summary>
+        /// FirstEvalStartDate
+        /// </summary>
+        [Display(Name="初审起始时间")]
+        public virtual System.DateTime FirstEvalStartDate {
+            get {
+                return _firstEvalStartDate;
+            }
+            set {
+                _firstEvalStartDate = value;
+            }
+        }
+        
+        /// <summary>
+        /// FirstEvalStartDate APColumnDef
+        /// </summary>
+        public static DateTimeAPColumnDef FirstEvalStartDateDef {
+            get {
+                return APDBDef.Active.FirstEvalStartDate;
+            }
+        }
+        
+        /// <summary>
+        /// FirstEvalEndDate
+        /// </summary>
+        [Display(Name="初审结束时间")]
+        public virtual System.DateTime FirstEvalEndDate {
+            get {
+                return _firstEvalEndDate;
+            }
+            set {
+                _firstEvalEndDate = value;
+            }
+        }
+        
+        /// <summary>
+        /// FirstEvalEndDate APColumnDef
+        /// </summary>
+        public static DateTimeAPColumnDef FirstEvalEndDateDef {
+            get {
+                return APDBDef.Active.FirstEvalEndDate;
+            }
+        }
+        
+        /// <summary>
+        /// DeliveryEvalStartDate
+        /// </summary>
+        [Display(Name="区级报送起始时间")]
+        public virtual System.DateTime DeliveryEvalStartDate {
+            get {
+                return _deliveryEvalStartDate;
+            }
+            set {
+                _deliveryEvalStartDate = value;
+            }
+        }
+        
+        /// <summary>
+        /// DeliveryEvalStartDate APColumnDef
+        /// </summary>
+        public static DateTimeAPColumnDef DeliveryEvalStartDateDef {
+            get {
+                return APDBDef.Active.DeliveryEvalStartDate;
+            }
+        }
+        
+        /// <summary>
+        /// DeliveryEvalEndDate
+        /// </summary>
+        [Display(Name="区级报送结束时间")]
+        public virtual System.DateTime DeliveryEvalEndDate {
+            get {
+                return _deliveryEvalEndDate;
+            }
+            set {
+                _deliveryEvalEndDate = value;
+            }
+        }
+        
+        /// <summary>
+        /// DeliveryEvalEndDate APColumnDef
+        /// </summary>
+        public static DateTimeAPColumnDef DeliveryEvalEndDateDef {
+            get {
+                return APDBDef.Active.DeliveryEvalEndDate;
+            }
+        }
+        
+        /// <summary>
         /// IsCurrent
         /// </summary>
         [Display(Name="是否当前项目")]
@@ -13801,6 +13977,10 @@ namespace Res.Business {
             UploadEndDate = data.UploadEndDate;
             EvalStartDate = data.EvalStartDate;
             EvalEndDate = data.EvalEndDate;
+            FirstEvalStartDate = data.FirstEvalStartDate;
+            FirstEvalEndDate = data.FirstEvalEndDate;
+            DeliveryEvalStartDate = data.DeliveryEvalStartDate;
+            DeliveryEvalEndDate = data.DeliveryEvalEndDate;
             IsCurrent = data.IsCurrent;
         }
         
@@ -13833,6 +14013,18 @@ namespace Res.Business {
                 return false;
             }
             if ((EvalEndDate != data.EvalEndDate)) {
+                return false;
+            }
+            if ((FirstEvalStartDate != data.FirstEvalStartDate)) {
+                return false;
+            }
+            if ((FirstEvalEndDate != data.FirstEvalEndDate)) {
+                return false;
+            }
+            if ((DeliveryEvalStartDate != data.DeliveryEvalStartDate)) {
+                return false;
+            }
+            if ((DeliveryEvalEndDate != data.DeliveryEvalEndDate)) {
                 return false;
             }
             if ((IsCurrent != data.IsCurrent)) {
@@ -13934,8 +14126,8 @@ namespace Res.Business {
         /// <summary>
         /// 初始化所有字段的构造函数。
         /// </summary>
-        public Active(long activeId, string activeName, string description, System.DateTime startDate, System.DateTime endDate, System.DateTime uploadStartDate, System.DateTime uploadEndDate, System.DateTime evalStartDate, System.DateTime evalEndDate, bool isCurrent) : 
-                base(activeId, activeName, description, startDate, endDate, uploadStartDate, uploadEndDate, evalStartDate, evalEndDate, isCurrent) {
+        public Active(long activeId, string activeName, string description, System.DateTime startDate, System.DateTime endDate, System.DateTime uploadStartDate, System.DateTime uploadEndDate, System.DateTime evalStartDate, System.DateTime evalEndDate, System.DateTime firstEvalStartDate, System.DateTime firstEvalEndDate, System.DateTime deliveryEvalStartDate, System.DateTime deliveryEvalEndDate, bool isCurrent) : 
+                base(activeId, activeName, description, startDate, endDate, uploadStartDate, uploadEndDate, evalStartDate, evalEndDate, firstEvalStartDate, firstEvalEndDate, deliveryEvalStartDate, deliveryEvalEndDate, isCurrent) {
         }
     }
     

@@ -5,7 +5,7 @@
 	var isAdmin = ResSettings.SettingsInSession.IsAdmin;
 	var isProvinceAdmin = ResSettings.SettingsInSession.IsProvinceAdmin;
 	var isCityAdmin = ResSettings.SettingsInSession.IsCityAdmin;
-	var maxDeliveryCount = ResDeliveryHelper.GetMaxAllowCount();
+	var maxDeliveryCount = ResDeliveryHelper.GetMaxAllowCount(user.ProvinceId,user.AreaId);
 	var currentDeliveryCount = ResDeliveryHelper.GetDeliveryCount(user.ProvinceId, user.AreaId);
 }
 <div class="col-md-10 content-wrapper">
@@ -314,7 +314,7 @@
 							.find('.btn_delivery').on('click',function(){
 								var id = $(this).data("row-id");
 								$.post('@Url.Action("MultiDelivery", "Crosource")', { ids: id}, function (response, status) {
-									if(response.cmd=="error"){
+									if(response.cmd=="error" || response.error){
 										alert(response.msg);
 									}
 									else{
@@ -327,7 +327,7 @@
 						  	.find('.btn_cancelDelivery').on('click',function(){
 						  		var id = $(this).data("row-id");
 						  		$.post('@Url.Action("MultiCancelDelivery", "Crosource")', { ids: id}, function (response, status) {
-						  			if(response.cmd=="error"){
+						  			if(response.cmd=="error" || response.error){
 						  				alert(response.msg);
 						  			}
 						  			else{
@@ -373,7 +373,7 @@
 				}
 
 				$.post("@Url.Action("MultiDelivery", "Crosource")",{ids:ids.join(',')}, function (response) {
-					if(response.cmd=="error"){
+					if(response.cmd=="error" || response.error){
 						alert(response.msg);
 					}
 					else{

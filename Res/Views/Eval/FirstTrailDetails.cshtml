@@ -120,6 +120,8 @@
 			var pdfPath = '@Model.AttachmentPath' + '.pdf';
 			PDFObject.embed(pdfPath, "#pdf");
 
+			$('.author_area').hide();
+
 			//$("#comment").keyup(function () {
 			//	$(".img_ta_num").html("评语还可以填写"+(150 - $(this).val().length)+"个字")
 			//})

@@ -108,6 +108,10 @@ namespace Res.Controllers
 
 		public ActionResult Details(long id, long resId, long? courseId, long groupId, long? expertId)
 		{
+			var active = ResSettings.SettingsInSession.Actives.First();
+			if (!active.IsInFirstEvalPeriod)
+				throw new ArgumentException("当前不在评审周期内，请联系统管理员！");
+
 			var expert = expertId == null ? ResSettings.SettingsInSession.User : APBplDef.ResUserBpl.PrimaryGet(expertId.Value);
 			if (expert == null) throw new ArgumentException("expert can not be null");
 
@@ -162,6 +166,10 @@ namespace Res.Controllers
 
 		public ActionResult FirstTrailDetails(long id, long resId, long groupId, long? expertId)
 		{
+			var active = ResSettings.SettingsInSession.Actives.First();
+			if (!active.IsInFirstEvalPeriod)
+				throw new ArgumentException("当前不在初审周期内，请联系统管理员！");
+
 			var expert = expertId == null ? ResSettings.SettingsInSession.User : APBplDef.ResUserBpl.PrimaryGet(expertId.Value);
 			if (expert == null) throw new ArgumentException("expert can not be null");
 

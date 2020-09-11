@@ -159,40 +159,8 @@
 			$("#comment").keyup(function () {
 				$(".img_ta_num").html("评语还可以填写"+(150 - $(this).val().length)+"个字")
 			})
-			@*var videoPath='@course.VideoPath';
-			var hasVideo=videoPath!='' && (videoPath.indexOf('.mp4')>=0 || videoPath.indexOf('.flv')>=0 );
-			var id = @Model.CrosourceId;
-			var path='@course.VideoPath';
-			var ua = navigator.userAgent;
-			ua = ua.toLocaleLowerCase();
-			//IE11 用ckplayer
-			if (ua.match(/edge/) != null || ua.match(/firefox/)!=null || ua.match(/Firefox/)!=null && hasVideo){
-				var videoObject = {
-					container: '#video',
-					variable: 'player',
-					poster:'@course.CoverPath',//封面图片
-					height: 500,
-					video:path
-				};
-				var player=new ckplayer(videoObject);
-			}
-			else if(hasVideo){
-				var player=jwplayer("video").setup({
-					flashplayer:"../../assets/plugins/jwplayer/jwplayer.flash.swf",
-					file:path,
-					width: 'auto',
-					height: 500,
-					controls: true ,
-					primary: "flash",
-					autostart:false,
-					image: '@course.CoverPath',
-				});
 
-				player.onPlay(function(){
-					$.post('@Url.Action("Play", "Crosource")',{id:'@Model.CrosourceId',courseId:'@course.CourseId'},function(){});
-				});
-			}*@
-
+			$('.author_area').hide();
 
 			$('.btn-eval').on('click',function(){
 				var o={
@@ -223,17 +191,6 @@
 					}
 				});
 			});
-
-			@*$('.btn-download').on('click',function(){
-				var $this=$(this);
-				var fileId=$(this).data('id');
-				if(fileId>0){
-					$.post('/Crosource/Download',{id:'@Model.CrosourceId',  courseId:'@course.CourseId', fileId:fileId},function(response){});
-				}
-				else{
-					alert('暂无文件可下载');
-				}
-			});*@
 
 		});
 	</script>
