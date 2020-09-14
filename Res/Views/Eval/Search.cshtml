@@ -95,10 +95,10 @@
 					console.log(row.isFirstTrail);
 					var isFirstTrail = row.isFirstTrail;
 					var url = isFirstTrail ? '@Url.Action("FirstTrailDetails", "Eval")' : '@Url.Action("Details", "Eval")';
-					var linkTitle = isFirstTrail ? '初审' : '评审';
+					var linkTitle = isFirstTrail ? id > 0 ? '初审已通过，继续评审' : '执行初审' : '继续评审';
 					if (row.isEval) {
 						return '<div class="btn-group btn-group-xs pull-right" data-row-id="' + row.id + '">' +
-									'<a class="btn btn-warning btn-eval" target="blank" href="' + url + '?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">继续' + linkTitle + '</a>' +
+									'<a class="btn btn-warning btn-eval" target="blank" href="' + url + '?id=' + row.id + '&resId=' + row.resId + '&groupId=' + row.groupId + '">' + linkTitle + '</a>' +
 								'</div>';
 					}
 					else {
