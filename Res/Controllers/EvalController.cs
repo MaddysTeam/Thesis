@@ -67,11 +67,11 @@ namespace Res.Controllers
 				   );
 			}
 
-			query.primary(r.CrosourceId)
-				 .skip((current - 1) * rowCount)
-				 .take(rowCount);
+			//query.primary(r.CrosourceI)
+			//	 .skip((current - 1) * rowCount)
+			//	 .take(rowCount);
 
-			var total = db.ExecuteSizeOfSelect(query);
+			//var total = db.ExecuteSizeOfSelect(query);
 
 			var results = query.query(db, rd =>
 			{
@@ -90,6 +90,12 @@ namespace Res.Controllers
 				 isFirstTrail = eg.GroupType.GetValue(rd) == EvalGroupHelper.FirstTrial
 				};
 			}).ToList();
+
+
+			var total = results.Count();
+
+			results = results.Skip((current - 1) * rowCount).Take(rowCount).ToList();
+
 
 			return Json(new
 			{
