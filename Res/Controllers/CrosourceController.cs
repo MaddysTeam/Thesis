@@ -302,7 +302,7 @@ namespace Res.Controllers
 			var provinces = ResSettings.SettingsInSession.AllProvince();
 			var areas = ResSettings.SettingsInSession.AllAreas();
 
-			ViewBag.Provinces = provinces;
+			ViewBag.Provinces = user.IsExpert;
 			ViewBag.Areas = areas;
 			ViewBag.ProvincesDic = GetStrengthDict(areas);
 			ViewBag.AreasDic = GetStrengthDict(areas);
