@@ -34,6 +34,6 @@ namespace Res.Business
 
 		public static long CurrentActiveId = 1001;
 
-	}
+   }
 
 }

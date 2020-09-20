@@ -93,6 +93,7 @@ namespace Res.Business
 
 		public bool IsExpert => UserTypePKID == ResUserHelper.Export;
 		public bool IsRigisterUser => UserTypePKID == ResUserHelper.RegistedUser;
+      public bool IsCityAdmin => UserTypePKID == ResUserHelper.CityAdmin;
 
 		#endregion
 

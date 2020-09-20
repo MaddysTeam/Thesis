@@ -39,6 +39,10 @@ namespace Res.Business
 		// 允许最大专家数量
 		public const int AllowedAreaExpertCount = 5;
 
-	}
+
+      //TODO
+      public static long MingHangAdmin = 44013;
+
+   }
 
 }

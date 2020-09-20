@@ -42,7 +42,7 @@
 					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
 					<strong id="deliverySituation">报送情况：已报送@(currentDeliveryCount + "篇")</strong>
 				}
-				else if (isProvinceAdmin || isCityAdmin)
+				else if (isProvinceAdmin || user.UserId== 44013)
 				{
 					<a href="@Url.Action("Edit", "Crosource")" id="addUser" class="btn btn-danger btn-md">新增论文</a>
 					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
