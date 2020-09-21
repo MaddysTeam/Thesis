@@ -42,9 +42,15 @@
 					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
 					<strong id="deliverySituation">报送情况：已报送@(currentDeliveryCount + "篇")</strong>
 				}
-				else if (isProvinceAdmin || user.UserId== 44013)
+				//TODO: to delete later 
+				//闵行区特制，以后删除
+				else if (user.UserId == 44013 || user.UserId == 44304 || user.UserId == 44305)
 				{
 					<a href="@Url.Action("Edit", "Crosource")" id="addUser" class="btn btn-danger btn-md">新增论文</a>
+
+				}
+				else if (isProvinceAdmin)
+				{
 					<a href="#" id="delivery" class="btn btn-success btn-winLevel">论文报送</a>
 					<strong id="deliverySituation">报送情况：@(currentDeliveryCount + "篇")/@(maxDeliveryCount + "篇")</strong>
 				}

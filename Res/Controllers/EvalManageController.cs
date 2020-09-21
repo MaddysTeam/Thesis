@@ -985,14 +985,15 @@ namespace Res.Controllers
 				//query=query.
 			}
 
-			query.primary(er.ResultId)
-			   .skip(rowCount * (current - 1))
-			   .take(rowCount);
+			//query.primary(cr.CrosourceId)
+			//   .skip(rowCount * (current - 1))
+			//   .take(rowCount);
+		  
 
 
 			//获得查询的总数量
 
-			var total = db.ExecuteSizeOfSelect(query);
+			//var total = db.ExecuteSizeOfSelect(query);
 
 			//查询结果集
 
@@ -1016,6 +1017,14 @@ namespace Res.Controllers
 					isDelivery = der.RecordId.GetValue(r) > 0
 				};
 			}).ToList();
+
+			var total = result.Count;
+
+			if (result.Count > 0)
+			{
+				result = result.Skip(rowCount * (current - 1)).Take(rowCount).ToList();
+			}
+
 
 			return Json(new
 			{
