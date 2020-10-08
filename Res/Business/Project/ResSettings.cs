@@ -167,6 +167,11 @@ namespace Res.Business
 			get { CheckCurrent(); return _user.UserTypePKID == ResUserHelper.CityAdmin; }
 		}
 
+      public bool IsExpert
+      {
+         get { CheckCurrent(); return _user.UserTypePKID == ResUserHelper.Export; }
+      }
+
 		public List<ResCompany> Companies
 		{
 			get

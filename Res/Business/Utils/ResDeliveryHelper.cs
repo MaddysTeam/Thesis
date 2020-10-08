@@ -16,7 +16,7 @@ namespace Res.Business
 				return 0;
 
 			var r = APDBDef.CroResource;
-			Symber.Web.Data.APSqlWherePhrase where = r.DeliveryStatus == CroResourceHelper.IsDelivery;
+			Symber.Web.Data.APSqlWherePhrase where = r.DeliveryStatus == CroResourceHelper.IsDelivery & r.StatePKID!= CroResourceHelper.StateDelete;
 
 			if (session.IsProvinceAdmin)
 				where &= r.ProvinceId == provinceId;
@@ -72,8 +72,8 @@ namespace Res.Business
 				dic = new Dictionary<long, int>
 				{
 					{0,int.MaxValue }, //管理员
-					{330000,300 },//江苏
-					{320000,300 }, // 浙江
+					{330000,300 },// 浙江
+					{320000,350 }, // 江苏
 					{340000,300}, // 安徽
 				};
 

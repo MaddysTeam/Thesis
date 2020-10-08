@@ -159,9 +159,10 @@ namespace Res.Controllers
 			}).ToList();
 
 
-			ViewBag.isSlef = (string.IsNullOrEmpty(expId) ? 0 : Convert.ToInt32(expId)) == ResSettings.SettingsInSession.UserId || (id == 0 && expert.UserTypePKID == ResUserHelper.Export);
+         ViewBag.isSlef = ResSettings.SettingsInSession.IsExpert;   // (string.IsNullOrEmpty(expId) ? 0 : Convert.ToInt32(expId)) == ResSettings.SettingsInSession.UserId || (id == 0 && expert.UserTypePKID == ResUserHelper.Export);
 
-			ViewBag.Indications = list;
+
+         ViewBag.Indications = list;
 
 			ViewBag.Comment = comment;
 

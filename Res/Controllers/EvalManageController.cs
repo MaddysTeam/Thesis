@@ -855,18 +855,21 @@ namespace Res.Controllers
 			var er = APDBDef.EvalResult;
 
 			//var isAdmin = user.UserTypePKID == ResUserHelper.Admin || user.UserTypePKID == ResUserHelper.ProvinceAdmin;
-			//var isExpert = user.UserTypePKID == ResUserHelper.Export;
+			var isExpert = user.UserTypePKID == ResUserHelper.Export;
 
 			APSqlSelectCommand query = APQuery.select(er.ResultId, er.ExpertId, er.GroupId, er.AccessDate, er.Score, er.Comment,
 							  cr.CrosourceId, cr.Title, cr.Score.As("AverageScore"), u.UserName, u.UserId,
-							  g.GroupName, g.GroupId, a.ActiveName, a.ActiveId)
+							  g.GroupName, g.GroupId.As("groupId"), a.ActiveName, a.ActiveId)
 					   .from(er,
 						   cr.JoinInner(cr.CrosourceId == er.ResourceId),
-						   u.JoinInner(u.UserId == er.ExpertId & er.ExpertId == expertId),
+						   u.JoinInner(u.UserId == er.ExpertId),
 						   g.JoinInner(er.GroupId == g.GroupId),
 						   a.JoinInner(a.ActiveId == cr.ActiveId)
-						   );
+						   )
+                     .where(g.GroupType== EvalGroupHelper.LastTrial);
 
+         if (isExpert)
+            query = query.where_and(er.ExpertId==expertId);
 
 			if (activeId > 0)
 				query = query.where_and(cr.ActiveId == activeId);
@@ -915,7 +918,7 @@ namespace Res.Controllers
 					averageScore = cr.Score.GetValue(r, "AverageScore"),
 					score = er.Score.GetValue(r),
 					group = g.GroupName.GetValue(r),
-					groupId = g.GroupId.GetValue(r),
+					groupId = g.GroupId.GetValue(r,"groupId"),
 					active = a.ActiveName.GetValue(r),
 					activeId = a.ActiveId.GetValue(r),
 					comment = er.Comment.GetValue(r),
