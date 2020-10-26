@@ -86,8 +86,8 @@ namespace Res.Controllers
 					groupId = eg.GroupId.GetValue(rd, "groupId"),
 					score = er.Score.GetValue(rd),
 					isEval = er.ResultId.GetValue(rd) > 0,
-				 //evalType=eg.GroupType.GetValue(rd), // 初审 或 最终评审
-				 isFirstTrail = eg.GroupType.GetValue(rd) == EvalGroupHelper.FirstTrial
+					//evalType=eg.GroupType.GetValue(rd), // 初审 或 最终评审
+					isFirstTrail = eg.GroupType.GetValue(rd) == EvalGroupHelper.FirstTrial
 				};
 			}).ToList();
 
@@ -115,7 +115,7 @@ namespace Res.Controllers
 		public ActionResult Details(long id, long resId, long? courseId, long groupId, long? expertId)
 		{
 			var active = ResSettings.SettingsInSession.Actives.First();
-			if (!active.IsInFirstEvalPeriod)
+			if (!active.IsInEvalPeriod)
 				throw new ArgumentException("当前不在评审周期内，请联系统管理员！");
 
 			var expert = expertId == null ? ResSettings.SettingsInSession.User : APBplDef.ResUserBpl.PrimaryGet(expertId.Value);
@@ -125,12 +125,12 @@ namespace Res.Controllers
 			var a = APDBDef.Active;
 
 			var model = APBplDef.CroResourceBpl.GetResource(db, resId);
-			var query = APQuery.select(i.IndicationId, i.Description, i.LevelPKID, i.Score, i.IndicationName,
+			var query = APQuery.select(i.IndicationId, i.Description, i.LevelPKID, i.Score, i.IndicationName, i.Score, i.Max, i.Min,
 									   i.TypePKID, i.ActiveId, a.ActiveName, a.ActiveId,
 									   eri.ResultId, eri.Score.As("evalScore"),
 									   er.Comment, er.ExpertId)
 			   .from(i,
-					eg.JoinInner(eg.GroupId == groupId & eg.GroupType == i.EvalType),
+					eg.JoinInner(eg.GroupId == groupId),
 					a.JoinInner(a.ActiveId == i.ActiveId),
 					eri.JoinLeft(eri.IndicationId == i.IndicationId & eri.ResultId == id),
 					er.JoinLeft(er.ResultId == eri.ResultId & er.ResultId == id)
@@ -144,6 +144,7 @@ namespace Res.Controllers
 			{
 				comment = er.Comment.GetValue(r);
 				expId = er.ExpertId.GetValue(r).ToString();
+				var score = eri.Score.GetValue(r, "evalScore");
 
 				var indication = new Indication();
 				indication.IndicationName = i.IndicationName.GetValue(r);
@@ -153,16 +154,19 @@ namespace Res.Controllers
 				indication.Description = i.Description.GetValue(r);
 				indication.EvalScore = eri.Score.GetValue(r, "evalScore");
 				indication.Score = (int)eri.Score.GetValue(r);
+				indication.Min = i.Min.GetValue(r);
+				indication.Max = i.Max.GetValue(r);
 				indication.LevelPKID = i.LevelPKID.GetValue(r);
 				indication.TypePKID = i.TypePKID.GetValue(r);
+				indication.IsCurrent = score > 0;
 				return indication;
 			}).ToList();
 
 
-         ViewBag.isSlef = ResSettings.SettingsInSession.IsExpert;   // (string.IsNullOrEmpty(expId) ? 0 : Convert.ToInt32(expId)) == ResSettings.SettingsInSession.UserId || (id == 0 && expert.UserTypePKID == ResUserHelper.Export);
+			ViewBag.isSlef = ResSettings.SettingsInSession.IsExpert;   // (string.IsNullOrEmpty(expId) ? 0 : Convert.ToInt32(expId)) == ResSettings.SettingsInSession.UserId || (id == 0 && expert.UserTypePKID == ResUserHelper.Export);
 
 
-         ViewBag.Indications = list;
+			ViewBag.Indications = list;
 
 			ViewBag.Comment = comment;
 
@@ -322,7 +326,7 @@ namespace Res.Controllers
 		{
 			if (model == null || model.Items == null || model.Items.Count <= 0)
 			{
-				return Request.IsAjaxRequest() ? Json(new { msg = "系统参数异常，请联系管理员" }) : IsNotAjax();
+				return Request.IsAjaxRequest() ? Json(new { msg = "必须选择其中一项" }) : IsNotAjax();
 			}
 
 			var group = APBplDef.EvalGroupBpl.PrimaryGet(model.GroupId);
@@ -357,8 +361,9 @@ namespace Res.Controllers
 			var list = APBplDef.IndicationBpl.GetAll();
 			foreach (var item in model.Items)
 			{
-				var maxScore = list.Find(x => x.IndicationId == item.IndicationId).Score;
-				if (item.Score < 0 || item.Score > maxScore)
+				var maxScore = list.Find(x => x.IndicationId == item.IndicationId).Max;
+				var minScore = list.Find(x => x.IndicationId == item.IndicationId).Min;
+				if (item.Score > maxScore || item.Score < minScore)
 					return Request.IsAjaxRequest() ? Json(new { error = "true", msg = "分数设置不合理，请检查" }) : IsNotAjax();
 			}
 
@@ -388,10 +393,10 @@ namespace Res.Controllers
 					APBplDef.EvalResultItemBpl.Insert(item);
 				}
 
-				// 更新总得分（该资源平均分）
+				// 更新总得分
 				var fullScore = score;
 				if (evalRecords != null && evalRecords.Count > 0)
-					fullScore = (double)(evalRecords.Sum(x => x.Score) + score) / (evalRecords.Count + 1);
+					fullScore = (double)(evalRecords.Sum(x => x.Score) + score);
 
 				APBplDef.CroResourceBpl.UpdatePartial(model.ResourceId, new { Score = fullScore });
 			}

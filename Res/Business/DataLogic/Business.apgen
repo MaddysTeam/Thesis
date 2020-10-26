@@ -317,11 +317,13 @@
 					<add name="Description" columnName="Description" type="string" dataLength="40000"  required="true" display="指标描述"/>
 					<add name="TypePKID" type="long" display="评价项目"></add>
 					<add name="LevelPKID" type="long"  display="评审级别"></add>
-					<add name="Score" type="int"  display="最大分值"></add>
+					<add name="Score" type="int"  display="分值"></add>
+					<add name="Max" type="int"  display="最大分值"></add>
+					<add name="Min" type="int"  display="最小分值"></add>
 					<add name="Status" columnName="Status" type="int"></add>
 					<add name="ActiveId" columnName="ActiveId" type="long" display="所属活动"/>
-					<add name="EvalType" columnName="EvalType" type="long" display="考核类型"/>
-					
+					<add name="ChooseValue" columnName="ChooseValue" type="string" dataLength="10" display="选择分值范围"/>
+
 				</columns>
 			</table>
 

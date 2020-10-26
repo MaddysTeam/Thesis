@@ -128,7 +128,7 @@
 						grid
 							.find('.btn-edit').on('click', function () {
 								var id = $(this).parent().data("row-id");
-								$.get('@Url.Action("Edit", "EvalManage")?id=' + id, function (response) {
+								$.get('@Url.Action("Edit", "EvalManage")?type=@EvalGroupHelper.LastTrial&id=' + id, function (response) {
 									$("#inner-edit-form")
 											.html(response).modal("show");
 								});
@@ -162,7 +162,7 @@
 
 
 			$('#addGroup').on('click', function () {
-				$.get('@Url.Action("Edit", "EvalManage")', function (response) {
+				$.get('@Url.Action("Edit", "EvalManage")?type=@EvalGroupHelper.LastTrial', function (response) {
 					$("#inner-edit-form")
 							.html(response).modal("show");
 				});

@@ -260,6 +260,8 @@ namespace Res.Business
 		public string Type { get { return IndicationHelper.Type.GetName(TypePKID); } }
 
 		public double EvalScore { get; set; }
+
+		public bool IsCurrent { get; set; }
 	}
 
 

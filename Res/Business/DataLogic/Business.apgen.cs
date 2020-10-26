@@ -3963,11 +3963,15 @@ namespace Res.Business {
             
             private Int32APColumnDef _score;
             
+            private Int32APColumnDef _max;
+            
+            private Int32APColumnDef _min;
+            
             private Int32APColumnDef _status;
             
             private Int64APColumnDef _activeId;
             
-            private Int64APColumnDef _evalType;
+            private StringAPColumnDef _chooseValue;
             
             public IndicationTableDef(string tableName) : 
                     base(tableName) {
@@ -4051,9 +4055,35 @@ namespace Res.Business {
                 get {
                     if (Object.ReferenceEquals(_score, null)) {
                         _score = new Int32APColumnDef(this, "Score", false);
-                        _score.Display = "最大分值";
+                        _score.Display = "分值";
                     }
                     return _score;
+                }
+            }
+            
+            /// <summary>
+            /// Max ColumnDef
+            /// </summary>
+            public virtual Int32APColumnDef Max {
+                get {
+                    if (Object.ReferenceEquals(_max, null)) {
+                        _max = new Int32APColumnDef(this, "Max", false);
+                        _max.Display = "最大分值";
+                    }
+                    return _max;
+                }
+            }
+            
+            /// <summary>
+            /// Min ColumnDef
+            /// </summary>
+            public virtual Int32APColumnDef Min {
+                get {
+                    if (Object.ReferenceEquals(_min, null)) {
+                        _min = new Int32APColumnDef(this, "Min", false);
+                        _min.Display = "最小分值";
+                    }
+                    return _min;
                 }
             }
             
@@ -4084,15 +4114,15 @@ namespace Res.Business {
             }
             
             /// <summary>
-            /// EvalType ColumnDef
+            /// ChooseValue ColumnDef
             /// </summary>
-            public virtual Int64APColumnDef EvalType {
+            public virtual StringAPColumnDef ChooseValue {
                 get {
-                    if (Object.ReferenceEquals(_evalType, null)) {
-                        _evalType = new Int64APColumnDef(this, "EvalType", false);
-                        _evalType.Display = "考核类型";
+                    if (Object.ReferenceEquals(_chooseValue, null)) {
+                        _chooseValue = new StringAPColumnDef(this, "ChooseValue", false, 10);
+                        _chooseValue.Display = "选择分值范围";
                     }
-                    return _evalType;
+                    return _chooseValue;
                 }
             }
             
@@ -4122,9 +4152,11 @@ namespace Res.Business {
                 data.TypePKID = TypePKID.GetValue<long>(reader, throwIfValidColumnName);
                 data.LevelPKID = LevelPKID.GetValue<long>(reader, throwIfValidColumnName);
                 data.Score = Score.GetValue<int>(reader, throwIfValidColumnName);
+                data.Max = Max.GetValue<int>(reader, throwIfValidColumnName);
+                data.Min = Min.GetValue<int>(reader, throwIfValidColumnName);
                 data.Status = Status.GetValue<int>(reader, throwIfValidColumnName);
                 data.ActiveId = ActiveId.GetValue<long>(reader, throwIfValidColumnName);
-                data.EvalType = EvalType.GetValue<long>(reader, throwIfValidColumnName);
+                data.ChooseValue = ChooseValue.GetValue<string>(reader, throwIfValidColumnName);
             }
             
             /// <summary>
@@ -7124,7 +7156,7 @@ namespace Res.Business {
                 if ((data.IndicationId == 0)) {
                     data.IndicationId = ((long)(GetNewId(APDBDef.Indication.IndicationId)));
                 }
-                var query = APQuery.insert(APDBDef.Indication).values(APDBDef.Indication.IndicationId.SetValue(data.IndicationId), APDBDef.Indication.IndicationName.SetValue(data.IndicationName), APDBDef.Indication.Description.SetValue(data.Description), APDBDef.Indication.TypePKID.SetValue(data.TypePKID), APDBDef.Indication.LevelPKID.SetValue(data.LevelPKID), APDBDef.Indication.Score.SetValue(data.Score), APDBDef.Indication.Status.SetValue(data.Status), APDBDef.Indication.ActiveId.SetValue(data.ActiveId), APDBDef.Indication.EvalType.SetValue(data.EvalType));
+                var query = APQuery.insert(APDBDef.Indication).values(APDBDef.Indication.IndicationId.SetValue(data.IndicationId), APDBDef.Indication.IndicationName.SetValue(data.IndicationName), APDBDef.Indication.Description.SetValue(data.Description), APDBDef.Indication.TypePKID.SetValue(data.TypePKID), APDBDef.Indication.LevelPKID.SetValue(data.LevelPKID), APDBDef.Indication.Score.SetValue(data.Score), APDBDef.Indication.Max.SetValue(data.Max), APDBDef.Indication.Min.SetValue(data.Min), APDBDef.Indication.Status.SetValue(data.Status), APDBDef.Indication.ActiveId.SetValue(data.ActiveId), APDBDef.Indication.ChooseValue.SetValue(data.ChooseValue));
                 ExecuteNonQuery(query);
             }
             
@@ -7132,7 +7164,7 @@ namespace Res.Business {
             /// 更新数据。
             /// </summary>
             public virtual void Update(Indication data) {
-                var query = APQuery.update(APDBDef.Indication).values(APDBDef.Indication.IndicationName.SetValue(data.IndicationName), APDBDef.Indication.Description.SetValue(data.Description), APDBDef.Indication.TypePKID.SetValue(data.TypePKID), APDBDef.Indication.LevelPKID.SetValue(data.LevelPKID), APDBDef.Indication.Score.SetValue(data.Score), APDBDef.Indication.Status.SetValue(data.Status), APDBDef.Indication.ActiveId.SetValue(data.ActiveId), APDBDef.Indication.EvalType.SetValue(data.EvalType)).where((APDBDef.Indication.IndicationId == data.IndicationId));
+                var query = APQuery.update(APDBDef.Indication).values(APDBDef.Indication.IndicationName.SetValue(data.IndicationName), APDBDef.Indication.Description.SetValue(data.Description), APDBDef.Indication.TypePKID.SetValue(data.TypePKID), APDBDef.Indication.LevelPKID.SetValue(data.LevelPKID), APDBDef.Indication.Score.SetValue(data.Score), APDBDef.Indication.Max.SetValue(data.Max), APDBDef.Indication.Min.SetValue(data.Min), APDBDef.Indication.Status.SetValue(data.Status), APDBDef.Indication.ActiveId.SetValue(data.ActiveId), APDBDef.Indication.ChooseValue.SetValue(data.ChooseValue)).where((APDBDef.Indication.IndicationId == data.IndicationId));
                 ExecuteNonQuery(query);
             }
             
@@ -17555,6 +17587,16 @@ namespace Res.Business {
         private int _score;
         
         /// <summary>
+        /// Max
+        /// </summary>
+        private int _max;
+        
+        /// <summary>
+        /// Min
+        /// </summary>
+        private int _min;
+        
+        /// <summary>
         /// Status
         /// </summary>
         private int _status;
@@ -17565,9 +17607,9 @@ namespace Res.Business {
         private long _activeId;
         
         /// <summary>
-        /// EvalType
+        /// ChooseValue
         /// </summary>
-        private long _evalType;
+        private string _chooseValue = string.Empty;
         
         /// <summary>
         /// 默认构造函数。
@@ -17578,16 +17620,18 @@ namespace Res.Business {
         /// <summary>
         /// 初始化所有字段的构造函数。
         /// </summary>
-        public IndicationBase(long indicationId, string indicationName, string description, long typePKID, long levelPKID, int score, int status, long activeId, long evalType) {
+        public IndicationBase(long indicationId, string indicationName, string description, long typePKID, long levelPKID, int score, int max, int min, int status, long activeId, string chooseValue) {
             _indicationId = indicationId;
             _indicationName = indicationName;
             _description = description;
             _typePKID = typePKID;
             _levelPKID = levelPKID;
             _score = score;
+            _max = max;
+            _min = min;
             _status = status;
             _activeId = activeId;
-            _evalType = evalType;
+            _chooseValue = chooseValue;
         }
         
         /// <summary>
@@ -17706,7 +17750,7 @@ namespace Res.Business {
         /// <summary>
         /// Score
         /// </summary>
-        [Display(Name="最大分值")]
+        [Display(Name="分值")]
         public virtual int Score {
             get {
                 return _score;
@@ -17722,6 +17766,50 @@ namespace Res.Business {
         public static Int32APColumnDef ScoreDef {
             get {
                 return APDBDef.Indication.Score;
+            }
+        }
+        
+        /// <summary>
+        /// Max
+        /// </summary>
+        [Display(Name="最大分值")]
+        public virtual int Max {
+            get {
+                return _max;
+            }
+            set {
+                _max = value;
+            }
+        }
+        
+        /// <summary>
+        /// Max APColumnDef
+        /// </summary>
+        public static Int32APColumnDef MaxDef {
+            get {
+                return APDBDef.Indication.Max;
+            }
+        }
+        
+        /// <summary>
+        /// Min
+        /// </summary>
+        [Display(Name="最小分值")]
+        public virtual int Min {
+            get {
+                return _min;
+            }
+            set {
+                _min = value;
+            }
+        }
+        
+        /// <summary>
+        /// Min APColumnDef
+        /// </summary>
+        public static Int32APColumnDef MinDef {
+            get {
+                return APDBDef.Indication.Min;
             }
         }
         
@@ -17769,24 +17857,25 @@ namespace Res.Business {
         }
         
         /// <summary>
-        /// EvalType
+        /// ChooseValue
         /// </summary>
-        [Display(Name="考核类型")]
-        public virtual long EvalType {
+        [Display(Name="选择分值范围")]
+        [StringLength(10)]
+        public virtual string ChooseValue {
             get {
-                return _evalType;
+                return _chooseValue;
             }
             set {
-                _evalType = value;
+                _chooseValue = value;
             }
         }
         
         /// <summary>
-        /// EvalType APColumnDef
+        /// ChooseValue APColumnDef
         /// </summary>
-        public static Int64APColumnDef EvalTypeDef {
+        public static StringAPColumnDef ChooseValueDef {
             get {
-                return APDBDef.Indication.EvalType;
+                return APDBDef.Indication.ChooseValue;
             }
         }
         
@@ -17818,9 +17907,11 @@ namespace Res.Business {
             TypePKID = data.TypePKID;
             LevelPKID = data.LevelPKID;
             Score = data.Score;
+            Max = data.Max;
+            Min = data.Min;
             Status = data.Status;
             ActiveId = data.ActiveId;
-            EvalType = data.EvalType;
+            ChooseValue = data.ChooseValue;
         }
         
         /// <summary>
@@ -17845,13 +17936,19 @@ namespace Res.Business {
             if ((Score != data.Score)) {
                 return false;
             }
+            if ((Max != data.Max)) {
+                return false;
+            }
+            if ((Min != data.Min)) {
+                return false;
+            }
             if ((Status != data.Status)) {
                 return false;
             }
             if ((ActiveId != data.ActiveId)) {
                 return false;
             }
-            if ((EvalType != data.EvalType)) {
+            if ((ChooseValue != data.ChooseValue)) {
                 return false;
             }
             return true;
@@ -17950,8 +18047,8 @@ namespace Res.Business {
         /// <summary>
         /// 初始化所有字段的构造函数。
         /// </summary>
-        public Indication(long indicationId, string indicationName, string description, long typePKID, long levelPKID, int score, int status, long activeId, long evalType) : 
-                base(indicationId, indicationName, description, typePKID, levelPKID, score, status, activeId, evalType) {
+        public Indication(long indicationId, string indicationName, string description, long typePKID, long levelPKID, int score, int max, int min, int status, long activeId, string chooseValue) : 
+                base(indicationId, indicationName, description, typePKID, levelPKID, score, max, min, status, activeId, chooseValue) {
         }
     }
     

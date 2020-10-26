@@ -1,6 +1,6 @@
 ﻿@{
 	ViewBag.Title = "初审组管理";
-	var isAdmin = ResSettings.SettingsInSession.IsCityAdmin || ResSettings.SettingsInSession.IsProvinceAdmin;
+	var isAdmin = ResSettings.SettingsInSession.IsCityAdmin || ResSettings.SettingsInSession.IsProvinceAdmin || ResSettings.SettingsInSession.IsAdmin;
 }
 <div class="col-md-10 content-wrapper">
 	<div class="row">
@@ -131,7 +131,7 @@
 						grid
 							.find('.btn-edit').on('click', function () {
 								var id = $(this).parent().data("row-id");
-								$.get('@Url.Action("Edit", "EvalManage")?id=' + id, function (response) {
+								$.get('@Url.Action("Edit", "EvalManage")?type=@EvalGroupHelper.FirstTrial&id=' + id, function (response) {
 									$("#inner-edit-form")
 											.html(response).modal("show");
 								});
@@ -155,7 +155,7 @@
 						grid.find('.btn-res').on('click', function () {
 							var id = $(this).parent().data("row-id");
 							var activeId = $(this).parent().data("activeId");
-								$.get('@Url.Action("ResList", "EvalManage")?id=' + id + '&activeId=' + activeId + '&deliveryStatus=@CroResourceHelper.AllDelivery', function (response) {
+								$.get('@Url.Action("ResList", "EvalManage")?id=' + id + '&activeId=' + activeId + '&deliveryStatus=@CroResourceHelper.IsDelivery', function (response) {
 								$("#inner-edit-form")
 										.html(response).modal("show");
 							});
@@ -165,7 +165,7 @@
 
 
 			$('#addGroup').on('click', function () {
-				$.get('@Url.Action("Edit", "EvalManage")', function (response) {
+				$.get('@Url.Action("Edit", "EvalManage")?type=@EvalGroupHelper.FirstTrial', function (response) {
 					$("#inner-edit-form")
 							.html(response).modal("show");
 				});

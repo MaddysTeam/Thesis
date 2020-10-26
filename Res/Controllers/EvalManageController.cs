@@ -14,6 +14,7 @@ namespace Res.Controllers
 	{
 
 		static APDBDef.EvalResultTableDef er = APDBDef.EvalResult;
+		static APDBDef.EvalGroupTableDef eg = APDBDef.EvalGroup;
 
 		//
 		//	评审组 - 查询
@@ -183,7 +184,7 @@ namespace Res.Controllers
 		// POST     /EvalManage/Edit
 		//
 
-		public ActionResult Edit(long? id)
+		public ActionResult Edit(long? id,long type)
 		{
 			EvalGroup model = null;
 			if (id == null)
@@ -199,6 +200,9 @@ namespace Res.Controllers
 				model = APBplDef.EvalGroupBpl.PrimaryGet(id.Value);
 			}
 
+			if (type > 0)
+				model.GroupType = type;
+
 			ViewBag.Actives = ResSettings.SettingsInSession.Actives;
 
 			return PartialView(model);
@@ -209,13 +213,11 @@ namespace Res.Controllers
 		{
 			var user = ResSettings.SettingsInSession.User;
 			model.LevelPKID = EvalGroupHelper.UnionLevel;
-			model.GroupType = EvalGroupHelper.LastTrial; // 超管设置的是专家终审
 
 			if (user.ProvinceId > 0)
 			{
 				model.ProvinceId = user.ProvinceId;
 				model.LevelPKID = EvalGroupHelper.ProvinceLevel;
-				model.GroupType = EvalGroupHelper.FirstTrial; // 省市级专家的初审
 			}
 
 			if (user.AreaId > 0)
@@ -570,14 +572,14 @@ namespace Res.Controllers
 		{
 			var ege = APDBDef.EvalGroupExpert;
 
-			if(APBplDef.EvalGroupExpertBpl.ConditionQueryCount(ege.GroupId == id) > 0)
-			{
-				return Json(new
-				{
-					error = "error",
-					msg = "一个组只能绑定一个专家，如需多个专家参与，请新增专家组"
-				});
-			}
+			//if(APBplDef.EvalGroupExpertBpl.ConditionQueryCount(ege.GroupId == id) > 0)
+			//{
+			//	return Json(new
+			//	{
+			//		error = "error",
+			//		msg = "一个组只能绑定一个专家，如需多个专家参与，请新增专家组"
+			//	});
+			//}
 
 			if (APBplDef.EvalGroupExpertBpl.ConditionQueryCount(ege.ExpertId == expId)>0)
 			{
@@ -610,12 +612,12 @@ namespace Res.Controllers
 			var array = ids.Split(',');
 
 			//TODO: 一个组只能绑定一个专家
-			if (array.Length > 1 || APBplDef.EvalGroupExpertBpl.ConditionQueryCount(ege.GroupId == id) > 0)
-				return Json(new
-				{
-					error = "error",
-					msg = "一个组只能绑定一个专家，如需多个专家参与，请新增专家组"
-				});
+			//if (array.Length > 1 || APBplDef.EvalGroupExpertBpl.ConditionQueryCount(ege.GroupId == id) > 0)
+			//	return Json(new
+			//	{
+			//		error = "error",
+			//		msg = "一个组只能绑定一个专家，如需多个专家参与，请新增专家组"
+			//	});
 
 			if (APBplDef.EvalGroupExpertBpl.ConditionQueryCount(ege.ExpertId == Convert.ToInt64(array[0])) > 0)
 				return Json(new
