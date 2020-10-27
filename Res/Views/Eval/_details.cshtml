@@ -13,14 +13,14 @@
 
 					<li class="list-group-item">作品名称：@Model.Title</li>
 
-					@if (!string.IsNullOrEmpty(Model.Province))
+					@*@if (!string.IsNullOrEmpty(Model.Province))
 					{
 						<li class="list-group-item">省份：@Model.Province</li>
 					}
 					@if (!string.IsNullOrEmpty(Model.Province))
 					{
 						<li class="list-group-item">市区：@Model.Area</li>
-					}
+					}*@
 
 					<li class="list-group-item">创建时间：@Model.CreatedTime.ToString("yyyy-MM-dd")</li>
 
@@ -36,7 +36,7 @@
 		</div>
 		<!-- end widget -->
 		<!-- widget -->
-		<div class="widget col-md-4">
+		@*<div class="widget col-md-4">
 			<div class="widget-header">
 				<h3><i class="fa fa-paperclip"></i> 当前论文信息</h3>
 			</div>
@@ -56,7 +56,7 @@
 
 				</ul>
 			</div>
-		</div>
+		</div>*@
 		<!-- end widget -->
 		<!-- widget -->
 		<div class="widget col-md-4 author_area">
