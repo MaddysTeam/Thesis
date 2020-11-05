@@ -34,7 +34,7 @@ namespace Res.Controllers
          var c = APDBDef.CroResource;
          var f = APDBDef.Files;
 
-         var winlevelResources = db.CroResourceDal.ConditionQuery(c.Author== "陆旻", null, null, null);
+         var winlevelResources = db.CroResourceDal.ConditionQuery(c.Author== "张成娟", null, null, null);
          var i = 0;
          foreach (var item in winlevelResources)
          {
@@ -45,7 +45,7 @@ namespace Res.Controllers
             var htmlStr = System.IO.File.ReadAllText(filePath).Replace("{{Auther}}",item.Author)
                .Replace("{{ResourceTitle}}", item.Title)
                .Replace("{{WinLevel}}", "二等奖")
-               .Replace("{{MedalCode}}", $"2018{CodeMappings[item.AreaId]}01{item.CrosourceId}");
+               .Replace("{{MedalCode}}", $"");
             var fs = MentalConverter.ConverHtmlToImage(htmlStr, item.Title, out md5);
             using (fs)
             {
